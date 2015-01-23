@@ -8,7 +8,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.1"
 
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/releases"
+resolvers += "https://repo.typesafe.com/typesafe/snapshots/org/reactivemongo/reactivemongo_2.11/"
+
 
 libraryDependencies ++= Seq(
   jdbc,
