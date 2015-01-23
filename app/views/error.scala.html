@@ -1,0 +1,13 @@
+@import play.api.libs.json.JsObject
+
+@(error: Int)
+
+@fullwidth("Welcome to Play") {
+        <div class="col-md-12 text-center">
+            <div class="error-digit wow animated fadeInUp">
+                        @error
+            </div>
+            <div class="divide40"></div>
+            <h3>Opps, Page not found</h3>
+        </div>
+}

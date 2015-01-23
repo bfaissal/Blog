@@ -1,0 +1,21 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /                     controllers.Application.index
+GET         /form                 controllers.Application.form(post :String="index")
+GET         /form/:post           controllers.Application.form(post :String)
+POST        /savePost             controllers.Application.savePost
+GET         /allPosts             controllers.Application.allPosts
+POST        /deletePost           controllers.Application.deletePost
+GET         /post/:url            controllers.Application.post(url: String)
+GET         /postById/:id         controllers.Application.postById(id: String)
+GET         /tags                 controllers.Application.tags(query:String)
+POST        /form/upload          controllers.Application.upload(CKEditorFuncNum:String)
+POST        /upload          controllers.Application.upload(CKEditorFuncNum:String)
+GET         /form/img/:img        controllers.Application.img(img:String)
+GET         /img/:img             controllers.Application.img(img:String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file         controllers.Assets.at(path="/public", file)

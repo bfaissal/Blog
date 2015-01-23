@@ -1,0 +1,1272 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+	
+
+
+
+  
+   
+<head>
+    <!-- TITLE BEGINS | DEBUT DU TITRE -->
+    <title>Bienvenue au CV commun canadien</title>
+    <!-- TITLE ENDS | FIN DU TITRE -->
+    
+        <link rel="shortcut icon" href="https://ccv-cvc.ca/favicon.ico?v=2" />
+    
+    
+    <!-- METADATA BEGINS | DEBUT DES METADONNEES -->
+    <meta http-equiv="X-UA-Compatible" content="IE=8" charset="UTF-8" />
+     
+    <!-- Previous settings
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+     -->
+    <link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
+    <link rel="schema.dcterms" href="http://purl.org/dc/terms/" />
+    <meta http-equiv="Cache-Control" Content="no-cache" />  
+    <meta http-equiv="Pragma" CONTENT="no-cache" />
+    <meta http-equiv="max-age" CONTENT="0" />
+    <meta http-equiv="Expires" CONTENT="0" />
+    <meta name="dc.description" content="" />
+    <meta name="keywords" content="Mise à jour des CV;" />
+    <meta name="dc.identifier" content="cv-193" />
+    <meta name="dc.creator" content="" />
+    <meta name="dc.title" content="Bienvenue au CV commun canadien" />
+    <meta name="dcterms.issued" scheme="W3CDTF" content="2012-05-01" />
+    <meta name="dcterms.modified" scheme="W3CDTF" content="2012-05-01" />
+    <meta name="dc.subject" scheme="gchccv" content="Mise à jour des CV;" />
+    <meta name="dc.language" scheme="ISO639-2/T" content="fra" />
+        
+    <meta name="gcterms.dateReviewed" scheme="W3CDTF" content="2012-05-01" />
+    <meta name="gcterms.dateForReview" scheme="W3CDTF" content="2012-05-01" />
+    
+    <meta name="dc.type" scheme="cihrtype" content="Chercheur/Administrateur" />
+    <meta name="dcterms.audience" scheme="cihraudience" content="Researcher" />
+    <meta name="cihrterms.webLifeCycleStatus" scheme="cihrwebstatus" content="Active" />
+    <meta name="gcterms.dateValidEnd" scheme="W3CDTF" content="" />
+    <meta name="cihrterms.institute" scheme="cihrinstitutes" content="" />
+    <meta name="cihrterms.diseaseType" scheme="cihrdiseasetype" content="" />
+    <meta name="cihrterms.fundingType" scheme="cihrfundingtype" content="" />
+    <meta name="subsite" scheme="cihrsubsites" content="caiindex.body.help.link" />
+    
+    
+    <!-- METADATA ENDS | FIN DES METADONNEES -->
+    <!-- TEMPLATE SCRIPTS/CSS BEGIN | DEBUT DES SCRIPTS/CSS DU GABARIT -->
+    <link href="/ccv-cvc-resources/css/base_new.css" media="screen, print" rel="stylesheet" type="text/css" />
+    <!--[if IE 8]><link href="/ccv-cvc-resources/css/base-ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
+    <!--[if IE 7]><link href="/ccv-cvc-resources/css/base-ie7.css" rel="stylesheet" type="text/css" /><![endif]-->
+    <!--[if lte IE 6]><link href="/ccv-cvc-resources/css/base-ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+    <!-- TEMPLATE SCRIPTS/CSS END | FIN DES SCRIPTS/CSS DU GABARIT -->
+    <!-- PROGRESSIVE ENHANCEMENT BEGINS | DEBUT DE L'AMELIORATION PROGRESSIVE -->
+
+            <style type="text/css">
+
+                        @import "/ccv-cvc-resources/scripts/dojo-release-1.8.4/dijit/themes/claro/document.css";
+                        @import "/ccv-cvc-resources/scripts/dojo-release-1.8.4/dijit/themes/dijit.css";
+                        @import "/ccv-cvc-resources/scripts/dojo-release-1.8.4/dijit/themes/claro/claro.css";
+                        @import "/ccv-cvc-resources/scripts/dojo-release-1.8.4/dojox/mobile/themes/iphone/TextBox.css";
+                        @import "/ccv-cvc-resources/scripts/dojo-release-1.8.4/dojox/mobile/themes/iphone/ComboBox.css";
+
+                        #table {
+                                    margin: 0;
+                                    padding: 2px;
+                        }
+                        #table .layout {
+                                    padding: 2px;
+                                    font-size: 100%;
+                                    margin: 0;
+                        }
+                        body .dojoTooltip {
+                			z-index: 500000;
+        				} 
+					     .dijitComboBoxMenu {
+					         list-style-type: none;
+					         font-size: 14px !important;
+					     }
+     </style>
+
+<!-- 
+	<style type="text/css">
+		@import "/ccv-cvc-resources/dijit/themes/claro/document.css";
+		@import "/ccv-cvc-resources/dijit/themes/dijit.css";
+		@import "/ccv-cvc-resources/dijit/themes/claro/claro.css";
+        @import "./dojox/mobile/themes/iphone/TextBox.css";
+        @import "./dojox/mobile/themes/iphone/ComboBox.css";
+
+
+		#table {
+			margin: 0;
+			padding: 2px;
+		}
+		#table .layout {
+			padding: 2px;
+			font-size: 100%;
+			margin: 0;
+		}
+	</style>
+ -->
+
+ <script src="/ccv-cvc-resources/scripts/ccv-cvc.js" type="text/javascript"></script>       
+    <script src="/ccv-cvc-resources/scripts/pe-ap.js" type="text/javascript" id="progressive"></script>
+
+             <!-- Add the datepicker script -->
+            <script type="text/javascript" src="/ccv-cvc-resources/js/datepicker.js">{ "nodrag":0, "lang":"fr", "noFadeEffect":1, "buttontabindex":1 }</script>
+            
+            <!-- Add the datepicker's stylesheet -->
+            <link href="/ccv-cvc-resources/css/datepicker.css" rel="stylesheet" type="text/css" />
+          
+<!--            <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
+ --> 
+            <script src="/ccv-cvc-resources/scripts/dojo-release-1.8.4/dojo/dojo.js"></script>
+
+			<script>dojo.require("dijit.Editor");</script>
+
+            <!--  
+		       <script src="/ccv-cvc-resources/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: true, isDebug: false"></script>
+   			-->
+   			
+            <script src="/ccv-cvc-resources/scripts/jquery.min.js" type="text/javascript" ></script>
+            
+            <script src="/ccv-cvc-resources/scripts/jquery-ui-1.8.6.custom.min.js" type="text/javascript" ></script>
+            
+            <script src="/ccv-cvc-resources/scripts/jquery.bgiframe-2-1-pre.js" type="text/javascript" ></script>
+            <script src="/ccv-cvc-resources/scripts/json2.js" type="text/javascript" ></script>
+            <script src="/ccv-cvc-resources/scripts/jquery.cookie.js" type="text/javascript" ></script>
+            <script src="/ccv-cvc-resources/scripts/jquery.jsoncookie.js" type="text/javascript" ></script>
+            <script src="/ccv-cvc-resources/scripts/jquery.textCounter.js" type="text/javascript" ></script>
+
+	<!--[if IE]>
+	<script type="text/javascript">
+	
+	sfFocus = function() {
+		var sfEls = document.getElementsByTagName("INPUT");
+		for (var i=0; i<sfEls.length; i++) {
+			sfEls[i].onfocus=function() {
+				this.className+=" sffocus";
+			}
+			sfEls[i].onblur=function() {
+				this.className=this.className.replace(new RegExp(" sffocus\\b"), "");
+			}
+		}
+		sfEls = document.getElementsByTagName("TEXTAREA");
+		for (var i=0; i<sfEls.length; i++) {
+			sfEls[i].onfocus=function() {
+				this.className+=" sffocus";
+			}
+			sfEls[i].onblur=function() {
+				this.className=this.className.replace(new RegExp(" sffocus\\b"), "");
+			}
+		}
+		sfEls = document.getElementsByTagName("SELECT");
+		for (var i=0; i<sfEls.length; i++) {
+			sfEls[i].onfocus=function() {
+				this.className+=" sffocus";
+			}
+			sfEls[i].onblur=function() {
+				this.className=this.className.replace(new RegExp(" sffocus\\b"), "");
+			}
+		}
+	}
+	if (window.attachEvent) window.attachEvent("onload", sfFocus);
+	
+	</script>
+	<![endif]-->
+
+	<style> #divSurroundTable { overflow: auto; } </style>
+
+	<!--[if lt IE 8]>
+		<style> #divSurroundTable { overflow: scroll; } </style>
+	<![endif]-->
+	
+	<script type="text/javascript">
+		/*           */
+		var params = {
+	
+			slideshow : {
+				id : "slideshow",
+				speed : "5",
+				randomslide : "false"
+			},
+	
+			share : {
+				compact : "",
+				popup : "true"
+			},
+			codaslider : {
+				id : 'slider',
+				dir : 'horizontal'
+			}
+		};
+		//PE.progress(params);
+		/*     */
+	</script>
+<!-- PROGRESSIVE ENHANCEMENT ENDS | FIN DE L'AMELIORATION PROGRESSIVE -->
+    
+    <!-- CUSTOM SCRIPTS/CSS BEGIN | DEBUT DES SCRIPTS/CSS PERSONNALISES -->
+    <link href="/ccv-cvc-resources/css/ccv-cvc.css" media="screen, print" rel="stylesheet" type="text/css" />
+    <!--[if IE 7]><link href="/ccv-cvc-resources/css/ccv-cvc-ie7.css" rel="stylesheet" type="text/css" /><![endif]-->
+    <!--[if lte IE 6]><link href="/ccv-cvc-resources/css/ccv-cvc-ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+    <!-- CUSTOM SCRIPTS/CSS END | FIN DES SCRIPTS/CSS PERSONNALISES -->
+    <!-- TEMPLATE PRINT CSS BEGINS | DEBUT DU CSS DU GABARIT POUR L'IMPRESSION -->
+    <link href="/ccv-cvc-resources/css/pf-if.css" rel="stylesheet" type="text/css" />
+    <link href="/ccv-cvc-resources/css/ui-lightness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"  />
+    <!-- TEMPLATE PRINT CSS ENDS | FIN DU CSS DU GABARIT POUR L'IMPRESSION -->
+    <style type="text/css">
+        
+    </style>
+
+	<style type="text/css">
+	<!--
+	#jsddm {
+		margin: 0;
+		padding: 0
+	}
+	
+	#jsddm li {
+		float: left;
+		list-style: none;
+		font: 14px Arial, Verdana, Helvetica, sans-serif;
+		font-weight: bold;
+	}
+	
+	#jsddm li a {
+		display: block;
+		background: #282E39;
+		padding: 2px 8px 2px 2px;
+		text-decoration: none;
+		border-right: 1px solid white;
+		color: #EAFFED;
+		white-space: nowrap
+	}
+	
+	#jsddm li a:hover {
+		background: none repeat scroll 0 0 #0066CC;
+		color: #FFFFFF;
+		text-decoration: none;
+	}
+	
+	#jsddm li a:focus {
+		background: none repeat scroll 0 0 #0066CC;
+		color: #FFFFFF;
+		text-decoration: none;
+	}
+	
+	#jsddm li ul {
+		margin: 0;
+		padding: 0;
+		position: absolute;
+		visibility: hidden; #
+		width: 100px;
+		border-top: 1px solid white
+	}
+	
+	#jsddm li ul li {
+		float: none;
+		display: inline
+	}
+	
+	#jsddm li ul li a {
+		width: 150%;
+		background: #282E39
+	}
+	
+	#jsddm li ul li a:hover {
+		background: #0066CC
+	}
+	-->
+	</style>
+	
+	<script type="text/javascript">
+		var startClockDatetime = new Date(); 
+		var serverClockDatetimeTimer = setTimeout("automaticClock()",5000);
+		var jsonServerClockDatetime;
+
+		$.ajax({
+  			    url: "clock/datetime.frm",
+			  	success: function(json) {
+			  		jsonServerClockDatetime = json;
+			  		displayServerClockTime();
+			    }
+			});
+		
+		displayServerClockTime();
+		
+		function zeroFill( number, width )
+		{
+		  width -= number.toString().length;
+		  if ( width > 0 )
+		  {
+		    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+		  }
+		  return number;
+		}
+		
+		function displayServerClockTime() {
+			// Calculate the number of second between the two
+			var serverClockDatetime = startClockDatetime;
+			if ( jsonServerClockDatetime ) {
+				serverClockDatetime = new Date( jsonServerClockDatetime.year, 
+												jsonServerClockDatetime.month,
+												jsonServerClockDatetime.day,
+												jsonServerClockDatetime.hours,
+												jsonServerClockDatetime.minutes,
+												jsonServerClockDatetime.seconds, 
+												jsonServerClockDatetime.milliseconds);
+			}
+		
+			var diffInMs = new Date().getTime() - startClockDatetime.getTime();
+			diffInMs = Math.round(diffInMs);
+			serverClockDatetime.setMilliseconds( diffInMs );
+	    	var strClockDatetime = serverClockDatetime.getFullYear() + "-" +
+									zeroFill((serverClockDatetime.getMonth()+1), 2) + "-" +
+									zeroFill(serverClockDatetime.getDate(), 2) + " " +
+									zeroFill(serverClockDatetime.getHours(), 2) + ":" +
+									zeroFill(serverClockDatetime.getMinutes(), 2) + " EST";
+			var elem = document.getElementById("idServerClockDateTime");
+			if ( elem ) {
+				document.getElementById("idServerClockDateTime").innerHTML = strClockDatetime;
+			}
+		}
+		
+		function automaticClock() {
+			clearTimeout(serverClockDatetimeTimer);
+			displayServerClockTime();
+			serverClockDatetimeTimer = setTimeout("automaticClock()", 5000);
+		}
+
+	</script>
+
+	<script type="text/javascript">
+		var formToBeSaved = false;
+		// Wait for the session
+		var nbSecondsToCheckSession = 1800000;
+		// Wait for the user to respond
+		var nbSecondsToIdleRespond = 307200;
+		// timer handle to wait for the client response
+		var idSecondsToIdleRespondTimer;
+		// session timer
+		var idSecondsToCheckSessionTimer;
+		// keep the disabled Undo state if the Cancel button was set to be disabled
+		var handleUndoButtonState = false;
+		// Control ID constant
+	    var activeSearch = false; 
+		// search flag for new combobox
+		var undoControlID = "Undo";
+	
+		function over_oddrow(src) {
+			src.bgColor='yellow';
+		}
+		
+		function out_oddrow(src) {
+			src.bgColor='#ffffff';
+		}
+		
+		function over_evenrow(src) {
+			src.bgColor='yellow';
+		}
+		
+		function out_evenrow(src) {
+			src.bgColor='#ebf5ff';
+		}
+			
+		function automaticLogout() {
+			clearTimeout(idSecondsToCheckSessionTimer);
+			clearTimeout(idSecondsToIdleRespondTimer);
+			$.JSONCookie("ccvFormGridToScrollViewTo", { gridIds: [] }, {path: '/'});
+			window.location = "logout?noclientrespond";
+		}
+	
+		function setTimeOutCheckup() {
+			idSecondsToIdleRespondTimer = setTimeout("automaticLogout()",	nbSecondsToIdleRespond);
+			$(document)
+					.ready(
+							function() {
+								$("#dialogSession")
+										.dialog(
+												{
+													modal : true,
+													bgiframe: true,
+													width : 400,
+													title : "Demande d’extension de la session",
+													buttons : [
+															{
+																text : "Oui",
+																click : function() {
+																	$(this)
+																		.dialog("close");
+																		clearTimeout(idSecondsToIdleRespondTimer);
+																		setTimeout("setTimeOutCheckup()",nbSecondsToCheckSession);
+																	$.get('extentsession.frm',
+																			function(data) {
+																				//The data returned should be the string 'ok'
+																			});
+																}
+															},
+															{
+																text : "Non",
+																click : function() {
+																	$(this)
+																			.dialog("close");
+																			clearTimeout(idSecondsToIdleRespondTimer);
+																			$.JSONCookie("ccvFormGridToScrollViewTo", { gridIds: [] }, {path: '/'});
+																			window.location = "logout?clientrefusedtoextent";
+																}
+															} ]
+												}
+	
+										);
+							});
+		}
+	
+		function getFormToBeSaved() {
+			return formToBeSaved;
+		}
+
+
+		function setAllCheckBoxes(formName, checkName) {
+			
+			if(!document.getElementById(formName)) {
+				return; 
+			}
+
+			var thisCheckBox = document.getElementById(checkName);
+			if (!thisCheckBox) {
+				return;				
+			}
+
+			var undoButton = document.getElementById("Undo");
+			if (undoButton) {
+				undoButton.disabled = false;
+			}
+
+			var objCheckBoxes = document.getElementById(formName).getElementsByTagName('input'); 
+			if(!objCheckBoxes) { 
+				return; 
+			}
+			
+			var countCheckBoxes = objCheckBoxes.length; 
+			if(!countCheckBoxes) {
+				objCheckBoxes.checked = thisCheckBox.checked;
+			}
+			else { 
+				// set the check value for all check boxes 
+				for(var i = 0; i < countCheckBoxes; i++) { 
+					if(!objCheckBoxes[i].disabled) {
+						objCheckBoxes[i].checked = thisCheckBox.checked;
+					}
+				}
+			}
+		}
+		
+		function setFormToBeSaved() {
+			//Enabled Cancel Button
+			if ( handleUndoButtonState ) {
+				// only if the button state was set to disable = false and then we have to set back to false if there is a change
+				var cancelId = document.getElementById(undoControlID);
+				if ( cancelId ) {
+					cancelId.disabled = false;
+				}
+			}
+			
+			formToBeSaved = true;
+		}
+		
+		function validateFormKeyPress(e)
+		{
+			var key = e.keyCode;
+			
+			if ( getDetectFirefox() ) {
+				//With Firefox, check these invalid functions keys
+				if ( key >= 112 && key <= 123) {
+					//Invalid key press like TAB, F1-F12, ARROW UP,DOWN,LEFT,RIGHT,PGUP,PGDOWN
+					return false;
+				}
+			}
+
+			if ( key == 13 || key == 19 || key == 27 || key == 33 || key == 34 || key == 35 || key == 36 || key == 37 || key == 38 || key == 39 || key == 40 || key == 45 || key == 9 ) {
+				//Don't set the form to be saved
+			}
+			else {
+				setFormToBeSaved();
+			}
+
+			return true;
+		}
+		
+		function validateFormOnSubmitKeyPress(e,formId, type, name, parameters)
+		{
+			var key = e.keyCode;
+			
+			if ( getDetectFirefox() ) {
+				//With Firefox, check these invalid functions keys
+				if ( key >= 112 && key <= 123) {
+					//Invalid key press like TAB, F1-F12, ARROW UP,DOWN,LEFT,RIGHT,PGUP,PGDOWN
+					return false;
+				}
+			}
+
+			if (  key == 19 || key == 27 || key == 33 || key == 34 || key == 35 || key == 36 || key == 37 || key == 38 || key == 39 || key == 40 || key == 45 || key == 9 ) {
+				//Don't set the form to be saved
+			}
+			else {
+				if ( key == 13 ) {
+					processSubmit(formId, type, name, parameters);
+				}
+				else {
+					setFormToBeSaved();
+				}
+			}
+
+			return true;
+		}
+		
+		function validateFormTextAreaKeyPress(e)
+		{
+			var key = e.keyCode;
+			
+			if ( getDetectFirefox() ) {
+				//With Firefox, check these invalid functions keys
+				if ( key >= 112 && key <= 123) {
+					//Invalid key press like TAB, F1-F12, ARROW UP,DOWN,LEFT,RIGHT,PGUP,PGDOWN
+					return false;
+				}
+			}
+
+			if ( key == 19 || key == 27 || key == 33 || key == 34 || key == 35 || key == 36 || key == 37 || key == 38 || key == 39 || key == 40 || key == 45 || key == 9 ) {
+				//Don't set the form to be saved
+			}
+			else {
+				setFormToBeSaved();
+			}
+
+			return true;
+		}
+		
+		function setFormToBeSaved() {
+			//Enabled Cancel Button
+			if ( handleUndoButtonState ) {
+				// only if the button state was set to disable = false and then we have to set back to false if there is a change
+				var cancelId = document.getElementById(undoControlID);
+				if ( cancelId ) {
+					cancelId.disabled = false;
+				}
+			}
+			
+			formToBeSaved = true;
+		}
+		
+		function validateSubmitPostedData(formId) {
+			var frmId = document.getElementById(formId);
+			if (frmId) {
+				if (frmId.nodeName == "FORM") {
+					if (getFormToBeSaved()) {
+						$(document)
+								.ready(
+										function() {
+											$("#dialog")
+													.dialog(
+															{
+																modal : true,
+																width : 400,
+																bgiframe: true,
+																title : "Des informations ont changées",
+																buttons : [
+																		{
+																			text : "Oui",
+																			click : function() {
+																				$(this).dialog("close");
+																				frmId.submit();
+																			}
+																		},
+																		{
+																			text : "Non",
+																			click : function() {
+																				$(this).dialog("close");
+																			}
+																		} ]
+															}
+	
+													);
+										});
+					} else {
+						frmId.submit();
+					}
+				} else {
+					alert("There element id '" + formId + "' is not a form!");
+				}
+			} else {
+				alert("There is no form '" + formId + "' found!");
+			}
+		}
+	
+		function validatePostedData(href) {
+			if (getFormToBeSaved()) {
+				$(document)
+						.ready(
+								function() {
+									$("#dialog")
+											.dialog(
+													{
+														modal : true,
+														width : 400,
+														bgiframe: true,
+														title : "Des informations ont changées",
+														buttons : [
+																{
+																	text : "Oui",
+																	click : function() {
+																		$(this).dialog("close");
+																		askDialogProcessInProgress();
+																		if ( href == 'logout?onpurpose' ) {
+																			$.JSONCookie("ccvFormGridToScrollViewTo", { gridIds: [] }, {path: '/'});
+																		}
+																		window.location = href;
+																	}
+																},
+																{
+																	text : "Non",
+																	click : function() {
+																		$(this).dialog("close");
+																	}
+																} ]
+													}
+	
+											);
+								});
+			} else {
+				askDialogProcessInProgress();
+				if ( href == 'logout?onpurpose' ) {
+					$.JSONCookie("ccvFormGridToScrollViewTo", { gridIds: [] }, {path: '/'});
+				}
+				window.location = href;
+			}
+		}
+
+		function onClickHelp(titleHelp) {
+			//var hasInnerText = (document.getElementsByTagName("body")[0].innerText != undefined) ? true
+			//		: false;
+			var dlgHelp = document.getElementById('dialogHelp');
+			titleHelp = titleHelp.replace(/\r/g,'<br/><br/>');
+			//if (!hasInnerText) {
+				dlgHelp.innerHTML = titleHelp;
+			//} else {
+			//	dlgHelp.innerText = titleHelp;
+			//}
+			
+			var isOpenned = $("#dialogHelp").dialog( "isOpen" );
+			if ( isOpenned == true ) {
+				$("#dialogHelp").dialog( "close" );
+			}
+	
+			$(document).ready(function() {
+				$("#dialogHelp").dialog({
+					modal : false,
+					bgiframe: true,
+					dialogClass : 'dialogHelp', 
+					position: 'right',
+					title : "Aide",
+					buttons : [ {
+						text : "Ok",
+						click : function() {
+							$(this).dialog("close");
+						}
+					} ]
+				});
+			});
+		}
+	
+		// Handling Menu
+		var timeout = 250;
+		var closetimer = 0;
+		var ddmenuitem = 0;
+	
+		function jsddm_open() {
+			jsddm_canceltimer();
+			jsddm_close();
+			ddmenuitem = $(this).find('ul').css('visibility', 'visible');
+		}
+	
+		function jsddm_close() {
+			if (ddmenuitem)
+				ddmenuitem.css('visibility', 'hidden');
+		}
+	
+		function jsddm_timer() {
+			closetimer = window.setTimeout(jsddm_close, timeout);
+		}
+	
+		function jsddm_canceltimer() {
+			if (closetimer) {
+				window.clearTimeout(closetimer);
+				closetimer = null;
+			}
+		}
+
+		$(document).ready(function() {
+			$('#jsddm > li').bind('focusin', jsddm_open); 
+			$('#jsddm > li').bind('mouseover', jsddm_open);
+			$('#jsddm > li').bind('mouseout', jsddm_timer);
+		});
+	
+		document.onclick = jsddm_close;
+	</script>
+	
+	<script language="JavaScript">
+
+ 		function blankInputField(id) {
+ 			try {
+				var elem = document.getElementById(id);
+				if ( elem ) {
+					elem.value = "";
+				}
+ 			}
+ 			catch (err) {}
+ 		}
+
+ 		function blankSelectOption(id) {
+ 			try {
+				var elem = document.getElementById(id);
+				if ( elem ) {
+					elem.value = "";
+				}
+ 			}
+ 			catch (err) {}
+ 		}
+
+ 	</script>
+ 	
+	<script type="text/javascript">
+		//Returns the version of Internet Explorer or a -1
+		//(indicating the use of another browser).
+		function getInternetExplorerVersion() {
+			var rv = -1; // Return value assumes failure.
+			if (navigator.appName == 'Microsoft Internet Explorer') {
+				var ua = navigator.userAgent;
+				var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+				if (re.exec(ua) != null)
+					rv = parseFloat(RegExp.$1);
+			}
+			return rv;
+		}
+		
+		function getDetectFirefox() {
+			var rv = false; // Return value assumes failure.
+			if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) { 
+				rc = true;
+			}
+			return rv;
+		}
+	
+		function preventBubbling(e) {
+			if (getInternetExplorerVersion() != -1) {
+				if (!e)
+					var e = window.event;
+				e.cancelBubble = true;
+				window.event.cancelBubble = true;
+				if (e.stopPropagation)
+					e.stopPropagation();
+			}
+	 
+			return false;
+		}
+		
+		function askDeleteBefore(formId, type, name, parameters) {
+			$(document)
+				.ready(
+						function() {
+							$("#dialogDelete")
+									.dialog(
+											{
+												open: function() {
+													$(this).parents('.ui-dialog-buttonpane button:eq(0)').blur();
+													$(this).parents('.ui-dialog-buttonpane button:eq(1)').focus(); 
+												},
+												modal : true,
+												width : 400,
+												bgiframe: true,
+												title : "Suppression",
+												buttons : [
+														{
+															text : "Oui",
+															click : function() {
+																$(this).dialog("close");
+																processSubmit(formId, type, name, parameters);
+															}
+														},
+														{
+															text : "Non",
+															click : function() {
+																$(this).dialog("close");
+															}
+														} ]
+											}
+	
+									);
+						});
+
+		}
+
+		function askDialogProcessInProgress() {
+			$(document)
+				.ready(
+						function() {
+							$("#dialogProcessInProgress")
+									.dialog({
+												title : "Traitement en cours",
+												closeOnEscape: false,
+												bgiframe: true,
+												open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+												modal : true,
+												draggable : false,
+												resizable : false,
+												width : 200,
+												height : 100
+											});
+						});
+
+		}
+		
+		function processSubmit(formId, type, name, parameters) {
+			var frmId = document.getElementById(formId);
+			if (frmId) {
+				//preventBubbling();
+				
+				if ( parameters ) {
+					var elems = parameters.split(",");
+					setCookieGridToScrollViewTo(elems[0],elems[1]);
+				}
+	
+				frmId.submitType.value = type;
+				frmId.submitName.value = name;
+				frmId.submitParameters.value = parameters;
+	
+				frmId.submit();
+				
+				askDialogProcessInProgress();
+				
+				return true;
+			}
+			return false;
+		}
+		
+		function processSubmitNoProcessing(formId, type, name, parameters) {
+			var frmId = document.getElementById(formId);
+			if (frmId) {
+				//preventBubbling();
+				
+				if ( parameters ) {
+					var elems = parameters.split(",");
+					setCookieGridToScrollViewTo(elems[0],elems[1]);
+				}
+
+				frmId.submitType.value = type;
+				frmId.submitName.value = name;
+				frmId.submitParameters.value = parameters;
+	
+				frmId.submit();
+				
+				return true;
+			}
+			return false;
+		}
+		
+		function openNewReportWindows(href,uniqueWindowsName) {
+			myRef = window.open(href,'','width=700,height=500,toolbar=1,resizable=1,status=0,menubar=1');
+		}
+	</script>
+
+	<script language="JavaScript">
+		var backDone = false;
+		javascript:window.history.forward(1);
+		function noBack() { 
+			try {
+				setMenuToHighLightFrom();
+			}
+			catch (err) {}
+
+			// This case, the button was be handled to be set to false and back to true if something change
+			if ( document.getElementById(undoControlID) ) {
+				if ( document.getElementById(undoControlID).disabled == false ) {
+					handleUndoButtonState = true; 
+					document.getElementById(undoControlID).disabled = true;
+				}
+			}
+			// Add code to handle code that are making some changes
+			window.history.forward(1);
+			
+			setFocusOnFirstInput();
+		}
+
+		if ( ! backDone ) {
+			// Fixed a Safari issue whici noBack isn't called by the body load
+			setTimeout("noBack()", 500);
+			backDone = true; 
+		}
+	</script>
+	
+	<script language="JavaScript">
+		function setFocusOnFirstInput() {
+			var inputs, index;
+
+			var divCenter = document.getElementById('cn-centre-col');
+			if ( divCenter ) {
+				var elms = divCenter.getElementsByTagName("*");
+				for(var i = 0, maxI = elms.length; i < maxI; ++i) {
+					var elem = elms[i];
+					
+					if ( elem.type == "text" ||
+						 elem.type == "textarea"  ||
+						 elem.type == "password"  ||
+						 elem.type == "image"  ||
+						 elem.type == "radio"  ||
+						 elem.type == "select-one"  ||
+						 elem.type == "select-multiple"  ||
+						 elem.type == "checkbox" ) {
+
+				    	if ( elem.getAttribute('disabled') == 'disabled') {
+				    		//Pass
+				    	}
+				    	else {
+				    		if ( ! elem.getAttribute('onfocus') ) {
+				    			elem.focus();
+				    			break;
+				    		}
+				    	}
+				    	
+					}
+				}
+				
+			}
+
+
+		} 
+	</script>
+
+	<script language="JavaScript">
+
+		var isMenuHasBeenSelectedYet = false;
+
+	    function setMenuToHighlight(id) {
+			$.JSONCookie("ccvSystemMenuToHighlight", { menuId: id }, {path: '/'});
+		}
+	    
+	    function setCookieGridToScrollViewTo(elemGridId,elemIdx) {
+	    	var idAutoScrollToElem = $.JSONCookie("ccvFormGridToScrollViewTo");
+			if ( ! idAutoScrollToElem ) {
+				$.JSONCookie("ccvFormGridToScrollViewTo", { gridIds: [] }, {path: '/'});
+			}
+			
+			// Stack-Up
+			idAutoScrollToElem = $.JSONCookie("ccvFormGridToScrollViewTo");
+			if ( ! idAutoScrollToElem.gridIds ) {
+				idAutoScrollToElem.gridIds = [];
+			}
+			
+			if ( elemIdx && elemGridId ) {
+				idAutoScrollToElem.gridIds.push(elemGridId);
+				idAutoScrollToElem.gridIds.push(elemIdx);
+				$.JSONCookie("ccvFormGridToScrollViewTo", { gridIds: idAutoScrollToElem.gridIds }, {path: '/'});
+	    	}
+		}
+	    
+		function setMenuToHighLightFrom() { 
+			var idMenuClicked = $.JSONCookie("ccvSystemMenuToHighlight");
+			if ( ! idMenuClicked.menuId ) {
+				setMenuToHighlight("menuTabWelcome");	
+			}
+	
+			idMenuClicked = $.JSONCookie("ccvSystemMenuToHighlight");
+			if ( idMenuClicked.menuId ) {
+				var elem = document.getElementById(idMenuClicked.menuId);
+				if ( elem ) {
+					if ( !isMenuHasBeenSelectedYet ) {
+						setMenuToBeBleu(idMenuClicked.menuId);
+					}
+				}
+				else {
+					if ( idMenuClicked.menuId == "menuTabLogin") {
+						setMenuToHighlight("menuTabWelcome");
+						setMenuToBeBleu("menuTabWelcome");
+					}
+					if ( idMenuClicked.menuId == "menuTabLogout") {
+						setMenuToHighlight("menuTabHome");
+						setMenuToBeBleu("menuTabHome");
+					}
+				}
+			}
+		}
+
+		function setMenuToBeBleu(menuId) {
+				var elem = document.getElementById(menuId);
+				if ( elem ) {
+					if ( !isMenuHasBeenSelectedYet ) {
+						elem.className = "cmb-selected";
+						isMenuHasBeenSelectedYet = true;
+					}
+				}
+		}
+		
+		var timerScrollView = setTimeout("automaticScrollView()", 500);
+		
+		function automaticScrollView() {
+			var idAutoScrollToElem = $.JSONCookie("ccvFormGridToScrollViewTo");
+			if ( idAutoScrollToElem ) {
+				if ( idAutoScrollToElem.gridIds ) {
+					var elemIdx = idAutoScrollToElem.gridIds.pop();
+					var elemGridId = idAutoScrollToElem.gridIds.pop();
+					var elemScrootTo = document.getElementById(elemGridId + elemIdx);
+					if ( elemScrootTo ) {
+						try {
+							elemScrootTo.scrollIntoView(true);
+						}
+						catch (err) {
+							//alert("#1" + err);
+						}
+						try {
+							if ( elemScrootTo.parentNode ) {
+								if ( elemScrootTo.parentNode.parentNode ) {
+									elemScrootTo.parentNode.parentNode.bgColor = "yellow";
+								}
+							}
+							else {
+								if ( elemScrootTo.parentElement ) {
+									if ( elemScrootTo.parentElement.parentElement ) {
+										elemScrootTo.parentElement.parentElement.bgColor = "yellow";
+									}
+								}
+							}
+						}
+						catch(err){
+							//alert("#2" + err);
+						}
+					}
+					else {
+						if ( elemIdx && elemGridId ) {
+							//Not found, we are not at the right level, push again what we found
+							idAutoScrollToElem.gridIds.push(elemGridId);
+							idAutoScrollToElem.gridIds.push(elemIdx);
+						}
+					}
+					$.JSONCookie("ccvFormGridToScrollViewTo", { gridIds: idAutoScrollToElem.gridIds }, {path: '/'});
+				}
+			}
+
+			clearTimeout(timerScrollView);
+		}
+
+ 	</script>
+
+</head>
+
+	<body class="claro" role="main" style="margin: 0 auto; width: 800px;" onload="noBack();" onpageshow="if (event.persisted) noBack();" onunload="">
+
+
+<div id="cn-body-inner-1col"> 
+  
+
+
+
+
+
+
+
+
+   	
+    <!-- HEADER BEGINS | DEBUT DE L'EN-TETE --> 
+    <div id="cn-head" style="padding-top: 1px;"><div id="cn-head-inner">
+    <header>
+        <!-- INSTITUTIONAL BANNER STARTS | DEBUT DE LA BANNIERE INSTITUTIONNELLE -->
+        <div class="banner" id="cn-banner" role="banner">
+		    <p class="main">Le CV commun canadien</p>
+		    <p class="siteuri">www.ccv-cvc.ca</p>
+        </div>
+        <!-- INSTITUTIONAL BANNER ENDS | FIN DE LA BANNIERE INSTITUTIONNELLE -->
+        <div role="navigation">
+        <nav>
+            <!-- COMMON MENU BAR BEGINS | DEBUT DE LA BARRE DE MENU COMMUNE -->             
+            <div id="cn-cmb">
+                <!-- COMMON MENU BAR TITLE BEGINS | DEBUT DU TITRE DE LA BARRE DE MENU COMMUNE -->
+                <h2>Liens de la barre de menu commune</h2>
+                <!-- COMMON MENU BAR TITLE ENDS | FIN DU TITRE DE LA BARRE DE MENU COMMUNE -->
+                <ul style="font-size: 14px;">
+                    <!-- FRENCH LINK BEGINS | DEBUT DU LIEN FRANCAIS -->
+                    <li id="cn-cmb1"><a id="menuTabLanguage" href="javascript:validatePostedData('indexresearcher-eng.frm');" lang="en" xml:lang="en" title="English - English version of the Web page" >English </a></li>
+                    <!-- FRENCH LINK ENDS | FIN DU LIEN FRANCAIS -->
+                    <li id="cn-cmb2"><a id="menuTabHome" href="javascript:setMenuToHighlight('menuTabHome'); javascript:validatePostedData('indexresearcher-fra.frm');"   title="Accueil - Page principale du Site du CV commun canadien">Accueil</a></li>
+                    <li id="cn-cmb3"><a id="menuTabContactUs" href="javascript:setMenuToHighlight('menuTabContactUs'); javascript:validatePostedData('researcherProcResearcherContactUs-fra.frm');" title="Contactez-nous - Communiquez avec le Site du CV commun canadien">Contactez-nous</a></li> 
+                    <li id="cn-cmb4"><a href="javascript:popupccvwindow('researcher-help-fr.htm');" title="Aide - Renseignements sur la façon d’utiliser le Site du CV commun canadien">Aide</a></li>
+                    <li id="cn-cmb6" style="position: absolute; right: 5px;">
+					    <!-- LOGIN BEGINS | DEBUT DE LA CONNECTION --> 
+			            
+			                <a id="menuTabLogin" href="javascript:setMenuToHighlight('menuTabLogin'); javascript:validatePostedData('loginresearcher-fra.frm');"   title="Entrer">Entrer</a>
+						
+						<!-- LOGIN ENDS | FIN DE LA CONNECTION --> 
+   
+					    <!-- LOGOUT SESSION BEGINS | DEBUT DE LA DISCONNECTION --> 
+			            
+						<!-- LOGOUT SESSION ENDS | FIN DE LA DISCONNECTION --> 
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        </div>
+    </header>
+    </div></div>
+    <!-- HEADER ENDS | FIN DE L'EN-TETE -->
+    
+ 
+<!-- ONE COLUMNS LAYOUT BEGINS | DEBUT DE LA MISE EN PAGE D'UNE COLONNE -->
+<div id="cn-cols">
+
+
+	
+
+
+
+ 
+ 
+<!--    User logged in  -->
+
+
+<!-- SESSION DIALOG BEGINS | DEBUT DU DIALOGUE DE SESSION -->
+<div id="dialogSession" style="display:none;">
+	<img src="/ccv-cvc-resources/images/error.gif" style="padding-right: 5px;"/>
+	Est-ce que vous voulez augmenter la session pour un autre 30 minutes?
+</div>
+<!-- SESSION DIALOG ENDS | FIN DU DIALOGUE DE SESSION -->
+
+<!-- ERROR DIALOG BEGINS | DEBUT DU DIALOGUE D'ERREUR -->
+<div id="dialog" style="display:none" title="Des informations ont changées">
+	<img src="/ccv-cvc-resources/images/error.gif" style="padding-right: 5px;"/>
+	Voulez-vous ignorer les changements?
+</div>
+<!-- ERROR DIALOG ENDS | FIN DU DIALOGUE D'ERREUR -->
+
+<!-- HELP DIALOG BEGINS | DEBUT DU DIALOGUE D'AIDE -->
+<div id="dialogHelp" style="display:none;">
+</div>
+<!-- HELP DIALOG ENDS | FIN DU DIALOGUE D'AIDE -->
+
+<!-- DELETION DIALOG BEGINS | DEBUT DU DIALOGUE DE DETRUIRE -->
+<div id="dialogDelete" style="display:none">
+	<img src="/ccv-cvc-resources/images/question.png" style="padding-right: 5px;"/>
+	dialog.deleting.question
+</div>
+<!-- DELETION DIALOG ENDS | FIN DU DIALOGUE DE DETRUIRE -->
+
+<!-- PROCESSING DIALOG BEGINS | DEBUT DU DIALOGUE DE TRAITEMENT -->
+<div id="dialogProcessInProgress" style="display:none">
+	<img src="/ccv-cvc-resources/images/working.png" style="padding-right: 5px;"/>
+	SVP attendre...
+</div>
+<!-- PROCESSING DIALOG ENDS | FIN DU DIALOGUE DE TRAITEMENT -->
+
+<!-- MENU LAYOUT BEGINS | DEBUT DU MENU -->
+<!--    User not logged in yet -->
+
+	<div style="width: 800px; height: 28px; border: 1px none; background-color:white; margin-top: 1px">
+	</div>
+
+
+<!--    User logged in  -->
+
+<!-- MENU LAYOUT ENDS | FIN DU MENU  -->
+
+<!-- TITLE BEGINS | DEBUT DU TITRE -->
+<div style="float: left; position: relative">
+	<table style="width: 800px; margin-top: 2px; margin-bottom: 5px;">
+		<tr>
+			<td style="width: 65%; font-size: 16px; font-weight: bold;" class="ccvleft">
+				
+			</td>
+			<td style="width: 35%; font-size: 16px; font-weight: bold; color: red;" class="ccvright">
+				
+				<span>&nbsp;&nbsp;</span>
+				<span style="color: black; font-weight: normal; !important" id="idServerClockDateTime"></span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<font style="font-size: 12px; font-weight: normal;">  </font>
+			</td>
+		</tr>		
+	</table>
+</div>
+<!-- TITLE ENDS | FIN DU TITRE  -->
+
+<!-- ERROR SECTION BEGINS | DEBUT DE LA SECTION DES ERREURS -->
+
+
+
+<!-- GENERIC MESSAGE SECTION BEGINS -->
+
+<!-- MESSAGE SECTION ENDS -->
+
+<!-- WARNINGS SECTION BEGINS | DEBUT DE LA SECTION DES AVERTISSEMENTS -->
+
+
+<!-- MESSAGE SECTION BEGINS | DEBUT DE LA SECTION DES MESSAGE -->
+
+<!-- MESSAGE SECTION ENDS | DE LA SECTION DES MESSAGES  -->
+
+
+	
+
+
+
+<!-- CONTENT BEGINS | DEBUT DU CONTENU --> 
+<div id="cn-centre-col" role="main">
+   	<div id="cn-centre-col-inner"> 
+		<section>   
+<iframe style="border: 1px #ECECEB solid; width:795px; height: 400px;" src="https://ccv-cvc.ca/info_fr/index.shtml">
+ <p>Votre navigateur ne supporte pas les « iframes »</p>
+</iframe>
+		</section>
+	</div>
+</div>
+<!-- CONTENT ENDS | FIN DU CONTENU -->
+
+
+
+
+
+</div>        
+<!-- COLUMNS LAYOUT ENDS | FIN DE LA MISE EN PAGE DE COLONNES -->
+
+		
+
+
+<!-- FOOTER BEGINS | DEBUT DU PIED DE LA PAGE --> 
+<div id="cn-foot"><div id="cn-foot-inner">
+<footer>
+    <div id="cn-in-pd">  
+        <!-- DATE MODIFIED BEGINS | DEBUT DE LA DATE DE MODIFICATION -->          
+        <dl id="cn-doc-dates" role="contentinfo">
+            <dt>Modifié: </dt>
+            <dd><span><time>2014-12-22_CCVPRODUCTION </time></span></dd>
+        </dl>
+        <!-- DATE MODIFIED ENDS | FIN DE LA DATE DE MODIFICATION -->
+        <div id="cn-toppage-foot"> 
+            <a href="#cn-cmb" title="Va au haut de la page" alt="Va au haut de la page"><img class="uparrow" src="/ccv-cvc-resources/images/tphp.gif" width="19" height="12" alt="" /></a><br />
+            <a href="#cn-cmb" title="Va au haut de la page" alt="Haut de la page">Haut de la page</a>
+        </div>
+        <div id="cn-in-pd-links">
+            <ul>
+                <li id="cn-inotices-link"><a href="javascript:popupccvwindow('importantresearcher-fra.frm')" title="Droit de reproduction et protection des renseignements personnels" alt="Avis importants">Avis importants</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+</div></div>
+<!-- FOOTER ENDS | FIN DU PIED DE LA PAGE -->
+	</body>
+</html>

@@ -1,0 +1,76 @@
+@import play.api.libs.json.JsUndefined
+
+@import play.api.libs.json.JsObject
+
+@(post: JsObject)
+
+@blog("Welcome to Play") {
+    <div class="blog-wrap">
+
+        <div class="blog-desc">
+            <h4><a href="#">@{(post\"title").as[String]}</a></h4>
+            <div>
+                @Html((post\"body").as[String])
+            </div>
+            <ul class="list-inline post-deatil">
+                <li><a href="#">@{(post\"author"\"fullName").as[String]}</a></li>
+                <li>الثلاثاء، 7 أكتوبر، 2014</li>
+                <li>التسميات: 6-2 سنوات, الأنشطة الحركية, الحياة العملية</li>
+            </ul>
+
+        </div>
+    </div><!--blog wrap-->
+    <h3>@Messages("Comments")</h3>
+    <ul class="list-unstyled comments-list">
+        <li>
+            <img class="avtar" src="img/team-2.jpg" alt="">
+            <div class="meta">
+                <span>Rocky Example</span>,
+                <span class="time">2 August 014, 1:01</span>
+            </div>
+            <p>
+                Suspendisse at placerat turpis. Duis luctus erat vel magna pharetra aliquet. Maecenas tincidunt feugiat ultricies. Phasellus et dui risus. Vestibulum adipiscing, eros quis lobortis dictum.  It enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </li>
+        <li>
+            <img class="avtar" src="img/team-3.jpg" alt="">
+            <div class="meta">
+                <span>Rocky Example</span>,
+                <span class="time">2 August 014, 1:01</span>
+            </div>
+            <p>
+                Suspendisse at placerat turpis. Duis luctus erat vel magna pharetra aliquet. Maecenas tincidunt feugiat ultricies. Phasellus et dui risus. Vestibulum adipiscing, eros quis lobortis dictum.  It enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </li>
+        <li>
+            <img class="avtar" src="img/team-4.jpg" alt="">
+            <div class="meta">
+                <span>Rocky Example</span>,
+                <span class="time">2 August 014, 1:01</span>
+            </div>
+            <p>
+                Suspendisse at placerat turpis. Duis luctus erat vel magna pharetra aliquet. Maecenas tincidunt feugiat ultricies. Phasellus et dui risus. Vestibulum adipiscing, eros quis lobortis dictum.  It enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </li>
+    </ul><!--comments list-->
+    <h3>Leave a Comment</h3>
+    <div class="contact-form">
+        <form role="form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="form-group">
+                <label for="mail">Email</label>
+                <input type="email" class="form-control" id="mail" required="">
+            </div>
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea class="form-control" rows="6" id="comment" required=""></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-theme-bg">Send Comment</button>
+        </form><!--form-->
+    </div>
+}
+

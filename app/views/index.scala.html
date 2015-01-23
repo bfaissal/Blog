@@ -1,0 +1,49 @@
+@import play.api.libs.json.JsUndefined
+
+@import play.api.libs.json.JsObject
+
+@(posts: List[JsObject])
+
+@blog("Welcome to Play") {
+<div class="col-md-12">
+    @for(post <- posts){
+
+        <div class="blog-wrap">
+            @(post\"head-image") match{
+                case _:JsUndefined => {}
+                case _ => {
+                    <a href="#">
+                        <div class="item-img-wrap">
+                            <img src="@routes.Assets.at("img/showcase-1.jpg")" class="img-responsive" alt="workimg">
+                            <div class="item-img-overlay">
+                                <span></span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="divide30"></div>
+                }
+
+            }
+
+
+            <div class="blog-desc">
+                <h4><a href="/post/@{(post\"url").as[String]}">@{(post\"title").as[String]}</a></h4>
+                <ul class="list-inline post-deatil">
+                    <li><a href="#">@{(post\"author"\"fullName").as[String]}</a></li>
+                    <li>الثلاثاء، 7 أكتوبر، 2014</li>
+                    <li>التسميات: 6-2 سنوات, الأنشطة الحركية, الحياة العملية</li>
+                </ul>
+                @Html((post\"body").as[String])
+
+                <p><a href="blog-post.html">المزيد...</a></p>
+            </div>
+        </div><!--blog wrap-->
+        }
+
+        <ul class="pager">
+            <li class="previous"><a href="#">&larr; اللاحق</a></li>
+            <li class="next"><a href="#">السابق &rarr;</a></li>
+        </ul>
+</div>
+    }
+
