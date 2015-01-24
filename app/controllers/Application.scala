@@ -8,6 +8,7 @@ import play.api.i18n.Messages
 import play.api.libs.iteratee.{Enumerator, Iteratee, Enumeratee}
 import play.api.libs.json
 import play.api.libs.json._
+import play.api.libs.ws.WS
 import play.api.mvc._
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
@@ -15,6 +16,7 @@ import reactivemongo.api.QueryOpts
 import reactivemongo.bson.{BSONInteger, BSONObjectID}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.Play.current
 
 
 object Application extends Controller with MongoController {
@@ -31,7 +33,9 @@ object Application extends Controller with MongoController {
   )
   def index = Action.async {
     val res = collection.find(Json.obj("published" -> true)).options(QueryOpts().batchSize(3)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
-    res.map(e => Ok(views.html.index(e)).withCookies(Cookie("faissal","Salam")).withSession(("sdqsd"->"xwcwxc")))
+    res.map(e => {
+      Ok(views.html.index(e))
+    })
   }
   def postById(id:String) = Action.async {
     collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
@@ -92,8 +96,13 @@ object Application extends Controller with MongoController {
     }
   }
 
-  def img(img:String) = Action{
-    Ok.chunked(Enumerator.fromFile(new File(s"/tmp2/picture/$img")))
+  def img(img:String) = Action.async{
+
+    WS.url("http://2.bp.blogspot.com/-aP74Rp910F4/VL0fEtYwWjI/AAAAAAAABeg/RxIRkeV45gk/s1600/une-classe-montessori%2B(1).jpg")
+      .getStream().map(
+        {case (rh,e) => Ok.chunked(e)}
+      )
+
   }
 
 }
