@@ -1,13 +1,16 @@
 package controllers
 
-import java.io.File
+import java.io.{FileInputStream, File}
 
+import com.ning.http.client.{AsyncHttpClient, StringPart, RequestBuilder}
+import com.sksamuel.scrimage.Image
 import play.api._
 import play.api.http.MimeTypes
 import play.api.i18n.Messages
 import play.api.libs.iteratee.{Enumerator, Iteratee, Enumeratee}
 import play.api.libs.json
 import play.api.libs.json._
+import play.api.libs.oauth.{RequestToken, ConsumerKey, OAuthCalculator}
 import play.api.libs.ws.WS
 import play.api.mvc._
 import play.modules.reactivemongo.MongoController
@@ -85,14 +88,20 @@ object Application extends Controller with MongoController {
   def upload(CKEditorFuncNum:String) = Action(parse.multipartFormData) { request =>
     request.body.file("upload").map { picture =>
       import java.io.File
+
       val filename = picture.filename
       val contentType = picture.contentType
+      val rb = new RequestBuilder()
+      rb.addBodyPart(new StringPart("",""))
+      rb.setUrl("").build()
+      val cl:AsyncHttpClient = WS.client.underlying
+
       picture.ref.moveTo(new File(s"/tmp2/picture/$filename"))
+      //picture.ref.
       val res = s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename','');</script></body></html>"
       Ok(res).as("text/html")
     }.getOrElse {
-      Redirect(routes.Application.index).flashing(
-        "error" -> "Missing file")
+      BadRequest(s"<html><body><script type='text/javascript'>alert('${Messages("upload.error.retry")}')</script></body></html>")
     }
   }
 
@@ -104,5 +113,15 @@ object Application extends Controller with MongoController {
       )
 
   }
+
+  def testDropbox = Action.async{
+    WS.url("https://api-content.dropbox.com/1/files_put/auto/DSC_1326.JPG")
+      .withHeaders("Authorization"->System.getenv("DROPBOX_TOCKEN"))
+      .put(new File(s"/tmp2/picture/DSC_1326.JPG")).map( rs => Ok(rs.body))
+
+
+    //Ok("")
+  }
+
 
 }
