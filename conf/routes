@@ -7,7 +7,7 @@ GET         /                     controllers.Application.index
 GET         /form                 controllers.Application.form(post :String="index")
 GET         /form/:post           controllers.Application.form(post :String)
 POST        /savePost             controllers.Application.savePost
-GET         /allPosts             controllers.Application.allPosts
+GET         /allPosts             controllers.Application.allPosts(f:Option[Long],l:Option[Long])
 POST        /deletePost           controllers.Application.deletePost
 GET         /post/:url            controllers.Application.post(url: String)
 GET         /postById/:id         controllers.Application.postById(id: String)

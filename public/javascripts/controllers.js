@@ -77,12 +77,29 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         $scope.orderPridicate="-creationDate";
         $http.get('/allPosts').success(function(data){
             $scope.posts = data;
-            console.info(data)
+            $scope.firstPost = $scope.posts[0].creationDate
+            console.info(">>> "+$scope.posts.length)
+            if($scope.posts.length>0)   {
+                console.info($scope.posts[$scope.posts.length-1])
+                $scope.lastPost = $scope.posts[$scope.posts.length-1].creationDate
+            }
         })
+        $scope.getCurrentPagePosts = function (ff){
+
+            var url= '/allPosts?l='+$scope.firstPost
+            if(ff)
+                var url= '/allPosts?f='+$scope.lastPost
+
+
+            $http.get(url).success(function(data){
+                $scope.posts = data;
+                $scope.firstPost = $scope.posts[0].creationDate
+                if($scope.posts.length>0)
+                    $scope.lastPost = $scope.posts[$scope.posts.length-1].creationDate
+            })
+        }
         $scope.save = function(){
             $http.post('/savePost',$scope.post).success(function(data){
-                console.info(data)
-                console.info($scope.post)
                 if(!$scope.post._id ){
                     $scope.posts.push(data)
                 }

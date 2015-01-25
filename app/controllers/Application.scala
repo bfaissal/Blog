@@ -24,6 +24,7 @@ import play.api.Play.current
 
 object Application extends Controller with MongoController {
   def collection: JSONCollection = db.collection[JSONCollection]("posts")
+  def sequences: JSONCollection = db.collection[JSONCollection]("counters")
   def users: JSONCollection = db.collection[JSONCollection]("users")
 
   def connect = Action.async(parse.json){ implicit request =>
@@ -35,7 +36,7 @@ object Application extends Controller with MongoController {
     (__ \ '_id \ '$oid).json.put(JsString(BSONObjectID.generate.stringify))
   )
   def index = Action.async {
-    val res = collection.find(Json.obj("published" -> true)).options(QueryOpts().batchSize(3)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
+    val res = collection.find(Json.obj(/*"published" -> true*/)).options(QueryOpts().batchSize(3000)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
     res.map(e => {
       Ok(views.html.index(e))
     })
@@ -50,8 +51,13 @@ object Application extends Controller with MongoController {
   def form(post:String) = Action.async {
       Future.successful(Ok(views.html.form("")))
   }
-  def allPosts = Action.async {
-    collection.find(Json.obj()).cursor[JsObject].collect[List]().map(list => Ok(Json.toJson(list)))
+  def allPosts(f:Option[Long],l:Option[Long]) = Action.async {
+
+    //asOk.chunked(Enumerator("[") andThen (collection.find(Json.obj()).cursor[JsObject].enumerate() &> Enumeratee.map(e => e.toString()+",")) andThen Enumerator("{}]")).as(JSON)
+    val query  = f.map({fDate:Long => {Json.obj("creationDate"->Json.obj("$lt"->fDate))}}).getOrElse(
+      l.map({lDate:Long => {Json.obj("creationDate"->Json.obj("$gt"->lDate))}}).getOrElse(Json.obj())
+    )
+    collection.find(query).options(QueryOpts().batchSize(20)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]().map(list => Ok(Json.toJson(list)))
   }
 
 
@@ -59,6 +65,7 @@ object Application extends Controller with MongoController {
     request => {
       val post = ((request.body \ "_id") match {
         case _:JsUndefined =>{
+          //sequences.fin
           val connectedUser = Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
           val addAuthor = __.json.update((__ \ 'author ).json.put(connectedUser))
           val creationDate = __.json.update((__ \ 'creationDate ).json.put(JsNumber(new java.util.Date().getTime())))
@@ -84,19 +91,16 @@ object Application extends Controller with MongoController {
     Ok(Json.obj("data"->Json.arr(Json.obj("tag"->"tag1"),Json.obj("tag"->"tag2"),Json.obj("tag"->"tag3"))))
     Ok(Json.arr(Json.obj("text"->"stag1"),Json.obj("text"->"wtag2"),Json.obj("text"->"tag3")))
   }
-
+  var i =0
   def upload(CKEditorFuncNum:String) = Action(parse.multipartFormData) { request =>
     request.body.file("upload").map { picture =>
       import java.io.File
-
+      i = i+1
       val filename = picture.filename
       val contentType = picture.contentType
-      val rb = new RequestBuilder()
-      rb.addBodyPart(new StringPart("",""))
-      rb.setUrl("").build()
-      val cl:AsyncHttpClient = WS.client.underlying
 
-      picture.ref.moveTo(new File(s"/tmp2/picture/$filename"))
+
+      picture.ref.moveTo(new File(s"/tmp2/picture/${filename}_$i"))
       //picture.ref.
       val res = s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename','');</script></body></html>"
       Ok(res).as("text/html")
@@ -115,9 +119,12 @@ object Application extends Controller with MongoController {
   }
 
   def testDropbox = Action.async{
+
     WS.url("https://api-content.dropbox.com/1/files_put/auto/DSC_1326.JPG")
       .withHeaders("Authorization"->System.getenv("DROPBOX_TOCKEN"))
-      .put(new File(s"/tmp2/picture/DSC_1326.JPG")).map( rs => Ok(rs.body))
+      .put(new File(s"/Users/faissalboutaounte/Downloads/VirtualBox-4.3.20-96996-OSX.dmg"))
+      //.put(new File(s"/tmp2/picture/DSC_1326.JPG"))
+       .map( rs => Ok(rs.body))
 
 
     //Ok("")

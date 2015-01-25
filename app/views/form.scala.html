@@ -8,6 +8,9 @@
     <div class="col-md-12" ng-app="blog" ng-controller="adminCtrl" ng-cloak>
         <div ng-show="!edit" class="animate-show">
             <button class="btn btn-info" ng-click="addPost()"><i class="glyphicon glyphicon-plus-sign"></i></button>
+            <button class="btn btn-info" ng-click="getCurrentPagePosts(true)"><i class="glyphicon glyphicon-fast-forward"></i></button>
+            <button class="btn btn-info" ng-click="getCurrentPagePosts()"><i class="glyphicon glyphicon-fast-backward"></i></button>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -33,39 +36,7 @@
             </table>
         </div>
         <div ng-hide="!edit" class="row animate-show">
-            <!--<div class="col-md-6">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">@Messages("tools")</a></li>
-                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">@Messages("preview")</a></li>
 
-                </ul>
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="home" style="margin-top: 20px">
-
-                        <div class="btn-group" role="group" aria-label="...">
-
-                            <button type="button" class="btn btn-default" ng-click="stylefunction(0)"><i class="glyphicon glyphicon-align-left"></i></button>
-                            <button type="button" class="btn btn-default" ng-click="stylefunction(1)"><i class="glyphicon glyphicon-align-center"></i></button>
-                            <button type="button" class="btn btn-default" ng-click="stylefunction(2)"><i class="glyphicon glyphicon-align-right"></i></button>
-                            <button type="button" class="btn btn-default" ng-click="stylefunction(3)"><i class="glyphicon glyphicon-bold"></i></button>
-                            <button type="button" class="btn btn-default" ng-click="stylefunction(4)"><i class="glyphicon glyphicon-italic"></i></button>
-                                <button type="button" class="btn btn-default" ng-click="stylefunction(5)"><i class="glyphicon glyphicon glyphicon-sort-by-alphabet"></i></button>
-                            <button type="button" class="btn btn-default" ng-click="stylefunction(6)"><i class="glyphicon glyphicon glyphicon-inbox"></i></button>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="profile">
-                        <div class="blog-desc" style="margin-top: 20px;">
-                            <h4><a href="#">{{post.title}}</a></h4>
-
-                            <div id="preview"></div>
-
-                            <p><a href="blog-post.html">المزيد...</a></p>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>  -->
             <div class="col-md-12">
                 <form>
                     <button type="submit" class="btn btn-info" ng-click="save()">@Messages("save")</button>
