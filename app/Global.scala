@@ -12,11 +12,11 @@ object Global extends GlobalSettings {
     Logger.info("Application has started")
     println("Salam ********* ")
   }
-  override def onError(request: RequestHeader, ex: Throwable) = {
+ /* override def onError(request: RequestHeader, ex: Throwable) = {
     Future.successful(Application.InternalServerError(
       views.html.error(500)
     ))
-  }
+  } */
   override def onHandlerNotFound(request: RequestHeader) = {
     Future.successful(Application.NotFound(
       views.html.error(404)
