@@ -2,6 +2,7 @@ package controllers
 
 import java.io.{FileInputStream, File}
 
+import _root_.util.ESUtilities
 import com.ning.http.client.{AsyncHttpClient, StringPart, RequestBuilder}
 import com.sksamuel.scrimage.Image
 import play.api._
@@ -76,7 +77,7 @@ object Application extends Controller with MongoController {
         }
       }).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get
       collection.save(post)
-
+      ESUtilities.esIndex(post)
 
       Future.successful(Ok(post).as(MimeTypes.JSON))
     }
@@ -178,7 +179,7 @@ object Application extends Controller with MongoController {
     //WS.url("http://localhost:9200/blox/_analyze?field=body&text="+text).get().map(r => Ok(r.body))
 
   }
-  def search(text:String) =Action.async{
+  def search(search:String) =Action.async{
     val ul:AsyncHttpClient = WS.client.underlying
     val rb = new RequestBuilder().setUrl("http://localhost:9200/blox/_search").setBody(
       s"""
@@ -186,7 +187,7 @@ object Application extends Controller with MongoController {
         |   "query": {
         |        "multi_match": {
         |            "fields" : ["title","body"],
-        |            "query":  "$text"
+        |            "query":  "$search"
         |        }
         |    },
         |    "highlight" : {
