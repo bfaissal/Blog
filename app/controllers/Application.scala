@@ -36,7 +36,7 @@ object Application extends Controller with MongoController {
     (__ \ '_id \ '$oid).json.put(JsString(BSONObjectID.generate.stringify))
   )
   def index = Action.async {
-    val res = collection.find(Json.obj(/*"published" -> true*/)).options(QueryOpts().batchSize(3000)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
+    val res = collection.find(Json.obj("published" -> true)).options(QueryOpts().batchSize(20)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
     res.map(e => {
       Ok(views.html.index(e))
     })
@@ -130,5 +130,76 @@ object Application extends Controller with MongoController {
     //Ok("")
   }
 
+  def indexing =Action.async{
+    val settings =
+      """
+        {
+          "mappings": {
+            "post" : {
+              "properties" : {
+                "title" : {
+                  "type" : "string",
+                  "analyzer": "arabic"
+                },
+                "body" : {
+                          "type" : "string",
+                          "analyzer": "arabic"
+                        },
+                "tag" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                }
+              }
+            }
+          }
+        }
+      """
+    for(
+     post <- collection.find(Json.obj(("url" -> "testxxx")))
+    .cursor[JsObject].headOption.map( p => p.getOrElse(Json.obj()));
+      //r1 <- WS.url("http://localhost:9200/blox").put(settings).map(rq => { rq.body});
+      //r2 <- WS.url("http://localhost:9200/blox").get.map(rq => rq.body) ;
+    r3 <- WS.url("http://localhost:9200/blox/post/"+(post \"url").as[String]).withHeaders("Content-Type"->"application/json;charset=UTF-8").put(post).map(rq => rq.body)) yield Ok("r1+ ----- "+" ----- "+r3)
+
+  }
+  def analyse(text:String) =Action.async{
+    val text = collection.find(Json.obj(("url" -> "testxxx")))
+      .cursor[JsObject].headOption.map( p => {p.map(px => (px\"body").as[String]).getOrElse("")})
+    text.map(aPost => {
+      val ul:AsyncHttpClient = WS.client.underlying
+      val rb = new RequestBuilder().setUrl("http://localhost:9200/blox/_analyze?analyzer=arabic").setBody(
+        aPost.replace("<p>","").replace("</p>","")
+
+      ).setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
+      println(" ===>" +aPost.replace("<p>","").replace("</p>",""))
+      Ok(ul.executeRequest(rb).get().getResponseBody)
+    })
+
+    //WS.url("http://localhost:9200/blox/_analyze?field=body&text="+text).get().map(r => Ok(r.body))
+
+  }
+  def search(text:String) =Action.async{
+    val ul:AsyncHttpClient = WS.client.underlying
+    val rb = new RequestBuilder().setUrl("http://localhost:9200/blox/_search").setBody(
+      s"""
+        |{
+        |   "query": {
+        |        "multi_match": {
+        |            "fields" : ["title","body"],
+        |            "query":  "$text"
+        |        }
+        |    },
+        |    "highlight" : {
+        "fields" : {
+            "body" : {}
+        }
+    }
+        |}
+      """.stripMargin)
+      .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
+
+    Future(Ok(ul.executeRequest(rb).get().getResponseBody))
+    //WS.url("http://localhost:9200/blox/_search").get().map(r => Ok(r.body))
+  }
 
 }

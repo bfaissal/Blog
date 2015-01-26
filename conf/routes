@@ -17,6 +17,10 @@ POST        /upload               controllers.Application.upload(CKEditorFuncNum
 GET         /form/img/:img        controllers.Application.img(img:String)
 GET         /img/:img             controllers.Application.img(img:String)
 GET         /testDropbox          controllers.Application.testDropbox
+GET         /indexing             controllers.Application.indexing
+GET         /search               controllers.Application.search(text:String)
+GET         /analyse               controllers.Application.analyse(text:String)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file         controllers.Assets.at(path="/public", file)
