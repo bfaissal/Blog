@@ -199,11 +199,8 @@ object Application extends Controller with MongoController {
         |}
       """.stripMargin)
       .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
-    //println(Json.parse(ul.executeRequest(rb).get().getResponseBody)\"htis")
-    //println(Json.parse(ul.executeRequest(rb).get().getResponseBody).transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get)
     Future(Ok(views.html.search(Json.parse(ul.executeRequest(rb).get().getResponseBody).transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get)))
-    //Future(Ok( (Json.parse(ul.executeRequest(rb).get().getResponseBody)\"hits"\"hits") ))
-    //WS.url("http://localhost:9200/blox/_search").get().map(r => Ok(r.body))
+
   }
 
 }
