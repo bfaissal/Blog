@@ -15,16 +15,28 @@ object ESUtilities {
         val settings =
           """
         {
+            |"settings": {
+            |    "analysis": {
+            |         "analyser":{
+            |             "arabic":{
+            |                 "tokenizer":  "standard",
+            |                 "char_filter":["html_strip"]
+            |             }
+            |         }
+            |    }},
           "mappings": {
             "post" : {
               "properties" : {
                 "title" : {
                   "type" : "string",
                   "analyzer": "arabic"
+
                 },
                 "body" : {
                           "type" : "string",
-                          "analyzer": "arabic"
+                          "analyzer": "arabic",
+                          "tokenizer":  "standard",
+                          "char_filter":["html_strip"]
                         },
                 "tag" : {
                   "type" : "string",
@@ -35,9 +47,10 @@ object ESUtilities {
           }
         }
           """
-        WS.url("http://localhost:9200/blox/post/"+(post \"url").as[String])
+        val res = WS.url("http://localhost:9200/blox/post/"+(post \"url").as[String])
           .withHeaders("Content-Type"->"application/json;charset=UTF-8")
           .put(post).map(rq => rq.body)
+        res.map(println(_))
 
       }
 }

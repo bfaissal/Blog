@@ -135,12 +135,22 @@ object Application extends Controller with MongoController {
     val settings =
       """
         {
+        |"settings": {
+        |    "analysis": {
+        |         "analyser":{
+        |             "arabic":{
+        |                 "tokenizer":  "standard",
+        |                 "char_filter":["html_strip"]
+        |             }
+        |         }
+        |    }},
           "mappings": {
             "post" : {
               "properties" : {
                 "title" : {
                   "type" : "string",
                   "analyzer": "arabic"
+
                 },
                 "body" : {
                           "type" : "string",
@@ -158,8 +168,8 @@ object Application extends Controller with MongoController {
     for(
      post <- collection.find(Json.obj(("url" -> "testxxx")))
     .cursor[JsObject].headOption.map( p => p.getOrElse(Json.obj()));
-      //r1 <- WS.url("http://localhost:9200/blox").put(settings).map(rq => { rq.body});
-      //r2 <- WS.url("http://localhost:9200/blox").get.map(rq => rq.body) ;
+      r1 <- WS.url("http://localhost:9200/blox").put(settings).map(rq => { rq.body});
+      r2 <- WS.url("http://localhost:9200/blox").get.map(rq => rq.body) ;
     r3 <- WS.url("http://localhost:9200/blox/post/"+(post \"url").as[String]).withHeaders("Content-Type"->"application/json;charset=UTF-8").put(post).map(rq => rq.body)) yield Ok("r1+ ----- "+" ----- "+r3)
 
   }
@@ -199,7 +209,9 @@ object Application extends Controller with MongoController {
         |}
       """.stripMargin)
       .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
-    Future(Ok(views.html.search(Json.parse(ul.executeRequest(rb).get().getResponseBody).transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get)))
+    val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)
+    println(rest)
+    Future(Ok(views.html.search(rest.transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get)))
 
   }
 
