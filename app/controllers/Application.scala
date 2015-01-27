@@ -22,7 +22,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Play.current
 
-
+//
 object Application extends Controller with MongoController {
   def collection: JSONCollection = db.collection[JSONCollection]("posts")
   def sequences: JSONCollection = db.collection[JSONCollection]("counters")
