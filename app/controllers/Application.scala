@@ -137,11 +137,15 @@ object Application extends Controller with MongoController {
         {
         |"settings": {
         |    "analysis": {
+        |         "index": {
         |         "analyser":{
-        |             "arabic":{
+        |             "my_arabic":{
+        |                 "type":"custom",
+        |                  "language": "Arabic",
         |                 "tokenizer":  "standard",
         |                 "char_filter":["html_strip"]
         |             }
+        |         }
         |         }
         |    }},
           "mappings": {
@@ -154,7 +158,9 @@ object Application extends Controller with MongoController {
                 },
                 "body" : {
                           "type" : "string",
-                          "analyzer": "arabic"
+                          "index": "analysed",
+                          "analyzer": "my_arabic" ,
+                          "char_filter":["html_strip"]
                         },
                 "tag" : {
                   "type" : "string",
@@ -164,13 +170,14 @@ object Application extends Controller with MongoController {
             }
           }
         }
-      """
+      """.stripMargin
+
     for(
      post <- collection.find(Json.obj(("url" -> "testxxx")))
     .cursor[JsObject].headOption.map( p => p.getOrElse(Json.obj()));
       r1 <- WS.url("http://localhost:9200/blox").put(settings).map(rq => { rq.body});
       r2 <- WS.url("http://localhost:9200/blox").get.map(rq => rq.body) ;
-    r3 <- WS.url("http://localhost:9200/blox/post/"+(post \"url").as[String]).withHeaders("Content-Type"->"application/json;charset=UTF-8").put(post).map(rq => rq.body)) yield Ok("r1+ ----- "+" ----- "+r3)
+    r3 <- WS.url("http://localhost:9200/blox/post/"+(post \"url").as[String]).withHeaders("Content-Type"->"application/json;charset=UTF-8").put(post).map(rq => rq.body)) yield Ok(r1+" ----- "+" ----- "+r3)
 
   }
   def analyse(text:String) =Action.async{
