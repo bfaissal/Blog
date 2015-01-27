@@ -25,6 +25,7 @@
                 <li>الثلاثاء، 7 أكتوبر، 2014</li>
                 <li>التسميات: 6-2 سنوات, الأنشطة الحركية, الحياة العملية</li>
             </ul>
+
             @{
                 val html = (post \ "highlight" \ "title") match {
                     case js: JsArray => {
@@ -35,7 +36,7 @@
                     }
 
                 }
-                (html)
+                Html(html)
             }
             @{
                 val html = (post \ "highlight" \ "body") match {
@@ -48,7 +49,7 @@
 
                 }
 
-                (html)
+                Html(html)
             }
 
         </div>

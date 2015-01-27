@@ -167,13 +167,12 @@ object Application extends Controller with MongoController {
               "properties" : {
                 "title" : {
                   "type" : "string",
-                  "analyzer": "my_arabic"
+                  "analyzer": "arabic"
 
                 },
                 "body" : {
                           "type" : "string",
-                          "analyzer": "my_arabic" ,
-                          "char_filter":["html_strip"]
+                          "analyzer": "arabic"
                         },
                 "tag" : {
                   "type" : "string",
@@ -221,11 +220,11 @@ object Application extends Controller with MongoController {
         |        }
         |    },
         |    "highlight" : {
-        "fields" : {
-            "body" : {},
-            "title" : {}
-        }
-    }
+                  "fields" : {
+                      "body" : {},
+                      "title" : {}
+                  }
+              }
         |}
       """.stripMargin)
       .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
