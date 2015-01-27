@@ -22,7 +22,8 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   "org.reactivemongo" %% "reactivemongo" % "0.10.5.0.AKKA23",
   "org.reactivemongo" %% "play2-reactivemongo" % "0.10.5.0.akka23",
-  "com.sksamuel.scrimage" %% "scrimage-core" % "1.4.2")
+  "com.sksamuel.scrimage" %% "scrimage-core" % "1.4.2",
+  "org.jsoup" % "jsoup" % "1.8.1")
 
 
 herokuAppName in Compile := "arabicmontessori"

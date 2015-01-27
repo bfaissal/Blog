@@ -137,28 +137,41 @@ object Application extends Controller with MongoController {
         {
         |"settings": {
         |    "analysis": {
-        |         "index": {
-        |         "analyser":{
-        |             "my_arabic":{
-        |                 "type":"custom",
-        |                  "language": "Arabic",
-        |                 "tokenizer":  "standard",
-        |                 "char_filter":["html_strip"]
-        |             }
-        |         }
-        |         }
-        |    }},
+        |          "filter": {
+        |            "arabic_stop": {
+        |              "type": "stop",
+        |              "stopwords": "_arabic_"
+        |            },
+        |            "arabic_stemmer": {
+        |              "type": "stemmer",
+        |              "language": "arabic"
+        |            }
+        |          },
+        |          "analyzer": {
+        |            "my_arabic": {
+        |              "char_filter": [
+        |                "html_strip"
+        |              ],
+        |              "filter": [
+        |                "lowercase",
+        |                "arabic_stop",
+        |                "arabic_normalization",
+        |                "arabic_stemmer"
+        |              ],
+        |              "tokenizer": "standard"
+        |            }
+        |          }
+        |        }},
           "mappings": {
             "post" : {
               "properties" : {
                 "title" : {
                   "type" : "string",
-                  "analyzer": "arabic"
+                  "analyzer": "my_arabic"
 
                 },
                 "body" : {
                           "type" : "string",
-                          "index": "analysed",
                           "analyzer": "my_arabic" ,
                           "char_filter":["html_strip"]
                         },
