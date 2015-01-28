@@ -1,0 +1,27 @@
+@import play.api.libs.json.JsObject
+@(comments: List[JsObject])
+<h3>@Messages("Comments")</h3>
+<ul class="list-unstyled comments-list">
+@for( comment <- comments ) {
+    <li>
+        <img class="avtar" src="img/team-2.jpg" alt="">
+        <div class="meta">
+            <span>@{(comment\"name").as[String]}</span>,
+            <span class="time">@{(comment\"date").as[String]}</span>
+        </div>
+        <p>
+        @{(comment\"comment").as[String]}
+        </p>
+    </li>
+    <li ng-repeat="comment in comments">
+        <img class="avtar" src="img/team-2.jpg" alt="">
+        <div class="meta">
+            <span>{{comment.name}}</span>,
+            <span class="time">{{comment.date}}</span>
+        </div>
+        <p>
+        {{comment.comment}}
+        </p>
+    </li>
+}
+</ul><!--comments list-->

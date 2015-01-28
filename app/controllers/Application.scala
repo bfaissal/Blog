@@ -21,6 +21,10 @@ import reactivemongo.bson.{BSONInteger, BSONObjectID}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Play.current
+import play.api.data._
+
+import play.api.libs.json.Reads._ // Custom validation helpers
+import play.api.libs.functional.syntax._ // Combinator syntax
 
 //
 object Application extends Controller with MongoController {
@@ -43,11 +47,35 @@ object Application extends Controller with MongoController {
     })
   }
   def postById(id:String) = Action.async {
-    collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
+      collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
+  }
+  def comment(url: String) = Action.async(parse.json){
+    request => {
+      val validationRead = (
+        (__ \ "name").read[String](minLength[String](2)) and
+          (__ \ "email").read[String](email) and
+          (__ \ "comment").read[String](minLength[String](2))
+        tupled
+        )
+
+      request.body.validate(validationRead) match {
+        case s: JsSuccess[String] => {
+          WS.url("https://www.google.com/recaptcha/api/siteverify")
+            .withQueryString(("secret"->System.getenv("RECAPTCHA_KEY"))
+                ,("response"->(request.body \ "recaptcha").as[String])).get().map(rh => {
+            if((Json.parse(rh.body)\"success").as[Boolean]) {
+
+              Ok("")
+            } else BadRequest(Messages("badCaptcha"))
+          })}
+        case e: JsError => Future(BadRequest(Messages("VerifyInputes")))
+      }
+    }
   }
   def post(url:String) = Action.async{
-    collection.find(Json.obj(("published" -> true),("url" -> url)))
-      .cursor[JsObject].headOption.map( p => Ok(views.html.post(p.getOrElse(Json.obj()))))
+      collection.find(Json.obj(("published" -> true), ("url" -> url)))
+        .cursor[JsObject].headOption.map(p => Ok(views.html.post(p.getOrElse(Json.obj()))))
+
   }
   def form(post:String) = Action.async {
       Future.successful(Ok(views.html.form("")))
