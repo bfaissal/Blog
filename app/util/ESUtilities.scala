@@ -11,13 +11,14 @@ import play.api.Play.current
  * Created by faissalboutaounte on 15-01-25.
  */
 object ESUtilities {
-      val ESURL = System.getenv(" ES_BONSAI_URLS")
+      val ESURL = System.getenv("ES_BONSAI_URLS")
       def esIndex(post: JsObject)= {
 
-
-        val thePost = post.transform(__.json.update(
-          (__ \ 'htmlbody ).json.put( JsString( ( (post \ "body").as[String] )) ) andThen
-            (__ \ 'body ).json.put( JsString(org.jsoup.Jsoup.parse( (post \ "body").as[String] ).text) )
+        val oldBody = (post \ "body").as[String]
+        val thePost = post.transform(
+            (__ \ '_id ).json.prune andThen
+            __.json.update((__ \ 'htmlbody ).json.put( JsString( (oldBody)) )) andThen
+            __.json.update( (__ \ 'body ).json.put( JsString(org.jsoup.Jsoup.parse( (post \ "body").as[String] ).text) )
         )).get
 
         println( thePost )

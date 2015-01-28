@@ -48,6 +48,33 @@ object Application extends Controller with MongoController {
       Ok(views.html.index(e))
     })
   }
+
+  def indexES = Action.async{
+    val ul:AsyncHttpClient = WS.client.underlying
+    println("====>>> "+ESUtilities.ESURL)
+    val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/_search").setBody(
+      s"""
+      {
+        "sort" : [
+            { "creationDate" : { "order": "desc" }}
+        ],
+        "query": {
+            "filtered" : {
+                "filter" : {
+                    "term" : {
+                       "published" : true
+                    }
+                }
+            }
+        }
+      }
+      """.stripMargin)
+      .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
+    val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)
+    println(rest)
+    Future(Ok(views.html.search(rest.transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get,false)))
+
+  }
   def postById(id:String) = Action.async {
       collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
   }
@@ -108,7 +135,7 @@ object Application extends Controller with MongoController {
           val addAuthor = __.json.update((__ \ 'author ).json.put(connectedUser))
           val published = __.json.update((__ \ 'published ).json.put(JsBoolean(false)))
           val creationDate = __.json.update((__ \ 'creationDate ).json.put(JsNumber(new java.util.Date().getTime())))
-          request.body.transform(addAuthor andThen published andThen generateId  andThen creationDate).get
+          request.body.transform(addAuthor andThen published andThen creationDate andThen generateId).get
         }
         case _ =>{
           request.body
@@ -215,7 +242,12 @@ object Application extends Controller with MongoController {
                 "tag" : {
                   "type" : "string",
                   "index" : "not_analyzed"
+                },
+                "creationDate" : {
+                    "type" : "date"
                 }
+
+
               }
             }
           }
@@ -275,7 +307,7 @@ object Application extends Controller with MongoController {
       .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
     val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)
     println(rest)
-    Future(Ok(views.html.search(rest.transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get)))
+    Future(Ok(views.html.search(rest.transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get,true)))
 
   }
 
