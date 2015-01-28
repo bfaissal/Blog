@@ -71,8 +71,8 @@ object Application extends Controller with MongoController {
             val newComment  = Json.parse(rh.body);
             if(true || (newComment\"success").as[Boolean]) {
 
-
-              collection.update(Json.obj("url" -> url),Json.obj("$push"->Json.obj("comments"->request.body.transform(setDate("date")).get)))
+              val transformedComment = request.body.transform(setDate("date")  ).get
+              collection.update(Json.obj("url" -> url),Json.obj("$push"->Json.obj("comments"->request.body.transform(__.json.update((__ \ 'recaptcha).json.prune) andThen setDate("date")).get)))
 
               Ok(request.body.transform(setDate("date")).get).as(JSON)
             } else BadRequest(Messages("badCaptcha"))

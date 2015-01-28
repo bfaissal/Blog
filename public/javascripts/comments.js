@@ -13,7 +13,9 @@ angular.module('comment', ['vcRecaptcha'])
         var url = $location.absUrl().replace("post","comments");
 
         $http.get(url).success(function(data){
-            $scope.comments = data.comments;
+            if(data.comments) {
+                $scope.comments = data.comments;
+            }
             $scope.comment = {}
         })
         $scope.sendComment = function(){
