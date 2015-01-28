@@ -77,9 +77,10 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         $scope.orderPridicate="-creationDate";
         $http.get('/allPosts').success(function(data){
             $scope.posts = data;
-            $scope.firstPost = $scope.posts[0].creationDate
-            console.info(">>> "+$scope.posts.length)
-            if($scope.posts.length>0)   {
+
+
+            if($scope.posts && $scope.posts.length>0)   {
+                $scope.firstPost = $scope.posts[0].creationDate
                 console.info($scope.posts[$scope.posts.length-1])
                 $scope.lastPost = $scope.posts[$scope.posts.length-1].creationDate
             }
@@ -114,7 +115,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         }
         $scope.publishPost = function(msg,post,publish){
             if(confirm(msg,post)){
-                post.published=publish;
+                post.myPublished="true";
                 $http.post('savePost',post);
             }
         }

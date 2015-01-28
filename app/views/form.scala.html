@@ -29,8 +29,8 @@
                         <td>{{post.creationDate | date:"dd/MM/yyyy ' ' HH:mm"}}</td>
                         <td><button class="btn btn-info" ng-click="editPost(post)"><i class="glyphicon glyphicon-edit"></i></button></td>
                         <td><button class="btn btn-danger" ng-click="deletePost('@Messages("deleteWarning")',post)"><i class="glyphicon glyphicon-remove"></i></button></td>
-                        <td><button class="btn btn-danger" ng-show="!post.published" ng-click="publishPost('@Messages("publish_warning")',post,true)">@Messages("publish")<i class="glyphicon glyphicon-play"></i></button>
-                            <button class="btn btn-danger" ng-show="post.published" ng-click="publishPost('@Messages("unpublish_warning")',post,false)">@Messages("unpublish")<i class="glyphicon glyphicon-pause"></i></button></td>
+                        <td><button class="btn btn-danger" ng-show="!post.myPublished" ng-click="publishPost('@Messages("publish_warning")',post,true)">@Messages("publish")<i class="glyphicon glyphicon-play"></i></button>
+                            <button class="btn btn-danger" ng-show="post.myPublished" ng-click="publishPost('@Messages("unpublish_warning")',post,false)">@Messages("unpublish")<i class="glyphicon glyphicon-pause"></i></button></td>
                     </tr>
                 </tbody>
             </table>

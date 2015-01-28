@@ -43,7 +43,7 @@ object Application extends Controller with MongoController {
     (__ \ '_id \ '$oid).json.put(JsString(BSONObjectID.generate.stringify))
   )
   def index = Action.async {
-    val res = collection.find(Json.obj("published" -> true)).options(QueryOpts().batchSize(20)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
+    val res = collection.find(Json.obj("myPublished" -> "true")).options(QueryOpts().batchSize(20)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
     res.map(e => {
       Ok(views.html.index(e))
     })
@@ -71,10 +71,10 @@ object Application extends Controller with MongoController {
             val newComment  = Json.parse(rh.body);
             if(true || (newComment\"success").as[Boolean]) {
 
-              val transformedComment = request.body.transform(setDate("date")  ).get
-              collection.update(Json.obj("url" -> url),Json.obj("$push"->Json.obj("comments"->request.body.transform(__.json.update((__ \ 'recaptcha).json.prune) andThen setDate("date")).get)))
+              val transformedComment = request.body.transform(__.json.update((__ \ 'recaptcha).json.prune) andThen setDate("date")).get
+              collection.update(Json.obj("url" -> url),Json.obj("$push"->Json.obj("comments"->  transformedComment )))
 
-              Ok(request.body.transform(setDate("date")).get).as(JSON)
+              Ok(transformedComment).as(JSON)
             } else BadRequest(Messages("badCaptcha"))
           })}
         case e: JsError => Future(BadRequest(Messages("VerifyInputes")))
@@ -82,7 +82,7 @@ object Application extends Controller with MongoController {
     }
   }
   def post(url:String) = Action.async{
-      collection.find(Json.obj(("published" -> true), ("url" -> url)))
+      collection.find(Json.obj(("myPublished" -> "true"), ("url" -> url)))
         .cursor[JsObject].headOption.map(p => Ok(views.html.post(p.getOrElse(Json.obj()))))
 
   }
@@ -106,8 +106,9 @@ object Application extends Controller with MongoController {
           //sequences.fin
           val connectedUser = Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
           val addAuthor = __.json.update((__ \ 'author ).json.put(connectedUser))
+          val myPublished = __.json.update((__ \ 'myPublished ).json.put(JsString("false")))
           val creationDate = __.json.update((__ \ 'creationDate ).json.put(JsNumber(new java.util.Date().getTime())))
-          request.body.transform(addAuthor andThen generateId andThen creationDate).get
+          request.body.transform(addAuthor andThen generateId andThen creationDate andThen myPublished).get
         }
         case _ =>{
           request.body
@@ -214,7 +215,11 @@ object Application extends Controller with MongoController {
                 "tag" : {
                   "type" : "string",
                   "index" : "not_analyzed"
-                }
+                },
+        |"myPublished" : {
+        |                  "type" : "string",
+        |                  "index" : "not_analyzed"
+        |                }
               }
             }
           }
@@ -224,9 +229,7 @@ object Application extends Controller with MongoController {
     for(
      post <- collection.find(Json.obj(("url" -> "testxxx")))
     .cursor[JsObject].headOption.map( p => p.getOrElse(Json.obj()));
-      r1 <- WS.url("http://localhost:9200/blox").put(settings).map(rq => { rq.body});
-      r2 <- WS.url("http://localhost:9200/blox").get.map(rq => rq.body) ;
-    r3 <- WS.url("http://localhost:9200/blox/post/"+(post \"url").as[String]).withHeaders("Content-Type"->"application/json;charset=UTF-8").put(post).map(rq => rq.body)) yield Ok(r1+" ----- "+" ----- "+r3)
+      r1 <- WS.url("http://localhost:9200/blox").put(settings).map(rq => { rq.body})) yield Ok(r1+" ----- "+" ----- ")
 
   }
   def analyse(text:String) =Action.async{
@@ -249,7 +252,7 @@ object Application extends Controller with MongoController {
     val ul:AsyncHttpClient = WS.client.underlying
     val rb = new RequestBuilder().setUrl("http://localhost:9200/blox/_search").setBody(
       s"""
-        |{
+                |{
         |   "query": {
         |        "multi_match": {
         |            "fields" : ["title","body"],
