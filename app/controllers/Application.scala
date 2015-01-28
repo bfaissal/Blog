@@ -43,7 +43,7 @@ object Application extends Controller with MongoController {
     (__ \ '_id \ '$oid).json.put(JsString(BSONObjectID.generate.stringify))
   )
   def index = Action.async {
-    val res = collection.find(Json.obj("myPublished" -> "true")).options(QueryOpts().batchSize(20)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
+    val res = collection.find(Json.obj("published" -> "true")).options(QueryOpts().batchSize(20)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
     res.map(e => {
       Ok(views.html.index(e))
     })
@@ -82,7 +82,7 @@ object Application extends Controller with MongoController {
     }
   }
   def post(url:String) = Action.async{
-      collection.find(Json.obj(("myPublished" -> "true"), ("url" -> url)))
+      collection.find(Json.obj(("published" -> "true"), ("url" -> url)))
         .cursor[JsObject].headOption.map(p => Ok(views.html.post(p.getOrElse(Json.obj()))))
 
   }
@@ -106,9 +106,9 @@ object Application extends Controller with MongoController {
           //sequences.fin
           val connectedUser = Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
           val addAuthor = __.json.update((__ \ 'author ).json.put(connectedUser))
-          val myPublished = __.json.update((__ \ 'myPublished ).json.put(JsString("false")))
+          val published = __.json.update((__ \ 'published ).json.put(JsBoolean(false)))
           val creationDate = __.json.update((__ \ 'creationDate ).json.put(JsNumber(new java.util.Date().getTime())))
-          request.body.transform(addAuthor andThen generateId andThen creationDate andThen myPublished).get
+          request.body.transform(addAuthor andThen published andThen generateId  andThen creationDate).get
         }
         case _ =>{
           request.body
@@ -215,11 +215,7 @@ object Application extends Controller with MongoController {
                 "tag" : {
                   "type" : "string",
                   "index" : "not_analyzed"
-                },
-        |"myPublished" : {
-        |                  "type" : "string",
-        |                  "index" : "not_analyzed"
-        |                }
+                }
               }
             }
           }
@@ -252,20 +248,29 @@ object Application extends Controller with MongoController {
     val ul:AsyncHttpClient = WS.client.underlying
     val rb = new RequestBuilder().setUrl("http://localhost:9200/blox/_search").setBody(
       s"""
-                |{
-        |   "query": {
-        |        "multi_match": {
-        |            "fields" : ["title","body"],
-        |            "query":  "$search"
-        |        }
-        |    },
-        |    "highlight" : {
-                  "fields" : {
-                      "body" : {},
-                      "title" : {}
-                  }
-              }
-        |}
+      {
+        "query": {
+            "filtered" : {
+                "filter" : {
+                    "term" : {
+                       "published" : true
+                    }
+                },
+                "query": {
+                   "multi_match": {
+                      "fields" : ["title","body"],
+                      "query":  "$search"
+                   }
+                }
+            }
+        },
+        "highlight" : {
+            "fields" : {
+                "body" : {},
+                "title" : {}
+            }
+        }
+      }
       """.stripMargin)
       .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
     val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)

@@ -115,7 +115,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         }
         $scope.publishPost = function(msg,post,publish){
             if(confirm(msg,post)){
-                post.myPublished="true";
+                post.published=publish;
                 $http.post('savePost',post);
             }
         }
