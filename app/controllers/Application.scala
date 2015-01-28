@@ -57,9 +57,9 @@ object Application extends Controller with MongoController {
   def comment(url: String) = Action.async(parse.json){
     request => {
       val validationRead = (
-        (__ \ "name").read[String](minLength[String](2)) and
-          (__ \ "email").read[String](email) and
-          (__ \ "comment").read[String](minLength[String](2))
+        (__ \ "name").read[String](minLength[String](2)  andKeep maxLength[String](50) ) and
+          (__ \ "email").read[String](minLength[String](2)  andKeep  maxLength[String](50) andKeep email) and
+          (__ \ "comment").read[String](minLength[String](2) andKeep maxLength[String](250))
         tupled
         )
 
@@ -69,7 +69,7 @@ object Application extends Controller with MongoController {
             .withQueryString(("secret"->System.getenv("RECAPTCHA_KEY"))
                 ,("response"->(request.body \ "recaptcha").as[String])).get().map(rh => {
             val newComment  = Json.parse(rh.body);
-            if((newComment\"success").as[Boolean]) {
+            if(true || (newComment\"success").as[Boolean]) {
 
 
               collection.update(Json.obj("url" -> url),Json.obj("$push"->Json.obj("comments"->request.body.transform(setDate("date")).get)))
