@@ -69,7 +69,7 @@ object Application extends Controller with MongoController {
             .withQueryString(("secret"->System.getenv("RECAPTCHA_KEY"))
                 ,("response"->(request.body \ "recaptcha").as[String])).get().map(rh => {
             val newComment  = Json.parse(rh.body);
-            if(true || (newComment\"success").as[Boolean]) {
+            if((newComment\"success").as[Boolean]) {
 
               val transformedComment = request.body.transform(__.json.update((__ \ 'recaptcha).json.prune) andThen setDate("date")).get
               collection.update(Json.obj("url" -> url),Json.obj("$push"->Json.obj("comments"->  transformedComment )))
