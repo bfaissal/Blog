@@ -36,8 +36,10 @@
             <li ng-repeat="comment in comments  track by $index">
                 <!--<img class="avtar" src="img/team-2.jpg" alt="">-->
                 <div class="meta">
-                    <span class="time">{{comment.date | date:"dd/MM/yyyy ' ' HH:mm" }}</span>,
-                        <span>{{comment.name}}</span>
+
+                    <span>{{comment.name}} , {{comment.date | date:"dd/MM/yyyy ' ' HH:mm" }} </span>
+
+
                 </div>
                 <p>
                     {{comment.comment}}
