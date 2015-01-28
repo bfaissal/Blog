@@ -11,6 +11,7 @@ import play.api.Play.current
  * Created by faissalboutaounte on 15-01-25.
  */
 object ESUtilities {
+      val ESURL = System.getenv(" ES_BONSAI_URLS")
       def esIndex(post: JsObject)= {
 
 
@@ -20,7 +21,7 @@ object ESUtilities {
         )).get
 
         println( thePost )
-        val res = WS.url("http://localhost:9200/blox/post/"+(post \"url").as[String])
+        val res = WS.url(ESUtilities.ESURL+"blox/post/"+(post \"url").as[String])
           .withHeaders("Content-Type"->"application/json;charset=UTF-8")
           .put(thePost).map(rq => rq.body)
         res.map(println(_))

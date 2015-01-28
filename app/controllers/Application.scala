@@ -225,7 +225,7 @@ object Application extends Controller with MongoController {
     for(
      post <- collection.find(Json.obj(("url" -> "testxxx")))
     .cursor[JsObject].headOption.map( p => p.getOrElse(Json.obj()));
-      r1 <- WS.url("http://localhost:9200/blox").put(settings).map(rq => { rq.body})) yield Ok(r1+" ----- "+" ----- ")
+      r1 <- WS.url(ESUtilities.ESURL+"blox").put(settings).map(rq => { rq.body})) yield Ok(r1+" ----- "+" ----- ")
 
   }
   def analyse(text:String) =Action.async{
@@ -246,7 +246,7 @@ object Application extends Controller with MongoController {
   }
   def search(search:String) =Action.async{
     val ul:AsyncHttpClient = WS.client.underlying
-    val rb = new RequestBuilder().setUrl("http://localhost:9200/blox/_search").setBody(
+    val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/_search").setBody(
       s"""
       {
         "query": {
