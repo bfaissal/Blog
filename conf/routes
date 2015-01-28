@@ -11,6 +11,7 @@ GET         /allPosts             controllers.Application.allPosts(f:Option[Long
 POST        /deletePost           controllers.Application.deletePost
 GET         /post/:url            controllers.Application.post(url: String)
 POST        /post/:url            controllers.Application.comment(url: String)
+GET         /comments/:url            controllers.Application.getComments(url: String)
 GET         /postById/:id         controllers.Application.postById(id: String)
 GET         /tags                 controllers.Application.tags(query:String)
 POST        /form/upload          controllers.Application.upload(CKEditorFuncNum:String)

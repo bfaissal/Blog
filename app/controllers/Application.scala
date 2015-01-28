@@ -32,6 +32,8 @@ object Application extends Controller with MongoController {
   def sequences: JSONCollection = db.collection[JSONCollection]("counters")
   def users: JSONCollection = db.collection[JSONCollection]("users")
 
+  def setDate(name: String) = __.json.update((__ \ name ).json.put(JsNumber(new java.util.Date().getTime())))
+
   def connect = Action.async(parse.json){ implicit request =>
 
     //users.find(Json.obj("_id")).cursor[JsObject].headOption.map(f => f.map(Ok("")))
@@ -49,6 +51,9 @@ object Application extends Controller with MongoController {
   def postById(id:String) = Action.async {
       collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
   }
+  def getComments(url: String) = Action.async{
+    collection.find(Json.obj("url" -> url),Json.obj("comments"->"1")).cursor[JsObject].headOption.map(list => Ok(Json.toJson(list.getOrElse(Json.obj()))))
+  }
   def comment(url: String) = Action.async(parse.json){
     request => {
       val validationRead = (
@@ -63,9 +68,13 @@ object Application extends Controller with MongoController {
           WS.url("https://www.google.com/recaptcha/api/siteverify")
             .withQueryString(("secret"->System.getenv("RECAPTCHA_KEY"))
                 ,("response"->(request.body \ "recaptcha").as[String])).get().map(rh => {
-            if((Json.parse(rh.body)\"success").as[Boolean]) {
+            val newComment  = Json.parse(rh.body);
+            if((newComment\"success").as[Boolean]) {
 
-              Ok("")
+
+              collection.update(Json.obj("url" -> url),Json.obj("$push"->Json.obj("comments"->request.body.transform(setDate("date")).get)))
+
+              Ok(request.body.transform(setDate("date")).get).as(JSON)
             } else BadRequest(Messages("badCaptcha"))
           })}
         case e: JsError => Future(BadRequest(Messages("VerifyInputes")))
