@@ -54,7 +54,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         }
         $scope.$watch(function () {return $location.path()}, function (newLocation, oldLocation) {
 
-                console.info('Why did you use history back?= '+$scope.post);
+            if(!$scope.edit){
                 if($location.path().indexOf("/form/") != -1 ){
                     console.info($scope.post)
                     if($scope.post == undefined || $scope.title == undefined){
@@ -69,6 +69,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
                 else{
                     $scope.edit = false;
                 }
+            }
 
         });
         $scope.loadTags = function(query) {
@@ -105,6 +106,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
                     $scope.posts.push(data)
                 }
                 $scope.edit = false;
+                $location.path("/form");
             })
         }
         $scope.deletePost = function(msg,post){

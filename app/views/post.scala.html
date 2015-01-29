@@ -18,7 +18,20 @@
                 }</a></h4>
                 <ul class="list-inline post-deatil" style="padding-right: 0px;">
                     <li><li>@{Html(Messages("postedBy",(post \"author"\"fullName").as[String],((post\"creationDate").as[Date]).format("dd-MM-yyyy hh:mm")))}</li></li>
-                    <li><a>التسميات: 6-2 سنوات, الأنشطة الحركية, الح</a>ياة العملية</li>
+                    <li>
+                        @Messages("tags"):
+                        @{
+                            val html = (post \ "tags" ) match {
+                                case js: JsArray => {
+                                    js.as[Array[JsObject]].map(e => s"<a>${(e\"text").as[String]}</a>").mkString(",")
+                                }
+                                case jsUndefined: JsUndefined => {""}
+                            }
+
+                            Html(html)
+                        }
+
+                         </li>
                 </ul>
                 <div>
                 @Html((post \ "body").as[String])

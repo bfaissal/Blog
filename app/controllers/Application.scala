@@ -242,9 +242,17 @@ object Application extends Controller with MongoController {
                           "type" : "string",
                           "analyzer": "arabic"
                         },
-                "tag" : {
-                  "type" : "string",
-                  "index" : "not_analyzed"
+               "url" : {
+                          "type" : "string",
+                          "index" : "not_analyzed"
+                        },
+                "tags" : {
+                    "properties" : {
+                      "text" : {
+                        "type" : "string",
+                        "index" : "not_analyzed"
+                      }
+                    }
                 },
                 "creationDate" : {
                     "type" : "date"

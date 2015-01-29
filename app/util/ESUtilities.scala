@@ -15,6 +15,7 @@ object ESUtilities {
       def esIndex(post: JsObject)= {
 
         val oldBody = (post \ "body").as[String]
+        org.jsoup.Jsoup.parse("")
         val thePost = post.transform(
             (__ \ '_id ).json.prune andThen
             __.json.update((__ \ 'htmlbody ).json.put( JsString( (oldBody)) )) andThen
