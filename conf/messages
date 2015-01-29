@@ -27,4 +27,5 @@ Email=البريد الإلكتروني
 Comment=التعليق
 VerifyInputes=المرجو التأكد من المعلومات التي أدخلتها
 badCaptcha= إختبار الربوت فشل
-postedBy=بواسطة <b>{0}</b> في {1}
+postedBy=بواسطة <b><a>{0}</a></b> في {1}
+TheBlog=المدونة

@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET         /                     controllers.Application.index
+GET         /indexMG              controllers.Application.index
 GET         /form                 controllers.Application.form(post :String="index")
 GET         /form/:post           controllers.Application.form(post :String)
 POST        /savePost             controllers.Application.savePost
@@ -21,7 +21,7 @@ GET         /img/:img             controllers.Application.img(img:String)
 GET         /testDropbox          controllers.Application.testDropbox
 GET         /indexing             controllers.Application.indexing
 GET         /search               controllers.Application.search(query:String)
-GET         /indexES               controllers.Application.indexES
+GET         /                     controllers.Application.indexES(page:Option[Int])
 GET         /analyse              controllers.Application.analyse(text:String)
 
 

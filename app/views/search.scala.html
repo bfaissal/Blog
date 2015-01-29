@@ -8,7 +8,7 @@
 
 @import play.api.libs.json.JsObject
 
-@(posts: JsObject,search:Boolean)
+@(posts: JsObject,search:Boolean, pages:Int)
 
 @blog("Welcome to Play") {
 <div class="col-md-12">
@@ -17,16 +17,18 @@
                             font-weight: bold;
                         }
                     </style>
-    @for(post <- (posts\"hits").as[Array[JsObject]] ){
+
+    @for(post <- (posts\"results"\"hits").as[Array[JsObject]] ){
 
         <div class="blog-wrap">
             <div class="blog-desc">
                 <h4><a href="/post/@{(post\"_source"\"url").as[String]}">@{(post\"_source"\"title").as[String]}</a></h4>
                 <ul class="list-inline post-deatil" style="padding-right: 0px;">
 
-                    <li>@{Html(Messages("postedBy",(post\"_source"\"author"\"fullName").as[String],((post\"_source"\"creationDate").as[Date]).format("yyyy-MM-dd hh:mm:ss")))}</li>
+                    <li>@{Html(Messages("postedBy",(post\"_source"\"author"\"fullName").as[String],((post\"_source"\"creationDate").as[Date]).format("dd-MM-yyyy hh:mm")))}</li>
                     <li>التسميات: 6-2 سنوات, الأنشطة الحركية, الحياة العملية</li>
                 </ul>
+
                 @if(search){
                 @{
                     val html = (post \ "highlight" \ "title") match {
@@ -54,6 +56,7 @@
                     Html(html)
                 }
                 }else{
+
                     @{Html((post\"_source"\"htmlbody").as[String])}
                 }
 
@@ -61,6 +64,17 @@
 
         </div><!--blog wrap-->
         }
+    <div style="text-align: center">
+        <ul class="pagination">
+            <li><a href="#">»</a></li>
+            @for( i <- 1 to pages ){
+            <li class="_active"><a href="?page=@i">@i</a></li>
+            }
+
+            <li><a href="#">«</a></li>
+
+        </ul>
+    </div>
 
         <ul class="pager">
             <li class="previous"><a href="#">&larr; اللاحق</a></li>

@@ -68,7 +68,7 @@
                         </button>
                         <a class="navbar-brand" href="index.html">منتسوري في المنزل</a>
                     </div><!--.navbar header-->
-                    <div class="navbar-collapse collapse">
+                    <div class="navbar-collapse collapse" style="display: none !important;">
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="index.html">@Messages("Home")</a></li>
                             <li class="dropdown">
@@ -81,7 +81,7 @@
                             <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle " data-toggle="dropdown">Blog <i class="fa fa-angle-down"></i></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="blog.html">المدونة</a></li>
+                                    <li><a href="blog.html">@Messages("theBlog")</a></li>
                                     <li><a href="blog-post.html">Blog - post</a></li>
                                 </ul>
                             </li><!--.dropdown-->
@@ -132,12 +132,13 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h4>المدونة</h4>
+
                         </div>
                         <div class="col-sm-6 hidden-xs text-right">
                             <ol class="breadcrumb">
                                 <li><a href="/">@Messages("Home")</a></li>
-                                <li>Blog</li>
+                                <li><a href="/">@Messages("TheBlog")</a></li>
+
                             </ol><!--breadcrumb-->
                         </div>
                     </div>

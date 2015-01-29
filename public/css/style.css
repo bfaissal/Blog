@@ -42,7 +42,7 @@ body {
 
 iframe {
     border: none;
-    width:100%;
+    /*width:100%;*/
 }
 ::selection {
     background: #fefac7; /* Safari */

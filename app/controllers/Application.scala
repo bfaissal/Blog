@@ -28,6 +28,7 @@ import play.api.libs.functional.syntax._ // Combinator syntax
 
 //
 object Application extends Controller with MongoController {
+  val PAGE_SIZE = 2;
   def collection: JSONCollection = db.collection[JSONCollection]("posts")
   def sequences: JSONCollection = db.collection[JSONCollection]("counters")
   def users: JSONCollection = db.collection[JSONCollection]("users")
@@ -49,12 +50,13 @@ object Application extends Controller with MongoController {
     })
   }
 
-  def indexES = Action.async{
+  def indexES(page:Option[Int]) = Action.async{
     val ul:AsyncHttpClient = WS.client.underlying
     println("====>>> "+ESUtilities.ESURL)
     val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/_search").setBody(
       s"""
       {
+        "from" : ${PAGE_SIZE*(page.getOrElse(1)-1)}, "size" : $PAGE_SIZE,
         "sort" : [
             { "creationDate" : { "order": "desc" }}
         ],
@@ -72,7 +74,8 @@ object Application extends Controller with MongoController {
       .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
     val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)
     println(rest)
-    Future(Ok(views.html.search(rest.transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get,false)))
+    val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
+    Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),false,pages)))
 
   }
   def postById(id:String) = Action.async {
@@ -86,7 +89,7 @@ object Application extends Controller with MongoController {
       val validationRead = (
         (__ \ "name").read[String](minLength[String](2)  andKeep maxLength[String](50) ) and
           (__ \ "email").read[String](minLength[String](2)  andKeep  maxLength[String](50) andKeep email) and
-          (__ \ "comment").read[String](minLength[String](2) andKeep maxLength[String](250))
+          (__ \ "comment").read[String](minLength[String](2) andKeep maxLength[String](2000))
         tupled
         )
 
@@ -109,7 +112,7 @@ object Application extends Controller with MongoController {
     }
   }
   def post(url:String) = Action.async{
-      collection.find(Json.obj(("published" -> "true"), ("url" -> url)))
+      collection.find(Json.obj(("published" -> true), ("url" -> url)))
         .cursor[JsObject].headOption.map(p => Ok(views.html.post(p.getOrElse(Json.obj()))))
 
   }
@@ -281,6 +284,7 @@ object Application extends Controller with MongoController {
     val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/_search").setBody(
       s"""
       {
+
         "query": {
             "filtered" : {
                 "filter" : {
@@ -307,7 +311,9 @@ object Application extends Controller with MongoController {
       .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
     val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)
     println(rest)
-    Future(Ok(views.html.search(rest.transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get,true)))
+    val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
+    Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),true,pages)))
+    //Future(Ok(views.html.search(rest.transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get,true,((rest\"hits"\"total").as[Int] / PAGE_SIZE))))
 
   }
 
