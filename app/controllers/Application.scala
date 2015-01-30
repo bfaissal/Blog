@@ -30,6 +30,7 @@ import play.api.libs.functional.syntax._ // Combinator syntax
 object Application extends Controller with MongoController {
   val PAGE_SIZE = 2;
   def collection: JSONCollection = db.collection[JSONCollection]("posts")
+  def tags: JSONCollection = db.collection[JSONCollection]("tags")
   def sequences: JSONCollection = db.collection[JSONCollection]("counters")
   def users: JSONCollection = db.collection[JSONCollection]("users")
 
@@ -155,6 +156,14 @@ object Application extends Controller with MongoController {
     request => collection.remove(request.body).map(lastError => Ok(Messages("Successfully_deleted ")+lastError)).recover({case t=> BadRequest(Messages("Delete_incomplete"))})
   }
 
+  def addtags = Action{
+    request => {
+      request.body.asJson.map(tag => {
+        tags.save(tag)
+      })
+      Ok("")
+    }
+  }
   def tags(query :String) = Action{
 
     Ok(Json.obj("data"->Json.arr(Json.obj("tag"->"tag1"),Json.obj("tag"->"tag2"),Json.obj("tag"->"tag3"))))
@@ -254,6 +263,16 @@ object Application extends Controller with MongoController {
                       }
                     }
                 },
+         "suggest" : {
+
+
+                                "type": "completion",
+                       "index_analyzer": "simple",
+                       "search_analyzer": "simple",
+                       "payloads": false
+
+
+                        },
                 "creationDate" : {
                     "type" : "date"
                 }

@@ -75,6 +75,11 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         $scope.loadTags = function(query) {
             return $http.get('/tags?query=' + query);
         };
+        $scope.newTagAdded = function() {
+            alert("sdsd")
+            $http.post('/tags',tag);
+        };
+
         $scope.orderPridicate="-creationDate";
         $http.get('/allPosts').success(function(data){
             $scope.posts = data;
@@ -101,6 +106,14 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
             })
         }
         $scope.save = function(){
+            var inputs = [];
+            for(aTag in $scope.post.tags){
+                console.info($scope.post.tags[aTag])
+                inputs.push($scope.post.tags[aTag].text)
+            }
+            $scope.post.suggest = {};
+            $scope.post.suggest.input = inputs;
+            $scope.post.suggest.output = $scope.post.title
             $http.post('/savePost',$scope.post).success(function(data){
                 if(!$scope.post._id ){
                     $scope.posts.push(data)
