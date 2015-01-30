@@ -75,8 +75,8 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         $scope.loadTags = function(query) {
             return $http.get('/tags?query=' + query);
         };
-        $scope.newTagAdded = function() {
-            alert("sdsd")
+        $scope.newTagAdded = function(tag) {
+
             $http.post('/tags',tag);
         };
 

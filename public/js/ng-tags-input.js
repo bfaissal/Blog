@@ -207,7 +207,7 @@ tagsInput.directive('tagsInput', ["$timeout","$document","tagsInputConfig", func
         require: 'ngModel',
         scope: {
             tags: '=ngModel',
-            onTagAdded: '&',
+            ontagadded: '&ontagadded',
             onTagRemoved: '&'
         },
         replace: false,
@@ -284,7 +284,7 @@ tagsInput.directive('tagsInput', ["$timeout","$document","tagsInputConfig", func
             };
 
             events
-                .on('tag-added', scope.onTagAdded)
+                .on('tag-added', scope.ontagadded)
                 .on('tag-removed', scope.onTagRemoved)
                 .on('tag-added', function() {
                     scope.newTag.text = '';
