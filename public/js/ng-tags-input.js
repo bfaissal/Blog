@@ -207,7 +207,7 @@ tagsInput.directive('tagsInput', ["$timeout","$document","tagsInputConfig", func
         require: 'ngModel',
         scope: {
             tags: '=ngModel',
-            ontagadded: '&ontagadded',
+            ontagadded: '&',
             onTagRemoved: '&'
         },
         replace: false,
