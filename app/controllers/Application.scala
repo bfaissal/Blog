@@ -75,10 +75,16 @@ object Application extends Controller with MongoController {
       .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
     val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)
     println(rest)
+
     val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
     Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),false,pages)))
 
   }
+  implicit def  tagsAggregation = {
+    val ok = Json.obj("test" -> "skhsdf js")
+    ok
+  }
+  implicit val menu = tagsAggregation
   def postById(id:String) = Action.async {
       collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
   }
@@ -306,6 +312,7 @@ object Application extends Controller with MongoController {
     //WS.url("http://localhost:9200/blox/_analyze?field=body&text="+text).get().map(r => Ok(r.body))
 
   }
+
   def search(search:String) =Action.async{
     val ul:AsyncHttpClient = WS.client.underlying
     val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/_search").setBody(
