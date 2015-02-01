@@ -1,6 +1,7 @@
 package util
 
-import controllers.Application._
+import com.ning.http.client.{RequestBuilder, AsyncHttpClient}
+
 import play.api.libs.json._
 import play.api.libs.ws.WS
 import reactivemongo.bson.BSONObjectID
@@ -12,6 +13,7 @@ import play.api.Play.current
  */
 object ESUtilities {
       val ESURL = System.getenv("ES_BONSAI_URLS")
+      val PAGE_SIZE = 2;
       def esIndex(post: JsObject)= {
 
         val oldBody = (post \ "body").as[String]
@@ -29,4 +31,13 @@ object ESUtilities {
         res.map(println(_))
 
       }
+
+  def esSearch (query:String) = {
+    val ul:AsyncHttpClient = WS.client.underlying
+    println("====>>> "+ESUtilities.ESURL)
+    val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/_search").setBody(
+      query)
+      .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
+    Json.parse(ul.executeRequest(rb).get().getResponseBody)
+  }
 }

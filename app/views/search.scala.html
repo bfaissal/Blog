@@ -7,10 +7,12 @@
 @import play.api.libs.json.JsUndefined
 
 @import play.api.libs.json.JsObject
+@import controllers.Application
 
 @(posts: JsObject,search:Boolean, pages:Int)
 
-@blog("Welcome to Play") {
+
+@blog("Welcome to Play",Application.tagsAggregation) {
 <div class="col-md-12">
                     <style>
                         em{
@@ -27,6 +29,7 @@
 
                     <li>@{Html(Messages("postedBy",(post\"_source"\"author"\"fullName").as[String],((post\"_source"\"creationDate").as[Date]).format("dd-MM-yyyy hh:mm")))}</li>
                     <li>
+
                         @Messages("tags"):
                         @{
                             val html = (post \"_source" \ "tags" ) match {

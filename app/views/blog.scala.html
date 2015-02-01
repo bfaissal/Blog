@@ -1,5 +1,6 @@
+
+@(title: String, tags: play.api.libs.json.JsObject)( content: Html)
 @import play.api.libs.json.JsObject
-@(title: String)( content: Html)(implicit tags: JsObject)
 
 <!DOCTYPE html>
     <html lang="en" dir="rtl">
@@ -20,7 +21,7 @@
                 <!-- animated css  -->
             <link href="@routes.Assets.at("css/animate.css")" rel="stylesheet" type="text/css" media="screen">
                 <!--owl carousel css-->
-            <link href="@routes.Assets.at("css/owl.carousel.css")" rel="stylesheet" type="text/css" media="screen">
+            <link href="@routes.Assets.at("css/owl.carousel.css")" rel="stylesheet type="text/css" media="screen">
             <link href="@routes.Assets.at("css/owl.theme.css")" rel="stylesheet" type="text/css" media="screen">
                 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
                 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -166,14 +167,13 @@
                         </div><!--sidebar-box-->
                         <div class="sidebar-box margin40">
                             <h4>التصنيفات
-                            @tags</h4>
+                            </h4>
                             <ul class="list-unstyled cat-list">
-                                <li><i class="fa fa-angle-left"></i> <a href="#">الأنشطة الحركية</a> </li>
-                                <li><i class="fa fa-angle-left"></i> <a href="#">الأنشطة الحسية</a> </li>
-                                <li><i class="fa fa-angle-left"></i> <a href="#">الحياة العملية</a> </li>
-                                <li><i class="fa fa-angle-left"></i> <a href="#">المراحل الحساسة</a> </li>
-                                <li><i class="fa fa-angle-left"></i> <a href="#">3-0 سنوات</a> </li>
-                                <li><i class="fa fa-angle-left"></i> <a href="#">6-2 سنوات</a> </li>
+
+
+                                @for(aTag <- (tags\"allTags"\"aggregations"\"tags"\"buckets").as[Array[JsObject]]) {
+                                    <li><i class="fa fa-angle-left"></i> <a href="/tags/@{(aTag\"key").as[String]}">@{Messages("tagIteration",(aTag\"key").as[String],(aTag\"doc_count"))}</a> </li>
+                                }
 
                             </ul>
                         </div><!--sidebar-box-->

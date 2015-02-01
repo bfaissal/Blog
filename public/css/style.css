@@ -10,10 +10,18 @@
 /* ---------------------------------------------------------------------- */
 
 @import url('http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800');
+@import url('http://fonts.googleapis.com/earlyaccess/notonaskharabic.css');
+@import url('http://fonts.googleapis.com/earlyaccess/notonastaliqurdudraft.css');
+@import url(http://fonts.googleapis.com/earlyaccess/notokufiarabic.css);
 
+
+h4, h4 a{
+    /*font-family: 'Noto Nastaliq Urdu Draft', serif;*/
+    font-family: 'Noto Kufi Arabic', serif;
+}
 
 body { 
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Noto Naskh Arabic', sans-serif;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;	
     cursor:default;
@@ -53,7 +61,7 @@ iframe {
     color: #555555;
 }
 strong,b{
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Noto Naskh Arabic', sans-serif;
     font-weight: 600;
 }
 span.text-bg{
@@ -66,7 +74,7 @@ span.text-color{
     color:#f99200;
 }
 label{
-   font-family: 'Open Sans', sans-serif;
+   font-family: 'Noto Naskh Arabic', sans-serif;
     font-weight: 400;
     color:#777;
 }
@@ -77,13 +85,13 @@ p.dropcap:first-letter{
     line-height: 51px;
     margin: -1px 8px -2px 0; 
     color:#f99200;
-   font-family: 'Open Sans', sans-serif;
+   font-family: 'Noto Naskh Arabic', sans-serif;
 }
 input,
 button,
 select,
 textarea {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Noto Naskh Arabic', sans-serif;
     font-size: 14px;
     font-weight: 400;
 }
@@ -94,7 +102,7 @@ a {
     -webkit-transition: all 200ms ease-in;
     -o-transition: all 200ms ease-in;
     -moz-transition: all 200ms ease-in;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Noto Naskh Arabic', sans-serif;
 }
 a:hover,
 a:focus {
@@ -109,7 +117,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #000;
     font-weight: 600;
     margin: 0;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Noto Naskh Arabic', sans-serif;
 }
 
 h1 {
@@ -235,7 +243,7 @@ p {
 
 /***********bootstrap navigation overrides--*/
 .navbar-default {
-   font-family: 'Open Sans', sans-serif;
+   font-family: 'Noto Naskh Arabic', sans-serif;
     border:none;
     border-radius: 0;
     margin-bottom: 0;
@@ -328,7 +336,7 @@ p {
 
 .btn {
     font-weight: 600;
-   font-family: 'Open Sans', sans-serif;
+   font-family: 'Noto Naskh Arabic', sans-serif;
     font-size: 14px;
     letter-spacing: 0.02em;
     text-shadow: none;
@@ -950,7 +958,7 @@ input[type="color"]:focus,
     margin-bottom: 20px;
 }
 .address-info{
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Noto Naskh Arabic', sans-serif;
 }
 .address-info li{
     padding: 3px 0;
@@ -1341,5 +1349,11 @@ tags-input .tags .tag-item {
     opacity: 0;
 
 }
+
+body{
+    font-family: 'Noto Naskh Arabic', serif !important;
+    font-size: 16px;
+}
+
 
 

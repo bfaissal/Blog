@@ -18,10 +18,11 @@ import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import reactivemongo.api.QueryOpts
 import reactivemongo.bson.{BSONInteger, BSONObjectID}
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Play.current
 import play.api.data._
+import scala.concurrent.duration._
 
 import play.api.libs.json.Reads._ // Custom validation helpers
 import play.api.libs.functional.syntax._ // Combinator syntax
@@ -51,11 +52,15 @@ object Application extends Controller with MongoController {
     })
   }
 
+  def executeESSearch(query:String) = {
+    val rest = ESUtilities.esSearch(query)
+
+    val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
+    Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),false,pages)))
+  }
   def indexES(page:Option[Int]) = Action.async{
-    val ul:AsyncHttpClient = WS.client.underlying
-    println("====>>> "+ESUtilities.ESURL)
-    val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/_search").setBody(
-      s"""
+
+    executeESSearch(s"""
       {
         "from" : ${PAGE_SIZE*(page.getOrElse(1)-1)}, "size" : $PAGE_SIZE,
         "sort" : [
@@ -72,19 +77,38 @@ object Application extends Controller with MongoController {
         }
       }
       """.stripMargin)
-      .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
-    val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)
-    println(rest)
-
-    val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
-    Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),false,pages)))
 
   }
-  implicit def  tagsAggregation = {
-    val ok = Json.obj("test" -> "skhsdf js")
-    ok
+
+  def tagsSearch(tag:String,page:Option[Int]) = Action.async{
+    executeESSearch(
+      s"""
+        |{
+        |    "from" : ${PAGE_SIZE*(page.getOrElse(1)-1)}, "size" : $PAGE_SIZE,
+        |    "query" : {
+        |        "match" :  { "tags.text" : "$tag" }
+        |
+        |    }
+        |}
+      """.stripMargin)
   }
-  implicit val menu = tagsAggregation
+   implicit def  tagsAggregation = {
+     val res = WS.url(ESUtilities.ESURL+"blox/_search").post(
+       """
+         |{
+         |    "aggs" : {
+         |        "tags" : {
+         |            "terms" : { "field" : "tags.text" }
+         |        }
+         |    },
+         |    "size": 0
+         |}
+       """.stripMargin).map(rh => Json.obj("allTags"->Json.parse(rh.body)))
+       Await.result(res,10 seconds)
+
+  }
+
+
   def postById(id:String) = Action.async {
       collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
   }
@@ -314,8 +338,7 @@ object Application extends Controller with MongoController {
   }
 
   def search(search:String) =Action.async{
-    val ul:AsyncHttpClient = WS.client.underlying
-    val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/_search").setBody(
+    executeESSearch(
       s"""
       {
 
@@ -342,12 +365,7 @@ object Application extends Controller with MongoController {
         }
       }
       """.stripMargin)
-      .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
-    val rest = Json.parse(ul.executeRequest(rb).get().getResponseBody)
-    println(rest)
-    val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
-    Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),true,pages)))
-    //Future(Ok(views.html.search(rest.transform((__ \ 'hits  ).json.pickBranch( ( (__ \ 'hits) ).json.pick )).get,true,((rest\"hits"\"total").as[Int] / PAGE_SIZE))))
+
 
   }
 
