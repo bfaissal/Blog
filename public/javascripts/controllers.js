@@ -1,9 +1,7 @@
 angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
     .controller('adminCtrl', ['$scope','$http','$location', function($scope,$http,$location) {
         $scope.posts = [];
-        $scope.tinymceOptions = {
-            plugins: ["image","code"]
-        };
+
         $scope.editorOptions = {
             language: 'ar',
             filebrowserUploadUrl: "upload",

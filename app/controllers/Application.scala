@@ -52,11 +52,11 @@ object Application extends Controller with MongoController {
     })
   }
 
-  def executeESSearch(query:String) = {
-    val rest = ESUtilities.esSearch(query)
+  def executeESSearch(query:String,_type:String="post",isSearch:Boolean=false) = {
+    val rest = ESUtilities.esSearch(query,_type)
 
     val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
-    Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),false,pages)))
+    Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),isSearch,pages)))
   }
   def indexES(page:Option[Int]) = Action.async{
 
@@ -90,10 +90,10 @@ object Application extends Controller with MongoController {
         |
         |    }
         |}
-      """.stripMargin)
+      """.stripMargin,"post")
   }
    implicit def  tagsAggregation = {
-     val res = WS.url(ESUtilities.ESURL+"blox/_search").post(
+     val res = WS.url(ESUtilities.ESURL+"blox/post/_search").post(
        """
          |{
          |    "aggs" : {
@@ -176,7 +176,14 @@ object Application extends Controller with MongoController {
         }
       }).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get
       collection.save(post)
-      ESUtilities.esIndex(post)
+      ESUtilities.esIndex(ESUtilities.stripHTML(post,"body"),"post","url")
+
+      (post\"tags") match {
+        case list:JsUndefined => {}
+        case list => list.as[Array[JsObject]].foreach(e => ESUtilities.esIndex(e,"tags","text"))
+      }
+
+        //.as[Array[JsObject]]
 
       Future.successful(Ok(post).as(MimeTypes.JSON))
     }
@@ -195,9 +202,17 @@ object Application extends Controller with MongoController {
     }
   }
   def tags(query :String) = Action{
+    val res = ESUtilities.esSearch(
+      s"""
+        |{
+        |    "query" : {
+        |        "wildcard" :  { "text" : "*$query*" }
+        |    }
+        |}
+      """.stripMargin,"tags") \"hits"\"hits"\\"_source"
 
     Ok(Json.obj("data"->Json.arr(Json.obj("tag"->"tag1"),Json.obj("tag"->"tag2"),Json.obj("tag"->"tag3"))))
-    Ok(Json.arr(Json.obj("text"->"stag1"),Json.obj("text"->"wtag2"),Json.obj("text"->"tag3")))
+    Ok(Json.obj("co"->res)\"co")
   }
   var i =0
   def upload(CKEditorFuncNum:String) = Action(parse.multipartFormData) { request =>
@@ -333,7 +348,7 @@ object Application extends Controller with MongoController {
       Ok(ul.executeRequest(rb).get().getResponseBody)
     })
 
-    //WS.url("http://localhost:9200/blox/_analyze?field=body&text="+text).get().map(r => Ok(r.body))
+
 
   }
 
@@ -364,7 +379,7 @@ object Application extends Controller with MongoController {
             }
         }
       }
-      """.stripMargin)
+      """.stripMargin,"post",true)
 
 
   }

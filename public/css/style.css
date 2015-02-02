@@ -15,10 +15,6 @@
 @import url(http://fonts.googleapis.com/earlyaccess/notokufiarabic.css);
 
 
-h4, h4 a{
-    /*font-family: 'Noto Nastaliq Urdu Draft', serif;*/
-    font-family: 'Noto Kufi Arabic', serif;
-}
 
 body { 
     font-family: 'Noto Naskh Arabic', sans-serif;
@@ -117,7 +113,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #000;
     font-weight: 600;
     margin: 0;
-    font-family: 'Noto Naskh Arabic', sans-serif;
+    font-family: 'Noto Kufi Arabic', serif;
 }
 
 h1 {
@@ -1213,7 +1209,7 @@ span.popular-tag{
 .search-widget i{
     position: absolute;
     top: 10px;
-    right: 10px;
+    left: 10px;
     color:#777;
 }
 .cat-list li{
@@ -1353,6 +1349,11 @@ tags-input .tags .tag-item {
 body{
     font-family: 'Noto Naskh Arabic', serif !important;
     font-size: 16px;
+}
+
+h4, h4 a, .navbar-brand{
+    /*font-family: 'Noto Nastaliq Urdu Draft', serif;*/
+    font-family: 'Noto Kufi Arabic', serif;
 }
 
 
