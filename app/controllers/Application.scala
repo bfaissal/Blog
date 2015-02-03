@@ -53,10 +53,10 @@ object Application extends Controller with MongoController {
   }
 
   def executeESSearch(query:String,_type:String="post",isSearch:Boolean=false) = {
-
+    println("_type = "+_type)
     println(query)
     val rest = ESUtilities.esSearch(query,_type)
-
+    println(rest)
     val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
     Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),isSearch,pages)))
   }

@@ -37,10 +37,12 @@ object ESUtilities {
 
   def esSearch (query:String,_type: String) = {
     val ul:AsyncHttpClient = WS.client.underlying
-
+    println(ESUtilities.ESURL+"blox/"+_type+"/_search")
     val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/"+_type+"/_search").setBody(
       query)
-       .setMethod("GET").build()
+       .setMethod("GET")
+      .setHeader("Content-Type","application/json;charset=UTF-8")
+      .build()
     Json.parse(ul.executeRequest(rb).get().getResponseBody)
   }
 }
