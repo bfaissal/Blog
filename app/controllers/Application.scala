@@ -8,7 +8,7 @@ import com.sksamuel.scrimage.Image
 import play.api._
 import play.api.http.MimeTypes
 import play.api.i18n.Messages
-import play.api.libs.iteratee.{Enumerator, Iteratee, Enumeratee}
+import play.api.libs.iteratee.{Concurrent, Enumerator, Iteratee, Enumeratee}
 import play.api.libs.json
 import play.api.libs.json._
 import play.api.libs.oauth.{RequestToken, ConsumerKey, OAuthCalculator}
@@ -53,6 +53,8 @@ object Application extends Controller with MongoController {
   }
 
   def executeESSearch(query:String,_type:String="post",isSearch:Boolean=false) = {
+
+    println(query)
     val rest = ESUtilities.esSearch(query,_type)
 
     val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
@@ -214,30 +216,53 @@ object Application extends Controller with MongoController {
     Ok(Json.obj("data"->Json.arr(Json.obj("tag"->"tag1"),Json.obj("tag"->"tag2"),Json.obj("tag"->"tag3"))))
     Ok(Json.obj("co"->res)\"co")
   }
-  var i =0
-  def upload(CKEditorFuncNum:String) = Action(parse.multipartFormData) { request =>
+
+  def upload(CKEditorFuncNum:String) = Action.async(parse.multipartFormData) { request =>
     request.body.file("upload").map { picture =>
       import java.io.File
-      i = i+1
-      val filename = picture.filename
-      val contentType = picture.contentType
+
+      val filename = System.nanoTime()
 
 
-      picture.ref.moveTo(new File(s"/tmp2/picture/${filename}_$i"))
-      //picture.ref.
-      val res = s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename','');</script></body></html>"
-      Ok(res).as("text/html")
+      val tempFile= File.createTempFile("upload","tmp")
+      println(tempFile.getAbsolutePath)
+      picture.ref.moveTo(tempFile,true)//new File(s"/tmp2/picture/${filename}_$i"))
+
+      WS.url(s"https://api-content.dropbox.com/1/files_put/auto/$filename.JPG")
+        .withHeaders("Authorization"->System.getenv("DROPBOX_TOCKEN"))
+        .put(tempFile)
+        .map( rs => {
+            tempFile.delete()
+            println("after upload = "+rs.body)
+        val res = s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename?size=l','');</script></body></html>"
+        Ok(res).as("text/html")
+        })
+
     }.getOrElse {
-      BadRequest(s"<html><body><script type='text/javascript'>alert('${Messages("upload.error.retry")}')</script></body></html>")
+      Future.successful(BadRequest(s"<html><body><script type='text/javascript'>alert('${Messages("upload.error.retry")}')</script></body></html>"))
     }
   }
 
-  def img(img:String) = Action.async{
+  def img(img:String,size:Option[String]=Some("l")) = Action{
+    val enumerator = Concurrent.unicast[Array[Byte]](c => {
+      WS.url(s"https://api-content.dropbox.com/1/thumbnails/auto/$img.JPG?size=${size.getOrElse("l")}&format=jpeg")
+        .withHeaders("Authorization"->System.getenv("DROPBOX_TOCKEN"))
+        .get(rh => {Iteratee.foreach(e=> c.push(e));}).onComplete({case f => c.end()})
+    })
+    Ok.chunked(enumerator andThen Enumerator.eof).as("image/jpeg")
+    /*println("downloading ...")
+    //WS.url(s"https://api-content.dropbox.com/1/thumbnails/auto/$img.JPG?size=${size.getOrElse("l")}&format=jpeg")
+    WS.url(s"https://api-content.dropbox.com/1/files/auto/$img.JPG")
+      .withHeaders("Authorization"->System.getenv("DROPBOX_TOCKEN"))
+      .get//(rh => Iteratee.foreach(e=> ))
 
-    WS.url("http://2.bp.blogspot.com/-aP74Rp910F4/VL0fEtYwWjI/AAAAAAAABeg/RxIRkeV45gk/s1600/une-classe-montessori%2B(1).jpg")
-      .getStream().map(
-        {case (rh,e) => Ok.chunked(e)}
-      )
+      .map(
+        {rq => {
+          println("=======:::> "+rq.body)
+          rq.allHeaders.filter({case (k,v) => !"content-security-policy-report-only".equals(k)}).map({case (k,v)=>{(k,v.mkString)}}).foldLeft(Ok(rq.body))({case (rp,h)=> rp.withHeaders(h)})
+
+        }}
+      )   */
 
   }
 

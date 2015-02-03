@@ -40,7 +40,7 @@ object ESUtilities {
 
     val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/"+_type+"/_search").setBody(
       query)
-      .setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
+       .setMethod("GET").build()
     Json.parse(ul.executeRequest(rb).get().getResponseBody)
   }
 }

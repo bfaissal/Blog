@@ -18,8 +18,8 @@ GET         /tags                 controllers.Application.tags(query:String)
 POST        /tags                 controllers.Application.addtags()
 POST        /form/upload          controllers.Application.upload(CKEditorFuncNum:String)
 POST        /upload               controllers.Application.upload(CKEditorFuncNum:String)
-GET         /form/img/:img        controllers.Application.img(img:String)
-GET         /img/:img             controllers.Application.img(img:String)
+GET         /form/img/:img        controllers.Application.img(img:String,size:Option[String])
+GET         /img/:img             controllers.Application.img(img:String,size:Option[String])
 GET         /testDropbox          controllers.Application.testDropbox
 GET         /indexing             controllers.Application.indexing
 GET         /search               controllers.Application.search(query:String)
