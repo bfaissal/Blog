@@ -1,5 +1,5 @@
 angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
-    .controller('adminCtrl', ['$scope','$http','$location', function($scope,$http,$location) {
+    .controller('adminCtrl', ['$scope','$http','$location','$interval', function($scope,$http,$location,$interval) {
         $scope.posts = [];
 
         $scope.editorOptions = {
@@ -42,6 +42,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
                 { name: 'about' }
             ]
         };
+        var stop = {};
 
         if($location.path().indexOf("/form/") != -1 ){
             $http.get('/postById/'+$location.path().split("/")[2]).success(function(data){
@@ -62,6 +63,11 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
                         })
                     }
                     $scope.edit = true;
+                    stop = $interval(function() {
+                        $http.post('/saveDraft',$scope.post).success(function(data){
+
+                        })
+                    },10000)
 
                 }
                 else{
@@ -104,6 +110,8 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
             })
         }
         $scope.save = function(){
+            $interval.cancel(stop);
+            stop = undefined;
             var inputs = [];
             for(aTag in $scope.post.tags){
                 console.info($scope.post.tags[aTag])
@@ -135,11 +143,18 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         $scope.cancelEdit = function(){
             $scope.edit = false;
             $location.path("/form");
+            $interval.cancel(stop);
+            stop = undefined;
         }
         $scope.editPost = function(post){
             $location.path("/form/"+post._id.$oid);
             $scope.edit = true;
             $scope.post = post;
+            stop = $interval(function() {
+                $http.post('/saveDraft',$scope.post).success(function(data){
+
+                })
+            },10000)
         }
         $scope.addPost = function(){
             $scope.edit = true;
@@ -147,36 +162,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         }
 
 
-        $scope.stylefunction = function(i){
-            var position = $('#bodyTextArea' ).caret()//getCursorPosition()
-            var a = $scope.post.body;
-            var style = "left"
-            switch(i){
-                case 0: style = "left" ;break;
-                case 1: style = "center";break;
-                case 2: style = "right";break;
-            }
-            var b = "\n<p style='text-align: "+style+"'>\n\r</p>\n"
-            if(i == 3){
-                b = "\n<b>\n\r</b>\n"
-            }
-            if(i == 4){
-                b = "\n<i>\n\r</i>\n"
-            }
-            if(i == 5){
-                b = "\n<br/>\n"
-            }
-            if(i == 6){
-                b = "\n<blockquote>\n\r</blockquote>\n"
-            }
 
-            $scope.post.body = [a.slice(0, position), b, a.slice(position)].join('');
-            $('#bodyTextArea' ).caret(position)
-            console.info(position)
-            //$('#bodyTextArea').focus();
-            console.info("==> "+position)
-            $('#bodyTextArea').caret(position)
-        }
 
     }]).config(function($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');
