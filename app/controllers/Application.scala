@@ -31,6 +31,7 @@ import play.api.libs.functional.syntax._ // Combinator syntax
 object Application extends Controller with MongoController {
   val PAGE_SIZE = 2;
   def collection: JSONCollection = db.collection[JSONCollection]("posts")
+  def drafts: JSONCollection = db.collection[JSONCollection]("drafts")
   def tags: JSONCollection = db.collection[JSONCollection]("tags")
   def sequences: JSONCollection = db.collection[JSONCollection]("counters")
   def users: JSONCollection = db.collection[JSONCollection]("users")
@@ -161,7 +162,12 @@ object Application extends Controller with MongoController {
     collection.find(query).options(QueryOpts().batchSize(20)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]().map(list => Ok(Json.toJson(list)))
   }
 
-
+  def saveDraft = Action(parse.json){
+      request => {
+        drafts.save(request.body)
+        Ok("")
+      }
+  }
   def savePost = Action.async(parse.json){
     request => {
       val post = ((request.body \ "_id") match {

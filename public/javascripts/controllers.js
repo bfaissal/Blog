@@ -52,8 +52,9 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
 
         }
         $scope.$watch(function () {return $location.path()}, function (newLocation, oldLocation) {
-
+            console.info("$scope.edit = "+$scope.edit)
             if(!$scope.edit){
+                console.info(" inside first if "+$location.path()+" "+$location.path().indexOf("/form/"))
                 if($location.path().indexOf("/form/") != -1 ){
                     console.info($scope.post)
                     if($scope.post == undefined || $scope.title == undefined){
@@ -71,6 +72,11 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
 
                 }
                 else{
+                    console.info("not edit")
+                    $scope.edit = false;
+                }
+            }else{
+                if($location.path().indexOf("/form/") == -1 ){
                     $scope.edit = false;
                 }
             }
