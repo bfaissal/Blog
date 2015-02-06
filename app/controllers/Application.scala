@@ -150,6 +150,13 @@ object Application extends Controller with MongoController {
         .cursor[JsObject].headOption.map(p => Ok(views.html.post(p.getOrElse(Json.obj()))))
 
   }
+  def preview = Action {
+    request => {
+      println(Json.parse(request.body.asFormUrlEncoded.get("preview").mkString).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get)
+      Ok(views.html.post(Json.parse(request.body.asFormUrlEncoded.get("preview").mkString).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get))
+    }
+
+  }
   def form(post:String) = Action.async {
       Future.successful(Ok(views.html.form("")))
   }

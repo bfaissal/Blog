@@ -25,6 +25,8 @@ GET         /indexing             controllers.Application.indexing
 GET         /search               controllers.Application.search(query:String)
 GET         /                     controllers.Application.indexES(page:Option[Int])
 GET         /analyse              controllers.Application.analyse(text:String)
+POST         /preview              controllers.Application.preview
+
 
 
 # Map static resources from the /public folder to the /assets URL path
