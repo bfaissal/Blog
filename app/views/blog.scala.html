@@ -1,6 +1,8 @@
-
+@import tags.adsense
 @(title: String, tags: play.api.libs.json.JsObject)( content: Html)
+
 @import play.api.libs.json.JsObject
+
 
 <!DOCTYPE html>
     <html lang="en" dir="rtl">
@@ -160,11 +162,9 @@
                             </form>
                         </div><!--sidebar-box-->
                         <div class="sidebar-box margin40">
-                            <h4>تقديم</h4>
-                            <p>
-							هذا النشاط و على الرغم من بساطته، لكنه قوى تركيزها لدرجة أن معلمتها تساءلت عن السر وراء ازدياد قدرتها على التركيز بشكل مفاجئ.
-                                إن الأنشطة التي أشاركها معكم على صفحات هذه المدونة، بالرغم من كوننا نرى أنها تتوقف عند تعلم الطفل مهارة معينة، إلا أنها في الواقع تحمله إلى أبعد من ذلك بكثير.
-                            </p>
+
+                            @adsense("")
+
                         </div><!--sidebar-box-->
                         <div class="sidebar-box margin40">
                             <h4>التصنيفات
