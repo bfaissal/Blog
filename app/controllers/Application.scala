@@ -31,6 +31,7 @@ import play.api.libs.functional.syntax._ // Combinator syntax
 //
 object Application extends Controller with MongoController {
   val PAGE_SIZE = 2;
+
   def collection: JSONCollection = db.collection[JSONCollection]("posts")
   def drafts: JSONCollection = db.collection[JSONCollection]("drafts")
   def tags: JSONCollection = db.collection[JSONCollection]("tags")
@@ -55,14 +56,17 @@ object Application extends Controller with MongoController {
   }
 
   def executeESSearch(query:String,_type:String="post",isSearch:Boolean=false) = {
-    println("_type = "+_type)
-    println(query)
+    //println("_type = "+_type)
+    //println(query)
     val rest = ESUtilities.esSearch(query,_type)
-    println(rest)
+    //println(rest)
     val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
     Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),isSearch,pages)))
   }
+
+
   def indexES(page:Option[Int]) = Action.async{
+
 
     executeESSearch(s"""
       {

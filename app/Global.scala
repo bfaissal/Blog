@@ -11,7 +11,6 @@ import scala.concurrent.Future
 object Global extends GlobalSettings {
   override def onStart(app: Application) {
     Logger.info("Application has started")
-    println("Salam ********* ")
   }
   override def onError(request: RequestHeader, ex: Throwable) = {
     if(Play.isDev){
