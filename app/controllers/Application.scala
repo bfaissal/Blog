@@ -27,6 +27,7 @@ import scala.concurrent.duration._
 import play.api.libs.json.Reads._ // Custom validation helpers
 import play.api.libs.functional.syntax._ // Combinator syntax
 
+
 //
 object Application extends Controller with MongoController {
   val PAGE_SIZE = 2;
