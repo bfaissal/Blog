@@ -83,7 +83,6 @@ object Application extends Controller with MongoController {
   }
 
   def executeESSearch(query:String,_type:String="post",isSearch:Boolean=false)(implicit request:Request[AnyContent]) = {
-      println(query)
       val rest = ESUtilities.esSearch(query,_type)
       val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
       Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),isSearch,pages)(request)))
@@ -188,7 +187,6 @@ object Application extends Controller with MongoController {
   }
   def preview = Action {
     request => {
-      println(Json.parse(request.body.asFormUrlEncoded.get("preview").mkString).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get)
       Ok(views.html.post(Json.parse(request.body.asFormUrlEncoded.get("preview").mkString).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get))
     }
 
@@ -277,7 +275,6 @@ object Application extends Controller with MongoController {
 
 
       val tempFile= File.createTempFile("upload","tmp")
-      println(tempFile.getAbsolutePath)
       picture.ref.moveTo(tempFile,true)//new File(s"/tmp2/picture/${filename}_$i"))
 
       WS.url(s"https://api-content.dropbox.com/1/files_put/auto/$filename.JPG")
@@ -420,7 +417,6 @@ object Application extends Controller with MongoController {
         aPost.replace("<p>","").replace("</p>","")
 
       ).setHeader("Content-Type","text/html;charset=UTF-8").setMethod("GET").build()
-      println(" ===>" +aPost.replace("<p>","").replace("</p>",""))
       Ok(ul.executeRequest(rb).get().getResponseBody)
     })
 
