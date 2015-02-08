@@ -5,6 +5,7 @@
 @import play.api.libs.json.JsUndefined
 
 @import play.api.libs.json.JsObject
+@import tags.adsense
 
 @(post: JsObject)
 
@@ -40,7 +41,11 @@
 
             </div>
         </div><!--blog wrap-->
-
+        <div class="blog-wrap">
+            <div class="blog-desc">
+            @adsense(1)
+            </div>
+        </div>
 
 
         <h3>@Messages("Comments")</h3>

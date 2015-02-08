@@ -69,7 +69,7 @@ object Application extends Controller with MongoController {
           __.json.update(
           (__ \ 'cover ).json.put({
             e.transform( (__ \ 'cover).json.pick) match {
-                case error:JsError => JsString("//images/placeholder.png")
+                case error:JsError => JsString("/assets/images/placeholder.png")
                 case s:JsSuccess[JsString] => s.get
             }
           })
@@ -92,6 +92,7 @@ object Application extends Controller with MongoController {
     }
 
     val totalResult = (restTemp\"hits"\"total").as[Int];
+    println("totalResult = "+totalResult)
     val rest = restTemp.transform(
       (__ \ "hits" \ "hits").json.update(
         __.read[JsArray].map {
@@ -100,7 +101,7 @@ object Application extends Controller with MongoController {
               e.transform(
                 __.json.update(
                   (__ \ "showAdds").json.put(
-                    JsBoolean((incremt % ADS_FREQUENCY == 0) || (incremt % totalResult ==0))
+                    JsBoolean({val currentIndex  = incremt;((currentIndex % ADS_FREQUENCY) == 0) || ((currentIndex % totalResult) ==0)})
                   )
                 )
               ).get
