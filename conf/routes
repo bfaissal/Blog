@@ -22,7 +22,7 @@ GET         /form/img/:img        controllers.Application.img(img:String,size:Op
 GET         /img/:img             controllers.Application.img(img:String,size:Option[String])
 GET         /testDropbox          controllers.Application.testDropbox
 GET         /indexing             controllers.Application.indexing
-GET         /search               controllers.Application.search(query:String)
+GET         /search               controllers.Application.search(query:String,page:Option[Int])
 GET         /                     controllers.Application.indexES(page:Option[Int])
 GET         /analyse              controllers.Application.analyse(text:String)
 POST         /preview              controllers.Application.preview
