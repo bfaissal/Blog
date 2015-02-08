@@ -31,6 +31,7 @@ import play.api.libs.functional.syntax._ // Combinator syntax
 //
 object Application extends Controller with MongoController {
   val PAGE_SIZE = 20;
+  val ADS_FREQUENCY = 4;
 
   def collection: JSONCollection = db.collection[JSONCollection]("posts")
   def drafts: JSONCollection = db.collection[JSONCollection]("drafts")
@@ -93,7 +94,7 @@ object Application extends Controller with MongoController {
 
       val rest = restTemp.transform(
         (__ \"hits" \"hits" ).json.update(
-          __.read[JsArray].map {case JsArray(a) => JsArray(a.map( e => e.transform(__.json.update((__ \ "showAdds").json.put(JsBoolean(incremt%6 == 0 )))).get))}
+          __.read[JsArray].map {case JsArray(a) => JsArray(a.map( e => e.transform(__.json.update((__ \ "showAdds").json.put(JsBoolean(incremt%ADS_FREQUENCY == 0 )))).get))}
         )
       ).get
       val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
