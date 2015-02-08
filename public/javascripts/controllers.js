@@ -82,6 +82,15 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
             }
 
         });
+
+        ARABICM.addImage = function(img){
+            try{
+                $scope.$apply{
+
+                }
+            }catch(e){}
+
+        }
         $scope.loadTags = function(query) {
             return $http.get('/tags?query=' + query);
         };

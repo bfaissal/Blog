@@ -23,7 +23,7 @@
                         @{
                             val html = (post \ "tags" ) match {
                                 case js: JsArray => {
-                                    js.as[Array[JsObject]].map(e => s"<a>${(e\"text").as[String]}</a>").mkString(",")
+                                    js.as[Array[JsObject]].map(e => s"<a href='/tags/${(e\"text").as[String]}'>${(e\"text").as[String]}</a>").mkString(",")
                                 }
                                 case jsUndefined: JsUndefined => {""}
                             }

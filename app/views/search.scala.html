@@ -21,7 +21,11 @@
                     </style>
 
     @for(post <- (posts\"results"\"hits").as[Array[JsObject]] ){
-
+        <style>
+            .noResultFound{
+                display: none;
+            }
+        </style>
         <div class="blog-wrap">
             <div class="blog-desc">
                 <h4><a href="/post/@{(post\"_source"\"url").as[String]}">@{(post\"_source"\"title").as[String]}</a></h4>
@@ -34,7 +38,7 @@
                         @{
                             val html = (post \"_source" \ "tags" ) match {
                                 case js: JsArray => {
-                                    js.as[Array[JsObject]].map(e => s"<a>${(e\"text").as[String]}</a>").mkString(",")
+                                    js.as[Array[JsObject]].map(e => s"<a href='/tags/${(e\"text").as[String]}'>${(e\"text").as[String]}</a>").mkString(",")
                                 }
                                 case jsUndefined: JsUndefined => {""}
                             }
@@ -80,6 +84,15 @@
 
         </div><!--blog wrap-->
         }
+    <div class="noResultFound">
+
+    </div>
+
+    <div class="col-md-12 text-center noResultFound">
+
+        <h3>@Messages("NoResultFound")</h3>
+    </div>
+
     @if(pages>1){
         <div style="text-align: center">
             <ul class="pagination">

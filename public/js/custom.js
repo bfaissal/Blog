@@ -247,3 +247,8 @@ new function($) {
     }
 })(jQuery);
 /*==========================*/
+
+var ARABICM = ARABICM || {}
+function addImage(img){
+
+}

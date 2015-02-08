@@ -182,7 +182,13 @@ object Application extends Controller with MongoController {
 
   def post(url:String) = Action.async{
       collection.find(Json.obj(("published" -> true), ("url" -> url)))
-        .cursor[JsObject].headOption.map(p => Ok(views.html.post(p.getOrElse(Json.obj()))))
+        .cursor[JsObject].headOption.map(p => {
+        p match {
+            case None => Redirect("/search",Map("query"->Seq(url)))//Ok(views.html.post(Json.obj()))
+            case Some(value) => Ok(views.html.post(value))
+        }
+        //Ok(views.html.post(p.getOrElse(Json.obj())))
+      })
 
   }
   def preview = Action {
@@ -282,7 +288,7 @@ object Application extends Controller with MongoController {
         .put(tempFile)
         .map( rs => {
             tempFile.delete()
-            val res = s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename?size=l','');</script></body></html>"
+            val res = s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename?size=l','');window.parent.ARABICM.addImage('/img/$filename');</script></body></html>"
             Ok(res).as("text/html")
         })
 
