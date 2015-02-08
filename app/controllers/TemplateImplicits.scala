@@ -17,4 +17,8 @@ object TemplateImplicits {
     val format = new java.text.SimpleDateFormat("EEEE dd MMMM yyyy الساعة HH:mm",new java.util.Locale("ar"))
     format.format(d)
   }
+
+  def trimBody(body:String) = {
+    body.substring(0,if(body.length > 1000){1000}else{body.length})
+  }
 }

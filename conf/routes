@@ -3,31 +3,31 @@
 # ~~~~
 
 # Home page
-GET         /indexMG              controllers.Application.index
-GET         /form                 controllers.Application.form(post :String="index")
-GET         /form/:post           controllers.Application.form(post :String)
-POST        /savePost             controllers.Application.savePost
-GET         /allPosts             controllers.Application.allPosts(f:Option[Long],l:Option[Long])
-POST        /deletePost           controllers.Application.deletePost
-GET         /post/:url            controllers.Application.post(url: String)
-POST        /post/:url            controllers.Application.comment(url: String)
-GET         /comments/:url        controllers.Application.getComments(url: String)
-GET         /postById/:id         controllers.Application.postById(id: String)
-GET         /tags/:tag            controllers.Application.tagsSearch(tag:String,page:Option[Int])
-GET         /tags                 controllers.Application.tags(query:String)
-POST        /tags                 controllers.Application.addtags()
-POST        /form/upload          controllers.Application.upload(CKEditorFuncNum:String)
-POST        /upload               controllers.Application.upload(CKEditorFuncNum:String)
-GET         /form/img/:img        controllers.Application.img(img:String,size:Option[String])
-GET         /img/:img             controllers.Application.img(img:String,size:Option[String])
-GET         /testDropbox          controllers.Application.testDropbox
-GET         /indexing             controllers.Application.indexing
-GET         /search               controllers.Application.search(query:String,page:Option[Int])
-GET         /                     controllers.Application.indexES(page:Option[Int])
-GET         /analyse              controllers.Application.analyse(text:String)
-POST         /preview              controllers.Application.preview
+GET         /indexMG               controllers.Application.index
+GET         /form                  controllers.Application.form(post :String="index")
+GET         /form/:post            controllers.Application.form(post :String)
+POST        /savePost/:draf        controllers.Application.savePost(draf:Boolean)
+GET         /allPosts              controllers.Application.allPosts(f:Option[Long],l:Option[Long])
+POST        /deletePost            controllers.Application.deletePost
+GET         /post/:url             controllers.Application.post(url: String)
+POST        /post/:url             controllers.Application.comment(url: String)
+GET         /comments/:url         controllers.Application.getComments(url: String)
+GET         /postById/:id          controllers.Application.postById(id: String)
+GET         /tags/:tag             controllers.Application.tagsSearch(tag:String,page:Option[Int])
+GET         /tags                  controllers.Application.tags(query:String)
+POST        /tags                  controllers.Application.addtags()
+POST        /form/upload           controllers.Application.upload(CKEditorFuncNum:String)
+POST        /upload                controllers.Application.upload(CKEditorFuncNum:String)
+GET         /form/img/:img         controllers.Application.img(img:String,size:Option[String])
+GET         /img/:img              controllers.Application.img(img:String,size:Option[String])
+GET         /testDropbox           controllers.Application.testDropbox
+GET         /indexing              controllers.Application.indexing
+GET         /search                controllers.Application.search(query:String,page:Option[Int])
+GET         /                      controllers.Application.indexES(page:Option[Int])
+GET         /analyse               controllers.Application.analyse(text:String)
+POST        /preview               controllers.Application.preview
 
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file         controllers.Assets.at(path="/public", file)
+GET         /assets/*file          controllers.Assets.at(path="/public", file)

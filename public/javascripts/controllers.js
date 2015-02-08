@@ -134,7 +134,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
                 inputs.push($scope.post.tags[aTag].text)
             }
             $scope.post.url = $scope.post.title
-            $http.post('/savePost',$scope.post).success(function(data){
+            $http.post('/savePost/false',$scope.post).success(function(data){
                 if(!$scope.post._id ){
                     $scope.posts.push(data)
                 }
@@ -165,7 +165,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
             $scope.edit = true;
             $scope.post = post;
             stop = $interval(function() {
-                $http.post('/saveDraft',$scope.post).success(function(data){
+                $http.post('/savePost/true',$scope.post).success(function(data){
 
                 })
             },10000)

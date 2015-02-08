@@ -30,7 +30,7 @@ import play.api.libs.functional.syntax._ // Combinator syntax
 
 //
 object Application extends Controller with MongoController {
-  val PAGE_SIZE = 2;
+  val PAGE_SIZE = 20;
 
   def collection: JSONCollection = db.collection[JSONCollection]("posts")
   def drafts: JSONCollection = db.collection[JSONCollection]("drafts")
@@ -56,7 +56,7 @@ object Application extends Controller with MongoController {
   }
 
   def lastestPosts =  {
-    val res = collection.find(Json.obj("published" -> true),Json.obj("title"->"1","url"->"2")).options(QueryOpts().batchSize(3)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
+    val res = collection.find(Json.obj("published" -> true),Json.obj("title"->"1","url"->"2","cover"->"3")).options(QueryOpts().batchSize(3)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
     val trans = (__ \ 'cover ).json.update(of[JsString].map{
       case JsString(cover) => JsString(cover)
       case _ => JsString("http://localhost:9000/img/1422940618442884000?size=m")
@@ -217,7 +217,7 @@ object Application extends Controller with MongoController {
       }
   }
 
-  def savePost = Action.async(parse.json){
+  def savePost(draft:Boolean) = Action.async(parse.json){
     request => {
       val post = ((request.body \ "_id") match {
         case _:JsUndefined =>{
@@ -234,7 +234,9 @@ object Application extends Controller with MongoController {
         }
       }).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get
       collection.save(post)
-      ESUtilities.esIndex(ESUtilities.stripHTML(post,"body"),"post","_id")
+      if(!draft){
+        ESUtilities.esIndex(ESUtilities.stripHTML(post,"body"),"post","_id")
+      }
 
       (post\"tags") match {
         case list:JsUndefined => {}

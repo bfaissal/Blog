@@ -1363,5 +1363,10 @@ h4, h4 a, .navbar-brand{
     border-bottom-left-radius: 3px;
 }
 
+.coverImg{
+    margin: auto;
+    margin-bottom: 20px;
+}
+
 
 

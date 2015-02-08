@@ -76,8 +76,25 @@
                     Html(html)
                 }
                 }else{
+                    <a href="/post/@{(post\"_source"\"url").as[String]}">
+                        <div class="item-img-wrap" style="text-align: center">
+                            @{
+                                val coverImg = (post\"_source"\"cover") match {
+                                    case jsUndefined: JsUndefined => {""}
+                                    case js:JsString => {"<img class='img-responsive coverImg' alt='workimg' src='"+js.as[String]+"'/>"}
+                                }
+                                Html(coverImg)
+                            }
+                            <div class="item-img-overlay">
+                                <span></span>
+                            </div>
+                        </div>
+                    </a>
 
-                    @{Html((post\"_source"\"htmlbody").as[String])}
+                    @{Html(trimBody((post\"_source"\"body").as[String]))}
+                    <br/>
+                    <div style="text-align: left;"><a href="/post/@{(post\"_source"\"url").as[String]}">@Messages("More")</a></div>
+
                 }
 
             </div>
