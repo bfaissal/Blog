@@ -1,17 +1,29 @@
-@(title:String)
+@(adType:Int)
 @import play.api._
 @import play.api.Play.current
 
 
 
 @if(!Play.isDev) {
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- ArabicMontessoriSideBar -->
-    <ins class="adsbygoogle"
-    style="display:inline-block;width:300px;height:250px"
-    data-ad-client="ca-pub-4514031144348063"
-    data-ad-slot="2856362837"></ins>
-    <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    @if(adType == 0 ) {
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- ArabicMontessoriSideBar -->
+        <ins class="adsbygoogle"
+        style="display : inline-block ; width : 300 px ; height : 250 px"
+        data-ad-client="ca-pub-4514031144348063"
+        data-ad-slot="2856362837"></ins>
+        <script>
+        ( adsbygoogle = window.adsbygoogle ||[ ] ).push ( { } ) ;
+        </script>
+    }else{
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- ArabicMontessoriCenter -->
+        <ins class="adsbygoogle"
+        style="display:inline-block;width:728px;height:90px"
+        data-ad-client="ca-pub-4514031144348063"
+        data-ad-slot="5286622038"></ins>
+        <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    }
 }

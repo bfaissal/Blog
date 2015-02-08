@@ -5,7 +5,7 @@
 @import play.api.libs.json.JsArray
 
 @import play.api.libs.json.JsUndefined
-
+@import tags.adsense
 @import play.api.libs.json.JsObject
 @import controllers.Application
 
@@ -21,11 +21,19 @@
                     </style>
 
     @for(post <- (posts\"results"\"hits").as[Array[JsObject]] ){
+
         <style>
             .noResultFound{
                 display: none;
             }
         </style>
+        @if((post \ "showAdds").as[Boolean]){
+            <div class="blog-wrap">
+                <div class="blog-desc">
+                @adsense(1)
+                </div>
+            </div>
+        }
         <div class="blog-wrap">
             <div class="blog-desc">
                 <h4><a href="/post/@{(post\"_source"\"url").as[String]}">@{(post\"_source"\"title").as[String]}</a></h4>
