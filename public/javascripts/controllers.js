@@ -84,10 +84,11 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         });
 
         ARABICM.addImage = function(img){
+            $scope.post.imgs = $scope.post.imgs || [];
             try{
-                $scope.$apply{
-
-                }
+                $scope.$apply(function(){
+                    $scope.post.imgs.push(img)
+                })
             }catch(e){}
 
         }

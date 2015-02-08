@@ -56,6 +56,14 @@
                             <auto-complete source="loadTags($query)" min-length="1"></auto-complete>
                         </tags-input>
                     </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">@Messages("CoverImage")</label>
+                        <ul>
+                            <li ng-repeat="img in post.imgs" style="display: inline">
+                                <input type="radio" ng-model="post.cover" ng-value="img"> <img ng-src="{{img}}?size=s"/>
+                            </li>
+                        </ul>
+                    </div>
 
 
                     <div class="form-group">
