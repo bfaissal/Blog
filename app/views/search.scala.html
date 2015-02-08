@@ -84,24 +84,25 @@
         <div style="text-align: center">
             <ul class="pagination">
 
-                <li><a href="?page=@{if((request.getQueryString("page").getOrElse("1")).toInt-1>0){(request.getQueryString("page").getOrElse("0")).toInt-1}else{1}}">»</a></li>
+                <li><a href="?query=@{request.getQueryString("query").getOrElse("")}&page=@{if((request.getQueryString("page").getOrElse("1")).toInt-1>0){(request.getQueryString("page").getOrElse("0")).toInt-1}else{1}}">»</a></li>
                 @for( i <- 1 to pages ){
                     <li class="@{(if((""+i).equals(request.getQueryString("page").getOrElse("1"))){"active"}else{""})}">
 
-                        <a href="?page=@i">@i</a>
+                        <a href="?query=@{request.getQueryString("query").getOrElse("")}&page=@i">@i</a>
                     </li>
                 }
 
-                <li><a href="?page=@{if((request.getQueryString("page").getOrElse("1")).toInt+1<pages){(request.getQueryString("page").getOrElse("1")).toInt+1}else{pages}}">«</a></li>
+                <li><a href="?query=@{request.getQueryString("query").getOrElse("")}&page=@{if((request.getQueryString("page").getOrElse("1")).toInt+1<pages){(request.getQueryString("page").getOrElse("1")).toInt+1}else{pages}}">«</a></li>
 
             </ul>
         </div>
 
             <ul class="pager">
-                <li class="previous"><a href="?page=@{if((request.getQueryString("page").getOrElse("1")).toInt-1>0){(request.getQueryString("page").getOrElse("0")).toInt-1}else{1}}">&larr; السابق</a></li>
-                <li class="next"><a href="?page=@{if((request.getQueryString("page").getOrElse("1")).toInt+1<pages){(request.getQueryString("page").getOrElse("1")).toInt+1}else{pages}}">اللاحق&rarr;</a></li>
+                <li class="previous"><a href="?query=@{request.getQueryString("query").getOrElse("")}&page=@{if((request.getQueryString("page").getOrElse("1")).toInt-1>0){(request.getQueryString("page").getOrElse("0")).toInt-1}else{1}}">&larr; السابق</a></li>
+                <li class="next"><a href="?query=@{request.getQueryString("query").getOrElse("")}&page=@{if((request.getQueryString("page").getOrElse("1")).toInt+1<pages){(request.getQueryString("page").getOrElse("1")).toInt+1}else{pages}}">اللاحق&rarr;</a></li>
             </ul>
-        </div>
-    }
+        }
+    </div>
+
     }
 

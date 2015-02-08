@@ -83,7 +83,7 @@ object Application extends Controller with MongoController {
   }
 
   def executeESSearch(query:String,_type:String="post",isSearch:Boolean=false)(implicit request:Request[AnyContent]) = {
-
+      println(query)
       val rest = ESUtilities.esSearch(query,_type)
       val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
       Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),isSearch,pages)(request)))
@@ -428,12 +428,12 @@ object Application extends Controller with MongoController {
 
   }
 
-  def search(search:String) =Action.async{
+  def search(search:String,page:Option[Int]) =Action.async{
     implicit request => {
       executeESSearch(
         s"""
       {
-
+        "from" : ${PAGE_SIZE * (page.getOrElse(1) - 1)}, "size" : $PAGE_SIZE,
         "query": {
             "filtered" : {
                 "filter" : {
