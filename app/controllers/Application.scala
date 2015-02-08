@@ -83,23 +83,35 @@ object Application extends Controller with MongoController {
     Await.result(modufeied,60 seconds)
   }
 
-  def executeESSearch(query:String,_type:String="post",isSearch:Boolean=false)(implicit request:Request[AnyContent]) = {
-      val restTemp = ESUtilities.esSearch(query,_type)
-      var index = 0;
-      def incremt:Int = {
-        index = index + 1
-        index
-      }
+  def executeESSearch(query: String, _type: String = "post", isSearch: Boolean = false)(implicit request: Request[AnyContent]) = {
+    val restTemp = ESUtilities.esSearch(query, _type)
+    var index = 0;
+    def incremt: Int = {
+      index = index + 1
+      index
+    }
 
-
-      val rest = restTemp.transform(
-        (__ \"hits" \"hits" ).json.update(
-          __.read[JsArray].map {case JsArray(a) => JsArray(a.map( e => e.transform(__.json.update((__ \ "showAdds").json.put(JsBoolean(incremt%ADS_FREQUENCY == 0 )))).get))}
-        )
-      ).get
-      val pages = ((rest\"hits"\"total").as[Int] / PAGE_SIZE) + (if(((rest\"hits"\"total").as[Int] % PAGE_SIZE)>0 ) 1 else 0)
-      println(rest)
-      Future(Ok(views.html.search(Json.obj("results"->rest.transform((__ \ 'hits  ).json.pick ).get),isSearch,pages)(request)))
+    val totalResult = (restTemp\"hits"\"total").as[Int];
+    val rest = restTemp.transform(
+      (__ \ "hits" \ "hits").json.update(
+        __.read[JsArray].map {
+          case JsArray(a) => {
+            JsArray(a.map(e => {
+              e.transform(
+                __.json.update(
+                  (__ \ "showAdds").json.put(
+                    JsBoolean((incremt % ADS_FREQUENCY == 0) || (incremt % totalResult ==0))
+                  )
+                )
+              ).get
+            }))
+          }
+        }
+      )
+    ).get
+    val pages = (totalResult / PAGE_SIZE) + (if ((totalResult % PAGE_SIZE) > 0) 1 else 0)
+    println(rest)
+    Future(Ok(views.html.search(Json.obj("results" -> rest.transform((__ \ 'hits).json.pick).get), isSearch, pages)(request)))
 
   }
 
