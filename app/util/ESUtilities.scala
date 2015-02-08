@@ -27,7 +27,7 @@ object ESUtilities {
             )).get
       }
       def esIndex(post: JsObject,_type : String,id :String)= {
-
+        WS.url(ESUtilities.ESURL+"blox/"+_type+"/"+URLEncoder.encode((post \id).as[String], "UTF-8")).delete()
         val res = WS.url(ESUtilities.ESURL+"blox/"+_type+"/"+URLEncoder.encode((post \id).as[String], "UTF-8"))
           .withQueryString("test"->"hg hg")
           .withHeaders("Content-Type"->"application/json;charset=UTF-8")
