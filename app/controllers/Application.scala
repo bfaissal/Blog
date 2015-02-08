@@ -68,7 +68,7 @@ object Application extends Controller with MongoController {
           __.json.update(
           (__ \ 'cover ).json.put({
             e.transform( (__ \ 'cover).json.pick) match {
-                case error:JsError => JsString("http://localhost:9000/img/1422940618442884000?size=m")
+                case error:JsError => JsString("//images/placeholder.png")
                 case s:JsSuccess[JsString] => s.get
             }
           })
@@ -120,9 +120,18 @@ object Application extends Controller with MongoController {
       s"""
         |{
         |    "from" : ${PAGE_SIZE*(page.getOrElse(1)-1)}, "size" : $PAGE_SIZE,
+        |    "query": {
+        |            "filtered" : {
+        |                "filter" : {
+        |                    "term" : {
+        |                       "published" : true
+        |                    }
+        |                },
         |    "query" : {
         |        "match" :  { "tags.text" : "$tag" }
         |
+        |    }
+        |    }
         |    }
         |}
       """.stripMargin,"post")

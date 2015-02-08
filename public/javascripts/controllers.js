@@ -151,7 +151,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
         $scope.publishPost = function(msg,post,publish){
             if(confirm(msg,post)){
                 post.published=publish;
-                $http.post('savePost',post);
+                $http.post('/savePost/false',post);
             }
         }
         $scope.cancelEdit = function(){
