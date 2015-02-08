@@ -65,7 +65,7 @@ angular.module('blog', ['ngSanitize','ngCkeditor','ngTagsInput','ngAnimate'])
                     }
                     $scope.edit = true;
                     stop = $interval(function() {
-                        $http.post('/saveDraft',$scope.post).success(function(data){
+                        $http.post('/savePost/true',$scope.post).success(function(data){
 
                         })
                     },10000)
