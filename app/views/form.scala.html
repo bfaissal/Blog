@@ -39,8 +39,9 @@
 
             <div class="col-md-12">
                 <form method="POST" action="/preview">
-                    <button type="submit" class="btn btn-info" ng-click="save()">@Messages("save")</button>
-                    <button type="submit" class="btn btn-danger" ng-click="cancelEdit()">@Messages("cancel")</button>
+                    <button type="button" class="btn btn-info" ng-click="save()">@Messages("save")</button>
+                    <button type="button" class="btn btn-danger" ng-click="edit=false">@Messages("cancel")</button>
+                    <button type="submit" class="btn btn-default">@Messages("preview")</button>
                     <div class="form-group">
                         <label for="exampleInputEmail1">@Messages("title")</label>
                         <input type="title" class="form-control" id="exampleInputEmail1" ng-model="post.title">

@@ -230,7 +230,7 @@ object Application extends Controller with MongoController {
         }
       }).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get
       collection.save(post)
-      ESUtilities.esIndex(ESUtilities.stripHTML(post,"body"),"post","id")
+      ESUtilities.esIndex(ESUtilities.stripHTML(post,"body"),"post","_id")
 
       (post\"tags") match {
         case list:JsUndefined => {}
