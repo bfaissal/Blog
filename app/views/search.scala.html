@@ -9,7 +9,7 @@
 @import play.api.libs.json.JsObject
 @import controllers.Application
 
-@(posts: JsObject,search:Boolean, pages:Int)
+@(posts: JsObject,search:Boolean, pages:Int)(implicit request: play.api.mvc.Request[AnyContent])
 
 
 @blog("Welcome to Play",Application.tagsAggregation) {
@@ -27,7 +27,7 @@
                 <h4><a href="/post/@{(post\"_source"\"url").as[String]}">@{(post\"_source"\"title").as[String]}</a></h4>
                 <ul class="list-inline post-deatil" style="padding-right: 0px;">
 
-                    <li>@{Html(Messages("postedBy",(post\"_source"\"author"\"fullName").as[String],((post\"_source"\"creationDate").as[Date]).format("dd-MM-yyyy hh:mm")))}</li>
+                    <li>@{Html(Messages("postedBy",(post\"_source"\"author"\"fullName").as[String],formatDate((post\"_source"\"creationDate").as[Date])))}</li>
                     <li>
 
                         @Messages("tags"):
@@ -80,22 +80,28 @@
 
         </div><!--blog wrap-->
         }
-    <div style="text-align: center">
-        <ul class="pagination">
-            <li><a href="#">»</a></li>
-            @for( i <- 1 to pages ){
-            <li class="_active"><a href="?page=@i">@i</a></li>
-            }
+    @if(pages>1){
+        <div style="text-align: center">
+            <ul class="pagination">
 
-            <li><a href="#">«</a></li>
+                <li><a href="?page=@{if((request.getQueryString("page").getOrElse("1")).toInt-1>0){(request.getQueryString("page").getOrElse("0")).toInt-1}else{1}}">»</a></li>
+                @for( i <- 1 to pages ){
+                    <li class="@{(if((""+i).equals(request.getQueryString("page").getOrElse("1"))){"active"}else{""})}">
 
-        </ul>
-    </div>
+                        <a href="?page=@i">@i</a>
+                    </li>
+                }
 
-        <ul class="pager">
-            <li class="previous"><a href="#">&larr; اللاحق</a></li>
-            <li class="next"><a href="#">السابق &rarr;</a></li>
-        </ul>
-</div>
+                <li><a href="?page=@{if((request.getQueryString("page").getOrElse("1")).toInt+1<pages){(request.getQueryString("page").getOrElse("1")).toInt+1}else{pages}}">«</a></li>
+
+            </ul>
+        </div>
+
+            <ul class="pager">
+                <li class="previous"><a href="?page=@{if((request.getQueryString("page").getOrElse("1")).toInt-1>0){(request.getQueryString("page").getOrElse("0")).toInt-1}else{1}}">&larr; السابق</a></li>
+                <li class="next"><a href="?page=@{if((request.getQueryString("page").getOrElse("1")).toInt+1<pages){(request.getQueryString("page").getOrElse("1")).toInt+1}else{pages}}">اللاحق&rarr;</a></li>
+            </ul>
+        </div>
+    }
     }
 

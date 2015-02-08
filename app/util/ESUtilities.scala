@@ -1,6 +1,7 @@
 package util
 
 import java.net.URLEncoder
+import java.util.Date
 
 import com.ning.http.client.{RequestBuilder, AsyncHttpClient}
 
@@ -45,4 +46,6 @@ object ESUtilities {
       .build()
     Json.parse(ul.executeRequest(rb).get().getResponseBody)
   }
+
+
 }

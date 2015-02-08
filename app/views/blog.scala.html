@@ -1,5 +1,6 @@
 @import tags.adsense
 @import play.api.libs.json.JsObject
+@import tags._
 
 @(title: String, tags: play.api.libs.json.JsObject)( content: Html)(implicit recentWork: List[JsObject])
 
@@ -200,7 +201,7 @@
                 </div>
             </div><!--blog container-->
             <div class="divide80"></div>
-            @footer(null,null)
+            @footer(null,recentWork)
             <!--scripts and plugins -->
             <!--must need plugin jquery-->
             <script src="@routes.Assets.at("js/jquery.min.js")"></script>

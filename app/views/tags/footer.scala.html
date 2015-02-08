@@ -46,35 +46,21 @@
                 </div>
                 <div class="col-md-3 margin30">
                     <div class="footer-col">
+
                         <h3 class="heading">@Messages("latestArticles")</h3>
                         <ul class="list-unstyled popular-post">
+                            @for(lasPost <- lastestArticles ){
                             <li>
                                 <div class="popular-img">
-                                    <a href="#"> <img src="@routes.Assets.at("img/work-6.png")" class="img-responsive" alt=""></a>
+                                    <a href="#"> <img src="@{(lasPost\"cover").as[String]}" class="img-responsive" alt=""></a>
                                 </div>
                                 <div class="popular-desc">
-                                    <h5> <a href="#">blog post image</a></h5>
-                                    <h6>31st july 2014</h6>
+                                    <h5> <a href="/post/@{(lasPost\"url").as[String]}">@{(lasPost\"title").as[String]}</a></h5>
+                                    <!--<h6>31st july 2014</h6>-->
                                 </div>
                             </li>
-                            <li>
-                                <div class="popular-img">
-                                    <a href="#"> <img src="@routes.Assets.at("img/work-2.png")" class="img-responsive" alt=""></a>
-                                </div>
-                                <div class="popular-desc">
-                                    <h5> <a href="#">blog post image</a></h5>
-                                    <h6>31st july 2014</h6>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="popular-img">
-                                    <a href="#"> <img src="@routes.Assets.at("img/work-5.png")" class="img-responsive" alt=""></a>
-                                </div>
-                                <div class="popular-desc">
-                                    <h5> <a href="#">blog post image</a></h5>
-                                    <h6>31st july 2014</h6>
-                                </div>
-                            </li>
+                            }
+
                         </ul><!--latest post-->
                     </div>
                 </div><!--footer col-->
@@ -89,9 +75,7 @@
                             إن الأنشطة التي أشاركها معكم على صفحات هذه المدونة، بالرغم من كوننا نرى أنها تتوقف عند تعلم الطفل
                         </p>
                         <ul class="address-info list-unstyled">
-                            <li><i class="fa fa-home"></i> Vaishali nagar, Jaipur, 302012</li>
-                            <li><i class="fa fa-phone"></i> +91 123456789</li>
-                            <li><i class="fa fa-envelope"></i> <a href="#">support@@designmylife.com</a></li>
+                            <li><i class="fa fa-envelope"></i> <a href="#">info@@arabicmontessori.com</a></li>
                         </ul>
                     </div>
                 </div>

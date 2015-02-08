@@ -17,7 +17,7 @@
                     (post \ "title").as[String]
                 }</a></h4>
                 <ul class="list-inline post-deatil" style="padding-right: 0px;">
-                    <li><li>@{Html(Messages("postedBy",(post \"author"\"fullName").as[String],((post\"creationDate").as[Date]).format("dd-MM-yyyy hh:mm")))}</li></li>
+                    <li><li>@{Html(Messages("postedBy",(post \"author"\"fullName").as[String],formatDate((post\"creationDate").as[Date])))}</li></li>
                     <li>
                         @Messages("tags"):
                         @{

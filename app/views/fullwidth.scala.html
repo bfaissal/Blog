@@ -1,4 +1,6 @@
-@(title: String)(content: Html)
+@import play.api.libs.json.JsObject
+@import tags._
+@(title: String)(content: Html)(implicit recentWork: List[JsObject])
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
     <head>
@@ -160,7 +162,7 @@
         </div><!--blog container-->
         <div class="divide80"></div>
 
-        @footer(null,null)
+        @footer(null,recentWork)
         <!--scripts and plugins -->
         <!--must need plugin jquery-->
         <script src="@routes.Assets.at("js/jquery.min.js")"></script>
