@@ -79,11 +79,11 @@
                 }
                 }else{
                     <a href="/post/@{(post\"_source"\"url").as[String]}">
-                        <div class="item-img-wrap" style="text-align: center">
+                        <div style="text-align: center">
                             @{
                                 val coverImg = (post\"_source"\"cover") match {
                                     case jsUndefined: JsUndefined => {""}
-                                    case js:JsString => {"<img class='img-responsive coverImg' alt='workimg' src='"+js.as[String]+"'/>"}
+                                    case js:JsString => {"<img style='width:100%' class='img-responsive coverImg' alt='workimg' src='"+js.as[String]+"'/>"}
                                 }
                                 Html(coverImg)
                             }
