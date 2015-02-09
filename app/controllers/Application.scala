@@ -1,10 +1,13 @@
 package controllers
 
 import java.io.{FileInputStream, File}
+import java.text.SimpleDateFormat
 
 import _root_.util.ESUtilities
 import com.ning.http.client.{AsyncHttpClient, StringPart, RequestBuilder}
 import com.sksamuel.scrimage.Image
+import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 import play.api._
 import play.api.http.MimeTypes
 import play.api.i18n.Messages
@@ -498,6 +501,87 @@ object Application extends Controller with MongoController {
       }
       """.stripMargin, "post", true)
     }
+  }
+
+
+  def migration = Action.async{
+    val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
+    import scala.collection.JavaConversions._
+    val res = WS.url("https://www.googleapis.com/blogger/v3/blogs/6365368560867867924/posts?key=AIzaSyD1QZ9KaDNfn88pVCx2klQkBctYkmaeSN8&maxResults=100")
+      .get.map(r => {
+
+      (Json.parse(r.body)\\"items").map({ case JsArray(se) => {
+        se.map( e => {
+
+          val doc = org.jsoup.Jsoup.parse((e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"))
+          val imgs:Elements = doc.select("img[src]");
+          val reees = imgs.map( img => {
+            img match {
+              case ele:Element => JsString(ele.attr("src"))
+              case _ => JsString("")
+            }
+          })
+          val resio = reees.foldLeft[Seq[JsString]](Seq[JsString]())({case (lx,ex) => {lx.+:(ex)}})
+        //println("title xxx===> "+(e \ "published"))
+          val jsOb = Json.obj("body"-> e \ "content",
+            "title"-> e \ "title",
+            "body"-> (e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"),
+            "imgs" -> resio ,
+            "url"-> e \ "title"  ,
+            "creationDate" -> sdf.parse((e \ "published").as[String]).getTime
+          )
+
+
+
+          (e \ "labels") match {case JsArray(el) => { jsOb ++ Json.obj("tags" -> el.map (ue => Json.obj("text" -> ue))) }; case _ => jsOb}
+          //jsOb
+      }
+        )
+        //}
+      }
+      }
+      )
+
+    })
+
+    res.map(s => {s.map({
+      ex => ex.map(
+      e => {
+        e
+
+        val post = ((e \ "_id") match {
+          case _:JsUndefined =>{
+            //sequences.fin
+            val connectedUser = Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
+            val addAuthor = __.json.update((__ \ 'author ).json.put(connectedUser))
+            val published = __.json.update((__ \ 'published ).json.put(JsBoolean(true)))
+
+            val trans = addAuthor andThen published andThen generateId
+            e.transform(trans).get
+          }
+          case _ =>{
+            e
+          }
+        }).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get
+        //println(post)
+        collection.save(post)
+
+          ESUtilities.esIndex(ESUtilities.stripHTML(post,"body"),"post","_id")
+
+
+        (post\"tags") match {
+          case list:JsUndefined => {}
+          case list => {println(":::::+++>> "+list);list.as[Array[JsObject]].foreach(e => { (e\"text") match {
+            case xsd:JsUndefined => {}
+            case _ => ESUtilities.esIndex(e,"tags","text")
+          }})}
+        }
+      } )
+
+    })
+      Ok(" Ok ")
+    })
+
   }
 
 }

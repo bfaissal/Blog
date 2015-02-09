@@ -60,7 +60,7 @@
                         <label for="exampleInputEmail1">@Messages("CoverImage")</label>
                         <ul>
                             <li ng-repeat="img in post.imgs" style="display: inline">
-                                <input type="radio" ng-model="post.cover" ng-value="img"> <img ng-src="{{img}}?size=s"/>
+                                <input type="radio" ng-model="post.cover" ng-value="img"> <img style="width: 150px;" ng-src="{{img}}?size=s"/>
                             </li>
                         </ul>
                     </div>
