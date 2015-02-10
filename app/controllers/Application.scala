@@ -66,8 +66,8 @@ object Application extends Controller with MongoController {
       case _ => JsString("http://localhost:9000/img/1422940618442884000?size=m")
     })
 
-    val modufeied = res.map({
-      r => r.map({
+    val modified = res.map({
+      r => r.take(3).map({
         e => e.transform({
           __.json.update(
           (__ \ 'cover ).json.put({
@@ -83,10 +83,10 @@ object Application extends Controller with MongoController {
 
 
     //__.json.update()
-    Await.result(modufeied,60 seconds)
+    Await.result(modified,60 seconds)
   }
 
-  def executeESSearch(query: String, _type: String = "post", isSearch: Boolean = false)(implicit request: Request[AnyContent]) = {
+  def executeESSearch(query: String, _type: String = "post", isSearch: Boolean = false,oQuery:String = "")(implicit request: Request[AnyContent]) = {
     val restTemp = ESUtilities.esSearch(query, _type)
     var index = 0;
     def incremt: Int = {
@@ -114,8 +114,8 @@ object Application extends Controller with MongoController {
       )
     ).get
     val pages = (totalResult / PAGE_SIZE) + (if ((totalResult % PAGE_SIZE) > 0) 1 else 0)
-    println(rest)
-    Future(Ok(views.html.search(Json.obj("results" -> rest.transform((__ \ 'hits).json.pick).get), isSearch, pages)(request)))
+
+    Future(Ok(views.html.search(Json.obj("results" -> rest.transform((__ \ 'hits).json.pick).get), isSearch, pages,oQuery,totalResult)(request)))
 
   }
 
@@ -150,6 +150,7 @@ object Application extends Controller with MongoController {
       s"""
         |{
         |    "from" : ${PAGE_SIZE*(page.getOrElse(1)-1)}, "size" : $PAGE_SIZE,
+        |    "sort" : [{ "creationDate" : { "order": "desc" }}],
         |    "query": {
         |            "filtered" : {
         |                "filter" : {
@@ -219,15 +220,68 @@ object Application extends Controller with MongoController {
     }
   }
 
-  def post(url:String) = Action.async{
-      collection.find(Json.obj(("published" -> true), ("url" -> url)))
-        .cursor[JsObject].headOption.map(p => {
-        p match {
-            case None => Redirect("/search",Map("query"->Seq(url)))//Ok(views.html.post(Json.obj()))
-            case Some(value) => Ok(views.html.post(value))
+  def post(url:String) = Action.async {
+    collection.find(Json.obj(("published" -> true), ("url" -> url)))
+      .cursor[JsObject].headOption.map(p => {
+      p match {
+        case None => Redirect("/search", Map("query" -> Seq(url))) //Ok(views.html.post(Json.obj()))
+        case Some(value) => Ok(views.html.post(value))
+      }
+      //Ok(views.html.post(p.getOrElse(Json.obj())))
+    })
+
+
+  }
+
+  def apost(url:String) = Action{
+    val restTemp = ESUtilities.esSearch(
+      s"""
+      {
+        "size" : 1,
+        "query": {
+            "filtered" : {
+                "filter" : {
+                    "term" : {
+                       "published" : true
+                    }
+                },
+                "query": {
+                   "multi_match": {
+                      "fields" : ["url"],
+                      "query":  "$url"
+                   }
+                }
+            }
         }
-        //Ok(views.html.post(p.getOrElse(Json.obj())))
-      })
+        }
+      }
+      """.stripMargin
+      , "post")
+    var index = 0;
+
+    val rest = restTemp.transform(
+      ((__ \ "hits" \ "hits")).json.pick
+    ) match {
+      case s:JsSuccess[JsValue] => s.get match {
+        case JsArray(a) => {
+          a(0).transform(
+            __.json.update((__ \ "_source" \ "body" ).json.put(a(0) \ "_source" \ "htmlbody")) andThen
+            (__ \ "_source").json.pick)
+          match {
+            case o: JsSuccess[JsObject] => o.get
+            case _ => Json.obj()
+          }
+      }
+
+        case _  => Json.obj()
+      }
+      case e:JsError=> println(e.errors.mkString);Json.obj()
+    }
+
+    Ok(views.html.post(rest))
+
+
+
 
   }
   def preview = Action {
@@ -499,7 +553,7 @@ object Application extends Controller with MongoController {
             }
         }
       }
-      """.stripMargin, "post", true)
+      """.stripMargin, "post", true,search)
     }
   }
 

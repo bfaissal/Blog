@@ -9,7 +9,7 @@
 @import play.api.libs.json.JsObject
 @import controllers.Application
 
-@(posts: JsObject,search:Boolean, pages:Int)(implicit request: play.api.mvc.Request[AnyContent])
+@(posts: JsObject,search:Boolean, pages:Int,query: String,totalResult:Int)(implicit request: play.api.mvc.Request[AnyContent])
 
 
 @blog("Welcome to Play",Application.tagsAggregation) {
@@ -19,7 +19,14 @@
                             font-weight: bold;
                         }
                     </style>
-
+    @if(search){
+        <script>
+            $("#searchBox").val('@query');
+            //alert("here");
+        </script>
+        <div>@Html(Messages("resultFound",totalResult,"<b>"+query+"</b>"))</div>
+        <hr/>
+    }
     @for(post <- (posts\"results"\"hits").as[Array[JsObject]] ){
 
         <style>
@@ -79,11 +86,11 @@
                 }
                 }else{
                     <a href="/post/@{(post\"_source"\"url").as[String]}">
-                        <div style="text-align: center">
+                        <div style="text-align: center;margin-bottom: 40px;">
                             @{
                                 val coverImg = (post\"_source"\"cover") match {
                                     case jsUndefined: JsUndefined => {""}
-                                    case js:JsString => {"<img style='width:100%' class='img-responsive coverImg' alt='workimg' src='"+js.as[String]+"'/>"}
+                                    case js:JsString => {"<img style='width:70%' class='img-responsive coverImg' alt='workimg' src='"+js.as[String]+"'/>"}
                                 }
                                 Html(coverImg)
                             }

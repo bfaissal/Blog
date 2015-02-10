@@ -10,6 +10,7 @@ POST        /savePost/:draf        controllers.Application.savePost(draf:Boolean
 GET         /allPosts              controllers.Application.allPosts(f:Option[Long],l:Option[Long])
 POST        /deletePost            controllers.Application.deletePost
 GET         /post/:url             controllers.Application.post(url: String)
+GET         /apost/:url             controllers.Application.apost(url: String)
 POST        /post/:url             controllers.Application.comment(url: String)
 GET         /comments/:url         controllers.Application.getComments(url: String)
 GET         /postById/:id          controllers.Application.postById(id: String)
