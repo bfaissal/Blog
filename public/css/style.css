@@ -1368,5 +1368,17 @@ h4, h4 a, .navbar-brand{
     margin-bottom: 20px;
 }
 
+.blog-desc img {
+    padding: 8px;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    -moz-box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
 
 

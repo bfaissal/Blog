@@ -6,6 +6,7 @@
 
 @import play.api.libs.json.JsObject
 @import tags.adsense
+@import tags.relatedPosts
 
 @(post: JsObject)
 
@@ -46,7 +47,11 @@
             @adsense(1)
             </div>
         </div>
-
+        <div class="blog-wrap">
+            <div class="blog-desc">
+            @relatedPosts(post)
+            </div>
+        </div>
 
         <h3>@Messages("Comments")</h3>
         <ul class="list-unstyled comments-list">

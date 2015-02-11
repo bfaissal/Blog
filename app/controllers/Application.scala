@@ -168,6 +168,42 @@ object Application extends Controller with MongoController {
       """.stripMargin,"post")
       }
   }
+
+  def relatedPost(tags:JsValue) = {
+    val should = (tags\"tags") match {
+      case JsArray(a) => {
+        a.map(e => {
+          s"""
+             |  { "match": { "tags.text": "${(e\"text").as[String]}"}}
+             """.stripMargin
+        }).mkString("[",",","]")
+      }
+      case _ => ""
+    }
+    val query =
+        s"""
+          |{
+          | size:5,
+          |
+          | "filter" : {
+                "term" : {
+                  "published" : true
+                }
+          |  },
+          |  "query": {
+          |    "bool": {
+          |      "should":  $should
+          |    }
+          |  }
+          |}
+        """.stripMargin
+    (ESUtilities.esSearch(query, "post")\"hits"\"hits") match
+    {
+      case JsArray(a)=> a.toList.filter(e =>{!(e\"_id").equals((tags\"_id")) })
+      case _ => List[JsValue]()
+    }
+
+  }
   //"""
    implicit def  tagsAggregation = {
      val res = WS.url(ESUtilities.ESURL+"blox/post/_search").post(

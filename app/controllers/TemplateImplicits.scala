@@ -2,13 +2,14 @@ package controllers
 
 import java.util.Date
 
-import play.api.libs.json.JsObject
+import play.api.libs.json.{JsValue, JsObject}
 
 /**
  * Created by faissalboutaounte on 15-02-07.
  */
 object TemplateImplicits {
   implicit def lastestPosts : List[JsObject]  = {Application.lastestPosts};
+  def findRelatedPosts(tags:JsValue) : List[JsValue]  = {Application.relatedPost(tags)};
   def formatDate(d:Long):String={
     formatDate(new Date(d))
   }

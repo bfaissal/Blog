@@ -26,18 +26,15 @@ object ESUtilities {
             )).get
       }
       def esIndex(post: JsObject,_type : String,id :String)= {
-
-        val res = WS.url(ESUtilities.ESURL+"blox/"+_type+"/"+URLEncoder.encode((post \id).as[String], "UTF-8"))
+        WS.url(ESUtilities.ESURL+"blox/"+_type+"/"+URLEncoder.encode((post \id).as[String], "UTF-8"))
           .withQueryString("test"->"hg hg")
           .withHeaders("Content-Type"->"application/json;charset=UTF-8")
           .put(post).map(rq => rq.body)
-        res.map(println(_))
-
       }
 
   def esSearch (query:String,_type: String) = {
     val ul:AsyncHttpClient = WS.client.underlying
-    println(ESUtilities.ESURL+"blox/"+_type+"/_search")
+
     val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/"+_type+"/_search").setBody(
       query)
        .setMethod("GET")

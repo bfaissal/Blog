@@ -1,0 +1,13 @@
+@import play.api.libs.json.JsValue
+
+@import play.api.libs.json.JsObject
+@(post: JsObject)
+<h5>@Messages("relatedPosts"):</h5>
+<ul>
+@for(aPost <- findRelatedPosts((post))) {
+    <li>
+          <a href="/post/@{(aPost\"_source"\"url").as[String]}">@{(aPost\"_source"\"title").as[String]}</a>
+    </li>
+
+}
+</ul>
