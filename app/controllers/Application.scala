@@ -597,7 +597,7 @@ object Application extends Controller with MongoController {
   def migration = Action.async{
     val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
     import scala.collection.JavaConversions._
-    val res = WS.url("https://www.googleapis.com/blogger/v3/blogs/6365368560867867924/posts?key=AIzaSyD1QZ9KaDNfn88pVCx2klQkBctYkmaeSN8&maxResults=100")
+    val res = WS.url(s"https://www.googleapis.com/blogger/v3/blogs/6365368560867867924/posts?key=${System.getenv("GOOOGLE_KEY")}&maxResults=100")
       .get.map(r => {
 
       (Json.parse(r.body)\\"items").map({ case JsArray(se) => {
@@ -617,7 +617,7 @@ object Application extends Controller with MongoController {
             "title"-> e \ "title",
             "body"-> (e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"),
             "imgs" -> resio ,
-            "url"-> e \ "title"  ,
+            "url"-> (e \ "url").as[String].replace("http://www.arabicmontessori.com/","")  ,
             "creationDate" -> sdf.parse((e \ "published").as[String]).getTime
           )
 
@@ -672,6 +672,10 @@ object Application extends Controller with MongoController {
       Ok(" Ok ")
     })
 
+  }
+
+  def gone(blog:String) = Action{
+    Ok("Salam "+blog)
   }
 
 }
