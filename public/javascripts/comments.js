@@ -8,7 +8,7 @@ angular.module('comment', ['vcRecaptcha'])
         $scope.comment = {}
         $scope.comments = []
         console.info("====> ")
-        console.info($location.path())
+        console.info($location.absUrl())
         console.info("====> ")
         var url = $location.absUrl().replace("post","comments");
 

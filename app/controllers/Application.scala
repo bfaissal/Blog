@@ -284,7 +284,7 @@ object Application extends Controller with MongoController {
                 "query": {
                    "multi_match": {
                       "fields" : ["url"],
-                      "query":  "$url"
+                      "query":  "${java.net.URLDecoder.decode(url, "UTF-8")}"
                    }
                 }
             }
@@ -294,7 +294,7 @@ object Application extends Controller with MongoController {
       """.stripMargin
       , "post")
     var index = 0;
-
+    println(restTemp)
     val rest = restTemp.transform(
       ((__ \ "hits" \ "hits")).json.pick
     ) match {
@@ -350,13 +350,15 @@ object Application extends Controller with MongoController {
     request => {
       val post = ((request.body \ "_id") match {
         case _:JsUndefined =>{
-          //sequences.fin
-          val connectedUser = Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
-          val addAuthor = __.json.update((__ \ 'author ).json.put(connectedUser))
-          val published = __.json.update((__ \ 'published ).json.put(JsBoolean(false)))
-          val creationDate = __.json.update((__ \ 'creationDate ).json.put(JsNumber(new java.util.Date().getTime())))
-          val trans = addAuthor andThen published andThen creationDate andThen generateId
-          request.body.transform(trans).get
+          request.body.transform(
+              __.json.update((__ \ 'author ).json.put(
+                  Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com"))
+                  ) andThen
+              __.json.update((__ \ 'published ).json.put(JsBoolean(false))) andThen
+              __.json.update((__ \ 'creationDate ).json.put(JsNumber(new java.util.Date().getTime()))) andThen
+              __.json.update((__ \ 'url).json.copyFrom((__ \ 'title).json.pick.map({case JsString(e)=> JsString(e.replaceAll(" ","-"))})))  andThen
+                generateId
+          ).get
         }
         case _ =>{
           request.body

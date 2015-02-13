@@ -683,7 +683,7 @@ input[type="color"]:focus,
     opacity: 0.8;
 }
 .social-1 li a i.fa-facebook{
-    background-color: #3b5998;
+    /*background-color: #3b5998;*/
 }
 .social-1 li a i.fa-twitter{
     background-color: #0084b4;
