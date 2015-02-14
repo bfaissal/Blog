@@ -4,7 +4,8 @@ name := """montessori"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file(".")).enablePlugins(PlayScala,SbtWeb)
+
 
 scalaVersion := "2.11.1"
 
@@ -16,8 +17,10 @@ libraryDependencies ++= Seq(
   jdbc,
   anorm,
   cache,
-  ws
+  ws,
+  filters
 )
+
 
 libraryDependencies ++= Seq(
   "org.reactivemongo" %% "reactivemongo" % "0.10.5.0.AKKA23",
@@ -33,3 +36,5 @@ herokuProcessTypes in Compile := Map(
 )
 
 TwirlKeys.templateImports += "controllers.TemplateImplicits._"
+
+pipelineStages := Seq( uglify, digest, gzip)

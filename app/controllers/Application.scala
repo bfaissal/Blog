@@ -632,18 +632,13 @@ object Application extends Controller with MongoController {
                 )) andThen
                 __.json.update((__ \ 'published ).json.put(JsBoolean(true)))
             andThen generateId
-
             ).get
           }
-          case _ =>{
-            e
-          }
+          case _ => e
         }).transform(__.json.update((__ \ 'lastUpdateDate ).json.put(JsNumber(new java.util.Date().getTime())))).get
-        //println(post)
+
         collection.save(post)
-
-          ESUtilities.esIndex(ESUtilities.stripHTML(post,"body"),"post","_id")
-
+        ESUtilities.esIndex(ESUtilities.stripHTML(post,"body"),"post","_id")
 
         (post\"tags") match {
           case list:JsUndefined => {}
