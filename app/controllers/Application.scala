@@ -602,8 +602,8 @@ object Application extends Controller with MongoController {
     val res = WS.url(s"https://www.googleapis.com/blogger/v3/blogs/6365368560867867924/posts?key=${System.getenv("GOOOGLE_KEY")}&maxResults=100")
       .get.map(r => {
 
-        (Json.parse(r.body)\\"items").map({ case JsArray(se) => {
-          se.map( e => {
+        (Json.parse(r.body)\"items").transform[JsArray](of[JsArray].map({ case JsArray(se) => {
+          JsArray(se.map( e => {
 
             val doc = org.jsoup.Jsoup.parse((e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"))
             Json.obj("body"-> e \ "content",
@@ -616,19 +616,13 @@ object Application extends Controller with MongoController {
               "creationDate" -> sdf.parse((e \ "published").as[String]).getTime,
               "tags" ->  {val xsr = (e \ "labels").transform[JsArray](of[JsArray].map({case JsArray(tags) => JsArray(tags.map(tag => Json.obj("text" -> tag)))})).getOrElse(JsArray(Seq()));xsr}
             )
-          })
-        }})
+          }))
+        }})).get
 
     })
-    res.map(s => {val result = JsArray(s.map({
-      ex => JsArray(ex.map(e  => JsString(Json.prettyPrint(e))))
-    }))
-    Ok(result).as(JSON)
-    })
-    /*res.map(s => {s.map({
-      ex => ex.map(
-      e => {
-        e
+
+    res.map({case JsArray(s) => {s.map({
+      e =>
 
         val post = ((e \ "_id") match {
           case _:JsUndefined =>{
@@ -637,6 +631,7 @@ object Application extends Controller with MongoController {
                     Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
                 )) andThen
                 __.json.update((__ \ 'published ).json.put(JsBoolean(true)))
+            andThen generateId
 
             ).get
           }
@@ -657,11 +652,10 @@ object Application extends Controller with MongoController {
             case _ => ESUtilities.esIndex(e,"tags","text")
           }})}
         }
-      } )
 
     })
       Ok(" Ok ")
-    })  */
+    }})
 
   }
 
