@@ -602,54 +602,43 @@ object Application extends Controller with MongoController {
     val res = WS.url(s"https://www.googleapis.com/blogger/v3/blogs/6365368560867867924/posts?key=${System.getenv("GOOOGLE_KEY")}&maxResults=100")
       .get.map(r => {
 
-      (Json.parse(r.body)\\"items").map({ case JsArray(se) => {
-        se.map( e => {
+        (Json.parse(r.body)\\"items").map({ case JsArray(se) => {
+          se.map( e => {
 
-          val doc = org.jsoup.Jsoup.parse((e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"))
-          val imgs:Elements = doc.select("img[src]");
-          val reees = imgs.map( img => {
-            img match {
-              case ele:Element => JsString(ele.attr("src"))
-              case _ => JsString("")
-            }
+            val doc = org.jsoup.Jsoup.parse((e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"))
+            Json.obj("body"-> e \ "content",
+              "title"-> e \ "title",
+              "body"-> (e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"),
+              "imgs" -> doc.select("img[src]").map( {case img:Element => {
+                  JsString(img.attr("src"))
+                  }}).foldLeft[Seq[JsString]](Seq[JsString]())({case (lx,ex) => {lx.+:(ex)}}) ,
+              "url"-> (e \ "url").as[String].replace("http://www.arabicmontessori.com/","")  ,
+              "creationDate" -> sdf.parse((e \ "published").as[String]).getTime,
+              "tags" ->  {val xsr = (e \ "labels").transform[JsArray](of[JsArray].map({case JsArray(tags) => JsArray(tags.map(tag => Json.obj("text" -> tag)))})).getOrElse(JsArray(Seq()));xsr}
+            )
           })
-          val resio = reees.foldLeft[Seq[JsString]](Seq[JsString]())({case (lx,ex) => {lx.+:(ex)}})
-        //println("title xxx===> "+(e \ "published"))
-          val jsOb = Json.obj("body"-> e \ "content",
-            "title"-> e \ "title",
-            "body"-> (e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"),
-            "imgs" -> resio ,
-            "url"-> (e \ "url").as[String].replace("http://www.arabicmontessori.com/","")  ,
-            "creationDate" -> sdf.parse((e \ "published").as[String]).getTime
-          )
-
-
-
-          (e \ "labels") match {case JsArray(el) => { jsOb ++ Json.obj("tags" -> el.map (ue => Json.obj("text" -> ue))) }; case _ => jsOb}
-          //jsOb
-      }
-        )
-        //}
-      }
-      }
-      )
+        }})
 
     })
-
-    res.map(s => {s.map({
+    res.map(s => {val result = JsArray(s.map({
+      ex => JsArray(ex.map(e  => JsString(Json.prettyPrint(e))))
+    }))
+    Ok(result).as(JSON)
+    })
+    /*res.map(s => {s.map({
       ex => ex.map(
       e => {
         e
 
         val post = ((e \ "_id") match {
           case _:JsUndefined =>{
-            //sequences.fin
-            val connectedUser = Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
-            val addAuthor = __.json.update((__ \ 'author ).json.put(connectedUser))
-            val published = __.json.update((__ \ 'published ).json.put(JsBoolean(true)))
+            e.transform(
+                __.json.update((__ \ 'author ).json.put(
+                    Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
+                )) andThen
+                __.json.update((__ \ 'published ).json.put(JsBoolean(true)))
 
-            val trans = addAuthor andThen published andThen generateId
-            e.transform(trans).get
+            ).get
           }
           case _ =>{
             e
@@ -663,7 +652,7 @@ object Application extends Controller with MongoController {
 
         (post\"tags") match {
           case list:JsUndefined => {}
-          case list => {println(":::::+++>> "+list);list.as[Array[JsObject]].foreach(e => { (e\"text") match {
+          case list => {list.as[Array[JsObject]].foreach(e => { (e\"text") match {
             case xsd:JsUndefined => {}
             case _ => ESUtilities.esIndex(e,"tags","text")
           }})}
@@ -672,7 +661,7 @@ object Application extends Controller with MongoController {
 
     })
       Ok(" Ok ")
-    })
+    })  */
 
   }
 
