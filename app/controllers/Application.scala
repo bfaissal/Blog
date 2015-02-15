@@ -296,7 +296,6 @@ object Application extends Controller with MongoController {
       """.stripMargin, "post").transform(((__ \ "hits" \ "hits")).json.pick)
       .collect(ValidationError("insane")){
         case JsArray(a) if a.size > 0 => {
-              println("xxx======> "+a);
               a(0).transform(
                 __.json.update((__ \ "_source" \ "body").json.put(a(0) \ "_source" \ "htmlbody")) andThen
                   (__ \ "_source").json.pick).map({case o:JsObject => Ok(views.html.post(o))})
