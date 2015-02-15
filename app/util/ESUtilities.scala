@@ -34,7 +34,6 @@ object ESUtilities {
 
   def esSearch (query:String,_type: String) = {
 
-    println(query)
     val ul:AsyncHttpClient = WS.client.underlying
 
     val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/"+_type+"/_search").setBody(

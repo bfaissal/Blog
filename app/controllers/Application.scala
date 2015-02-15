@@ -5,10 +5,8 @@ import java.text.SimpleDateFormat
 
 import _root_.util.ESUtilities
 import com.ning.http.client.{AsyncHttpClient, StringPart, RequestBuilder}
-import com.sksamuel.scrimage.Image
 import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
-import play.api._
+import play.api.data.validation.ValidationError
 import play.api.http.MimeTypes
 import play.api.i18n.Messages
 import play.api.libs.iteratee.{Concurrent, Enumerator, Iteratee, Enumeratee}
@@ -17,6 +15,7 @@ import play.api.libs.json._
 import play.api.libs.oauth.{RequestToken, ConsumerKey, OAuthCalculator}
 import play.api.libs.ws.WS
 import play.api.mvc._
+import play.api.cache.Cache
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import reactivemongo.api.QueryOpts
@@ -24,7 +23,6 @@ import reactivemongo.bson.{BSONInteger, BSONObjectID}
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Play.current
-import play.api.data._
 import scala.concurrent.duration._
 
 import play.api.libs.json.Reads._ // Custom validation helpers
@@ -95,7 +93,7 @@ object Application extends Controller with MongoController {
     }
 
     val totalResult = (restTemp\"hits"\"total").as[Int];
-    println("totalResult = "+totalResult)
+
     val rest = restTemp.transform(
       (__ \ "hits" \ "hits").json.update(
         __.read[JsArray].map {
@@ -119,11 +117,11 @@ object Application extends Controller with MongoController {
 
   }
 
-
   def indexES(page:Option[Int]) = Action.async {
     implicit request =>{
 
-    executeESSearch( s"""
+      Cache.getOrElse(s"$page"){
+        val result = executeESSearch( s"""
       {
         "from" : ${PAGE_SIZE * (page.getOrElse(1) - 1)}, "size" : $PAGE_SIZE,
         "sort" : [
@@ -139,7 +137,10 @@ object Application extends Controller with MongoController {
             }
         }
       }"""
-    )
+        )
+        Cache.set(s"$page",result);
+        result
+      }
   }
 
   }
@@ -269,8 +270,9 @@ object Application extends Controller with MongoController {
 
   }
 
-  def apost(url:String) = Action{
-    val restTemp = ESUtilities.esSearch(
+  def apost(url: String) = Action {
+
+    ESUtilities.esSearch(
       s"""
       {
         "size" : 1,
@@ -291,33 +293,16 @@ object Application extends Controller with MongoController {
         }
         }
       }
-      """.stripMargin
-      , "post")
-    var index = 0;
-    println(restTemp)
-    val rest = restTemp.transform(
-      ((__ \ "hits" \ "hits")).json.pick
-    ) match {
-      case s:JsSuccess[JsValue] => s.get match {
-        case JsArray(a) => {
-          a(0).transform(
-            __.json.update((__ \ "_source" \ "body" ).json.put(a(0) \ "_source" \ "htmlbody")) andThen
-            (__ \ "_source").json.pick)
-          match {
-            case o: JsSuccess[JsObject] => o.get
-            case _ => Json.obj()
-          }
-      }
+      """.stripMargin, "post").transform(((__ \ "hits" \ "hits")).json.pick)
+      .collect(ValidationError("insane")){
+        case JsArray(a) if a.size > 0 => {
+              println("xxx======> "+a);
+              a(0).transform(
+                __.json.update((__ \ "_source" \ "body").json.put(a(0) \ "_source" \ "htmlbody")) andThen
+                  (__ \ "_source").json.pick).map({case o:JsObject => Ok(views.html.post(o))})
+        }
 
-        case _  => Json.obj()
-      }
-      case e:JsError=> println(e.errors.mkString);Json.obj()
-    }
-
-    Ok(views.html.post(rest))
-
-
-
+    }.flatMap(s => s).getOrElse(Ok(views.html.error(404)))
 
   }
   def preview = Action {

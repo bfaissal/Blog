@@ -18,7 +18,8 @@ libraryDependencies ++= Seq(
   anorm,
   cache,
   ws,
-  filters
+  filters ,
+  cache
 )
 
 
