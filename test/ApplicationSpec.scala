@@ -19,12 +19,12 @@ class ApplicationSpec extends Specification {
       status(route(FakeRequest(GET, "/boum")).get) must equalTo(NOT_FOUND)
     }
 
-    "render the index page" in new WithApplication{
+    "render the index page" in new WithApplication(FakeApplication(additionalConfiguration=Map("mongodb.uri"->"mongodb://192.168.59.103:27017/montessori") )){
       val home = route(FakeRequest(GET, "/")).get
 
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Bootstrap")
+      contentAsString(home) must contain ("لا توجد نتائج لهذا البحث")
     }
   }
 }
