@@ -120,7 +120,7 @@ object Application extends Controller with MongoController {
   def indexES(page:Option[Int]) = Action.async {
     implicit request =>{
 
-      Cache.getOrElse(s"$page"){
+      //Cache.getOrElse(s"$page"){
         val result = executeESSearch( s"""
       {
         "from" : ${PAGE_SIZE * (page.getOrElse(1) - 1)}, "size" : $PAGE_SIZE,
@@ -140,7 +140,7 @@ object Application extends Controller with MongoController {
         )
         Cache.set(s"$page",result);
         result
-      }
+      //}
   }
 
   }

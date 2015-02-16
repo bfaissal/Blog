@@ -1,10 +1,10 @@
 #docker with 0 data
-docker create -v /data/db --name dbdata mongo
+docker create -v /data/db --name dbdata0 mongo
 
 #docker with init data
 docker create -v /data/db --name dbdata mongo
 
-docker rm mongodb
+#docker rm mongodb
 docker run --name mongodb -p 27017:27017 --volumes-from dbdata -d mongo
 
 

@@ -30,7 +30,7 @@ object ESUtilities {
         WS.url(ESUtilities.ESURL+"blox/"+_type+"/"+URLEncoder.encode((post \id).as[String], "UTF-8"))
           .withQueryString("test"->"hg hg")
           .withHeaders("Content-Type"->"application/json;charset=UTF-8")
-          .put(post).map(rq => rq.body)
+          .put(post)
       }
 
   def esSearch (query:String,_type: String) = {
