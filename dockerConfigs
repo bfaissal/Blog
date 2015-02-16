@@ -14,3 +14,5 @@ docker create -v /usr/share/elasticsearch/data --name esindex0 elasticsearch
 docker create -v /usr/share/elasticsearch/data --name esindex elasticsearch
 
 docker run --volumes-from esindex0 --name esearch -p 9200:9200 -d elasticsearch
+
+docker run --volumes-from esindex --name esearch -p 9200:9200 -d elasticsearch

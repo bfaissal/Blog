@@ -4,6 +4,7 @@ import java.net.URLEncoder
 import java.util.Date
 
 import com.ning.http.client.{RequestBuilder, AsyncHttpClient}
+import play.api.Play
 
 import play.api.libs.json._
 import play.api.libs.ws.WS
@@ -15,7 +16,7 @@ import play.api.Play.current
  * Created by faissalboutaounte on 15-01-25.
  */
 object ESUtilities {
-      val ESURL = System.getenv("ES_BONSAI_URLS")
+      val ESURL = Play.configuration.getString("elasticsearch.url").get;
       val PAGE_SIZE = 2;
       def stripHTML(post: JsObject,field:String) = {
         val oldBody = (post \ field).as[String]

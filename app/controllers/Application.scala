@@ -91,7 +91,7 @@ object Application extends Controller with MongoController {
       index = index + 1
       index
     }
-
+    println("====++++===++++>"+restTemp)
     val totalResult = (restTemp\"hits"\"total").as[Int];
 
     val rest = restTemp.transform(
@@ -452,83 +452,88 @@ object Application extends Controller with MongoController {
   def indexing =Action.async{
     val settings =
       """
-        {
-        |"settings": {
-        |    "analysis": {
-        |          "filter": {
-        |            "arabic_stop": {
-        |              "type": "stop",
-        |              "stopwords": "_arabic_"
-        |            },
-        |            "arabic_stemmer": {
-        |              "type": "stemmer",
-        |              "language": "arabic"
+        |{
+        |        "settings": {
+        |             "analysis": {
+        |               "analyzer": {
+        |                  "my_arabic": {
+        |                     "char_filter": [
+        |                        "html_strip"
+        |                     ],
+        |                     "filter": [
+        |                        "lowercase",
+        |                        "arabic_stop",
+        |                        "arabic_normalization",
+        |                        "arabic_stemmer"
+        |                     ],
+        |                     "tokenizer": "standard"
+        |                  }
+        |               },
+        |               "filter": {
+        |                  "arabic_stop": {
+        |                     "type": "stop",
+        |                     "stopwords": "_arabic_"
+        |                  },
+        |                  "arabic_stemmer": {
+        |                     "type": "stemmer",
+        |                     "language": "arabic"
+        |                  }
+        |               }
         |            }
-        |          },
-        |          "analyzer": {
-        |            "my_arabic": {
-        |              "char_filter": [
-        |                "html_strip"
-        |              ],
-        |              "filter": [
-        |                "lowercase",
-        |                "arabic_stop",
-        |                "arabic_normalization",
-        |                "arabic_stemmer"
-        |              ],
-        |              "tokenizer": "standard"
+        |      },
+        |      "mappings": {
+        |         "post": {
+        |            "properties": {
+        |               "body": {
+        |                  "type": "string",
+        |                  "analyzer": "my_arabic"
+        |               },
+        |               "creationDate": {
+        |                  "type": "date",
+        |                  "format": "dateOptionalTime"
+        |               },
+        |               "suggest": {
+        |                  "type": "completion",
+        |                  "analyzer": "standard",
+        |                  "payloads": false,
+        |                  "preserve_separators": true,
+        |                  "preserve_position_increments": true,
+        |                  "max_input_length": 50
+        |               },
+        |               "tags": {
+        |                  "properties": {
+        |                     "text": {
+        |                        "type": "string",
+        |                        "index": "not_analyzed"
+        |                     }
+        |                  }
+        |               },
+        |               "title": {
+        |                  "type": "string",
+        |                  "analyzer": "my_arabic"
+        |               },
+        |               "url": {
+        |                  "type": "string",
+        |                  "index": "not_analyzed"
+        |               }
         |            }
-        |          }
-        |        }},
-          "mappings": {
-            "post" : {
-              "properties" : {
-                "title" : {
-                  "type" : "string",
-                  "analyzer": "arabic"
-
-                },
-                "body" : {
-                          "type" : "string",
-                          "analyzer": "arabic"
-                        },
-               "url" : {
-                          "type" : "string",
-                          "index" : "not_analyzed"
-                        },
-                "tags" : {
-                    "properties" : {
-                      "text" : {
-                        "type" : "string",
-                        "index" : "not_analyzed"
-                      }
-                    }
-                },
-         "suggest" : {
-
-
-                                "type": "completion",
-                       "index_analyzer": "simple",
-                       "search_analyzer": "simple",
-                       "payloads": false
-
-
-                        },
-                "creationDate" : {
-                    "type" : "date"
-                }
-
-
-              }
-            }
-          }
-        }
+        |         },
+        |         "tags": {
+        |            "properties": {
+        |               "text": {
+        |                  "type": "string",
+        |                  "analyzer": "my_arabic"
+        |               }
+        |            }
+        |         }
+        |      }
+        |}
+        |
       """.stripMargin
 
     for(
-     post <- collection.find(Json.obj(("url" -> "testxxx")))
-    .cursor[JsObject].headOption.map( p => p.getOrElse(Json.obj()));
-      r1 <- WS.url(ESUtilities.ESURL+"blox").put(settings).map(rq => { rq.body})) yield Ok(r1+" ----- "+" ----- ")
+      r0 <- WS.url(ESUtilities.ESURL+"blox").delete().map(rq => { rq.body});
+      r1 <- WS.url(ESUtilities.ESURL+"blox").put(settings).map(rq => { rq.body})) yield Ok(r0+" ----- "+r1+" ----- ")
 
   }
   def analyse(text:String) =Action.async{
