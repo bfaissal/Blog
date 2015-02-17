@@ -9,7 +9,7 @@
 @import play.api.libs.json.JsObject
 @import controllers.Application
 
-@(posts: JsObject,search:Boolean, pages:Int,query: String,totalResult:Int)(implicit request: play.api.mvc.Request[AnyContent])
+@(posts: JsObject, asearch:Boolean, pages:Int,query: String,totalResult:Int)(implicit request: play.api.mvc.Request[AnyContent])
 
 
 @blog("Welcome to Play",Application.tagsAggregation) {

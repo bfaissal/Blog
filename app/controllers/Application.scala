@@ -58,30 +58,19 @@ object Application extends Controller with MongoController {
   }
 
   def lastestPosts =  {
-    val res = collection.find(Json.obj("published" -> true),Json.obj("title"->"1","url"->"2","cover"->"3")).options(QueryOpts().batchSize(3)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
-    val trans = (__ \ 'cover ).json.update(of[JsString].map{
-      case JsString(cover) => JsString(cover)
-      case _ => JsString("http://localhost:9000/img/1422940618442884000?size=m")
-    })
-
-    val modified = res.map({
-      r => r.take(3).map({
+    Await.result(
+      collection.find(Json.obj("published" -> true),Json.obj("title"->"1","url"->"2","cover"->"3")).options(QueryOpts().batchSize(3)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
+        .map({
+      _.take(3).map({
         e => e.transform({
           __.json.update(
           (__ \ 'cover ).json.put({
-            e.transform( (__ \ 'cover).json.pick) match {
-                case error:JsError => JsString("/assets/images/placeholder.png")
-                case s:JsSuccess[JsString] => s.get
-            }
+            e.transform( (__ \ 'cover).json.pick).getOrElse(JsString("/assets/images/placeholder.png"))
           })
           )
         }).get
       })
-    })
-
-
-    //__.json.update()
-    Await.result(modified,60 seconds)
+    }),60 seconds)
   }
 
   def executeESSearch(query: String, _type: String = "post", isSearch: Boolean = false,oQuery:String = "")(implicit request: Request[AnyContent]) = {
@@ -91,12 +80,12 @@ object Application extends Controller with MongoController {
       index = index + 1
       index
     }
-    println("====++++===++++>"+restTemp)
+
     val totalResult = (restTemp\"hits"\"total").as[Int];
 
     val rest = restTemp.transform(
       (__ \ "hits" \ "hits").json.update(
-        __.read[JsArray].map {
+        of[JsArray].map {
           case JsArray(a) => {
             JsArray(a.map(e => {
               e.transform(
