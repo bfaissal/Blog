@@ -19,14 +19,13 @@ object ESUtilities {
       val ESURL = Play.configuration.getString("elasticsearch.url").get;
       val PAGE_SIZE = 2;
       def stripHTML(post: JsObject,field:String) = {
-        val oldBody = (post \ field).as[String]
         post.transform(
           __.json.update((__ \ '_id ).json.put(post \ "_id" \ "$oid")) andThen
-            __.json.update((__ \ ("html"+field) ).json.put( JsString( (oldBody)) )) andThen
+            __.json.update((__ \ ("html"+field) ).json.put((post \ field))) andThen
             __.json.update( (__ \ field ).json.put( JsString(org.jsoup.Jsoup.parse( (post \ field).as[String] ).text) )
             )).get
       }
-      def esIndex(post: JsObject,_type : String,id :String)= {
+      def esIndex(post: JsValue,_type : String,id :String)= {
         WS.url(ESUtilities.ESURL+"blox/"+_type+"/"+URLEncoder.encode((post \id).as[String], "UTF-8"))
           .withQueryString("test"->"hg hg")
           .withHeaders("Content-Type"->"application/json;charset=UTF-8")
@@ -35,14 +34,13 @@ object ESUtilities {
 
   def esSearch (query:String,_type: String) = {
 
-    val ul:AsyncHttpClient = WS.client.underlying
-
-    val rb = new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/"+_type+"/_search").setBody(
-      query)
-       .setMethod("GET")
-      .setHeader("Content-Type","application/json;charset=UTF-8")
-      .build()
-    Json.parse(ul.executeRequest(rb).get().getResponseBody)
+    Json.parse(WS.client.underlying[AsyncHttpClient].executeRequest(
+      new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/"+_type+"/_search").setBody(
+        query)
+        .setMethod("GET")
+        .setHeader("Content-Type","application/json;charset=UTF-8")
+        .build()
+    ).get().getResponseBody)
   }
 
 

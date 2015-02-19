@@ -42,11 +42,6 @@ object Application extends Controller with MongoController {
 
   def setDate(name: String) = __.json.update((__ \ name ).json.put(JsNumber(new java.util.Date().getTime())))
 
-  def connect = Action.async(parse.json){ implicit request =>
-
-    //users.find(Json.obj("_id")).cursor[JsObject].headOption.map(f => f.map(Ok("")))
-     Future(Ok(""))
-  }
   protected val generateId = __.json.update(
     (__ \ '_id \ '$oid).json.put(JsString(BSONObjectID.generate.stringify))
   )
@@ -77,8 +72,7 @@ object Application extends Controller with MongoController {
     val restTemp = ESUtilities.esSearch(query, _type)
     var index = 0;
     def incremt: Int = {
-      index = index + 1
-      index
+      index = index + 1; index
     }
 
     val totalResult = (restTemp\"hits"\"total").as[Int];
@@ -109,7 +103,7 @@ object Application extends Controller with MongoController {
   def indexES(page:Option[Int]) = Action.async {
     implicit request =>{
 
-      //Cache.getOrElse(s"$page"){
+      Cache.getOrElse(s"$page"){
         val result = executeESSearch( s"""
       {
         "from" : ${PAGE_SIZE * (page.getOrElse(1) - 1)}, "size" : $PAGE_SIZE,
@@ -129,7 +123,7 @@ object Application extends Controller with MongoController {
         )
         Cache.set(s"$page",result);
         result
-      //}
+      }
   }
 
   }
@@ -232,10 +226,11 @@ object Application extends Controller with MongoController {
           WS.url("https://www.google.com/recaptcha/api/siteverify")
             .withQueryString(("secret"->System.getenv("RECAPTCHA_KEY"))
                 ,("response"->(request.body \ "recaptcha").as[String])).get().map(rh => {
-            val newComment  = Json.parse(rh.body);
-            if((newComment\"success").as[Boolean]) {
 
-              val transformedComment = request.body.transform(__.json.update((__ \ 'recaptcha).json.prune) andThen setDate("date")).get
+            if((Json.parse(rh.body)\"success").as[Boolean]) {
+
+              val transformedComment = request.body.transform(__.json.update((__ \ 'recaptcha).json.prune)
+                andThen setDate("date")).get
               collection.update(Json.obj("url" -> url),Json.obj("$push"->Json.obj("comments"->  transformedComment )))
 
               Ok(transformedComment).as(JSON)
@@ -366,17 +361,14 @@ object Application extends Controller with MongoController {
     }
   }
   def tags(query :String) = Action{
-    val res = ESUtilities.esSearch(
+    Ok(ESUtilities.esSearch(
       s"""
-        |{
-        |    "query" : {
-        |        "wildcard" :  { "text" : "*$query*" }
-        |    }
-        |}
-      """.stripMargin,"tags") \"hits"\"hits"\\"_source"
-
-    Ok(Json.obj("data"->Json.arr(Json.obj("tag"->"tag1"),Json.obj("tag"->"tag2"),Json.obj("tag"->"tag3"))))
-    Ok(Json.obj("co"->res)\"co")
+         {
+             "query" : {
+                 "wildcard" :  { "text" : "*$query*" }
+                 }
+          }
+      """.stripMargin,"tags") \"hits"\"hits"\"_source")
   }
 
   def upload(CKEditorFuncNum:String) = Action.async(parse.multipartFormData) { request =>
@@ -394,8 +386,9 @@ object Application extends Controller with MongoController {
         .put(tempFile)
         .map( rs => {
             tempFile.delete()
-            val res = s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename?size=l','');window.parent.ARABICM.addImage('/img/$filename');</script></body></html>"
-            Ok(res).as("text/html")
+            Ok(
+              s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename?size=l','');window.parent.ARABICM.addImage('/img/$filename');</script></body></html>"
+            ).as("text/html")
         })
 
     }.getOrElse {
@@ -410,32 +403,6 @@ object Application extends Controller with MongoController {
         .get(rh => {Iteratee.foreach(e=> c.push(e));}).onComplete({case f => c.end()})
     })
     Ok.chunked(enumerator andThen Enumerator.eof).as("image/jpeg")
-    /*println("downloading ...")
-    //WS.url(s"https://api-content.dropbox.com/1/thumbnails/auto/$img.JPG?size=${size.getOrElse("l")}&format=jpeg")
-    WS.url(s"https://api-content.dropbox.com/1/files/auto/$img.JPG")
-      .withHeaders("Authorization"->System.getenv("DROPBOX_TOCKEN"))
-      .get//(rh => Iteratee.foreach(e=> ))
-
-      .map(
-        {rq => {
-          println("=======:::> "+rq.body)
-          rq.allHeaders.filter({case (k,v) => !"content-security-policy-report-only".equals(k)}).map({case (k,v)=>{(k,v.mkString)}}).foldLeft(Ok(rq.body))({case (rp,h)=> rp.withHeaders(h)})
-
-        }}
-      )   */
-
-  }
-
-  def testDropbox = Action.async{
-
-    WS.url("https://api-content.dropbox.com/1/files_put/auto/DSC_1326.JPG")
-      .withHeaders("Authorization"->System.getenv("DROPBOX_TOCKEN"))
-      .put(new File(s"/Users/faissalboutaounte/Downloads/VirtualBox-4.3.20-96996-OSX.dmg"))
-      //.put(new File(s"/tmp2/picture/DSC_1326.JPG"))
-       .map( rs => Ok(rs.body))
-
-
-    //Ok("")
   }
 
   def indexing =Action.async{
@@ -577,7 +544,7 @@ object Application extends Controller with MongoController {
   def migration = Action.async{
     val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
     import scala.collection.JavaConversions._
-    val res = WS.url(s"https://www.googleapis.com/blogger/v3/blogs/6365368560867867924/posts?key=${System.getenv("GOOOGLE_KEY")}&maxResults=100")
+    WS.url(s"https://www.googleapis.com/blogger/v3/blogs/6365368560867867924/posts?key=${System.getenv("GOOOGLE_KEY")}&maxResults=100")
       .get.map(r => {
 
         (Json.parse(r.body)\"items").transform[JsArray](of[JsArray].map({ case JsArray(se) => {
@@ -597,9 +564,7 @@ object Application extends Controller with MongoController {
           }))
         }})).get
 
-    })
-
-    res.map({case JsArray(s) => {s.map({
+    }).map({case JsArray(s) => {s.map({
       e =>
 
         val post = ((e \ "_id") match {
@@ -620,7 +585,7 @@ object Application extends Controller with MongoController {
 
         (post\"tags") match {
           case list:JsUndefined => {}
-          case list => {list.as[Array[JsObject]].foreach(e => { (e\"text") match {
+          case JsArray(list) => {list.foreach(e => { (e\"text") match {
             case xsd:JsUndefined => {}
             case _ => ESUtilities.esIndex(e,"tags","text")
           }})}
@@ -629,11 +594,5 @@ object Application extends Controller with MongoController {
     })
       Ok(" Ok ")
     }})
-
   }
-
-  def gone(blog:String) = Action{
-    Ok("Salam "+blog)
-  }
-
 }
