@@ -71,7 +71,7 @@ object Application extends Controller with MongoController {
   def executeESSearch(query: String, _type: String = "post", isSearch: Boolean = false,oQuery:String = "")(implicit request: Request[AnyContent]) = {
     val restTemp = ESUtilities.esSearch(query, _type)
     var index = 0;
-    def incremt: Int = {
+    def increment: Int = {
       index = index + 1; index
     }
 
@@ -85,7 +85,7 @@ object Application extends Controller with MongoController {
               e.transform(
                 __.json.update(
                   (__ \ "showAdds").json.put(
-                    JsBoolean({val currentIndex  = incremt;((currentIndex % ADS_FREQUENCY) == 0) || ((currentIndex % totalResult) ==0)})
+                    JsBoolean({val currentIndex  = increment;((currentIndex % ADS_FREQUENCY) == 0) || ((currentIndex % totalResult) ==0)})
                   )
                 )
               ).get
@@ -103,7 +103,7 @@ object Application extends Controller with MongoController {
   def indexES(page:Option[Int]) = Action.async {
     implicit request =>{
 
-      Cache.getOrElse(s"$page"){
+      //Cache.getOrElse(s"$page"){
         val result = executeESSearch( s"""
       {
         "from" : ${PAGE_SIZE * (page.getOrElse(1) - 1)}, "size" : $PAGE_SIZE,
@@ -123,7 +123,7 @@ object Application extends Controller with MongoController {
         )
         Cache.set(s"$page",result);
         result
-      }
+      //}
   }
 
   }
@@ -143,8 +143,7 @@ object Application extends Controller with MongoController {
         |                    }
         |                },
         |    "query" : {
-        |        "match" :  { "tags.text" : "$tag" }
-        |
+        |        "match" :  { "tags.text" : "$tag" }uwt<ds
         |    }
         |    }
         |    }

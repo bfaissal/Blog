@@ -19,7 +19,7 @@
                             font-weight: bold;
                         }
                     </style>
-    @if(search){
+    @if(asearch){
         <script>
             $("#searchBox").val('@query');
             //alert("here");
@@ -40,7 +40,7 @@
                 <h4><a href="/@{(post\"_source"\"url").as[String]}">@{(post\"_source"\"title").as[String]}</a></h4>
 
 
-                @if(search){
+                @if(asearch){
                 @{
                     val html = (post \ "highlight" \ "title") match {
                         case js: JsArray => {
