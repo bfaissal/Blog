@@ -284,7 +284,7 @@ object Application extends Controller with MongoController {
                   (__ \ "_source").json.pick).map({case o:JsObject => Ok(views.html.post(o))})
         }
 
-    }.flatMap(s => s).getOrElse(NotFound(views.html.error(404)))
+    }.flatMap(identity).getOrElse(NotFound(views.html.error(404)))
 
   }
   def preview = Action {
