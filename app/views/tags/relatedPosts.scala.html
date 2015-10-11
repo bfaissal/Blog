@@ -6,7 +6,7 @@
 <ul>
 @for(aPost <- findRelatedPosts((post))) {
     <li>
-          <a href="/post/@{(aPost\"_source"\"url").as[String]}">@{(aPost\"_source"\"title").as[String]}</a>
+          <a href="/@{(aPost\"_source"\"url").as[String]}">@{(aPost\"_source"\"title").as[String]}</a>
     </li>
 
 }

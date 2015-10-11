@@ -60,7 +60,7 @@
                         <label for="exampleInputEmail1">@Messages("CoverImage")</label>
                         <ul>
                             <li ng-repeat="img in post.imgs" style="display: inline">
-                                <input type="radio" ng-model="post.cover" ng-value="img"> <img style="width: 150px;" ng-src="{{img}}?size=s"/>
+                                <input type="radio" ng-model="post.cover" ng-value="img"> <img style="width: 150px;" ng-src="{{img}}"/>
                             </li>
                         </ul>
                     </div>
@@ -84,10 +84,10 @@
     <script type="text/javascript" src="https://code.angularjs.org/1.3.10/angular-sanitize.min.js"></script>
     <script type="text/javascript" src="https://code.angularjs.org/1.3.10/angular-animate.min.js"></script>
     <script type="text/javascript" src="@routes.Assets.versioned("js/ng-ckeditor.min.js")"></script>
-    <!--
+
     <script type="text/javascript" src="@routes.Assets.versioned("/js/ckeditor/ckeditor.js")"></script>
-    -->
-    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+
+
     <script type="text/javascript" src="@routes.Assets.versioned("js/ng-tags-input.min.js")"></script>
     <script type="text/javascript" src="@routes.Assets.versioned("javascripts/controllers.js")"></script>
 }

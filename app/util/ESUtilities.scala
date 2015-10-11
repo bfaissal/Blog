@@ -34,13 +34,15 @@ object ESUtilities {
 
   def esSearch (query:String,_type: String) = {
 
-    Json.parse(WS.client.underlying[AsyncHttpClient].executeRequest(
+    var res = WS.client.underlying[AsyncHttpClient].executeRequest(
       new RequestBuilder().setUrl(ESUtilities.ESURL+"blox/"+_type+"/_search").setBody(
         query)
         .setMethod("GET")
         .setHeader("Content-Type","application/json;charset=UTF-8")
         .build()
-    ).get().getResponseBody)
+    ).get().getResponseBody
+
+    Json.parse(res)
   }
 
 

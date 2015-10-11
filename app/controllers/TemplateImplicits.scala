@@ -20,6 +20,6 @@ object TemplateImplicits {
   }
 
   def trimBody(body:String) = {
-    body.substring(0,if(body.length > 1000){1000}else{body.length})
+    body.substring(0,if(body.length > 500){500}else{body.length})
   }
 }

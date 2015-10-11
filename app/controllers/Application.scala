@@ -56,16 +56,16 @@ object Application extends Controller with MongoController {
     Await.result(
       collection.find(Json.obj("published" -> true),Json.obj("title"->"1","url"->"2","cover"->"3")).options(QueryOpts().batchSize(3)).sort(Json.obj("creationDate" -> -1)).cursor[JsObject].collect[List]()
         .map({
-      _.take(3).map({
-        e => e.transform({
-          __.json.update(
-          (__ \ 'cover ).json.put({
-            e.transform( (__ \ 'cover).json.pick).getOrElse(JsString("/assets/images/placeholder.png"))
-          })
-          )
-        }).get
-      })
-    }),60 seconds)
+        _.take(3).map({
+          e => e.transform({
+            __.json.update(
+              (__ \ 'cover ).json.put({
+                e.transform( (__ \ 'cover).json.pick).getOrElse(JsString("/assets/images/placeholder.png"))
+              })
+            )
+          }).get
+        })
+      }),60 seconds)
   }
 
   def executeESSearch(query: String, _type: String = "post", isSearch: Boolean = false,oQuery:String = "")(implicit request: Request[AnyContent]) = {
@@ -74,7 +74,6 @@ object Application extends Controller with MongoController {
     def increment: Int = {
       index = index + 1; index
     }
-
     val totalResult = (restTemp\"hits"\"total").as[Int];
 
     val rest = restTemp.transform(
@@ -104,7 +103,7 @@ object Application extends Controller with MongoController {
     implicit request =>{
 
       //Cache.getOrElse(s"$page"){
-        val result = executeESSearch( s"""
+      val result = executeESSearch( s"""
       {
         "from" : ${PAGE_SIZE * (page.getOrElse(1) - 1)}, "size" : $PAGE_SIZE,
         "sort" : [
@@ -120,36 +119,36 @@ object Application extends Controller with MongoController {
             }
         }
       }"""
-        )
-        Cache.set(s"$page",result);
-        result
+      )
+      Cache.set(s"$page",result);
+      result
       //}
-  }
+    }
 
   }
   //"""
   def tagsSearch(tag:String,page:Option[Int]) = Action.async{
     implicit request =>{
-    executeESSearch(
-      s"""
-        |{
-        |    "from" : ${PAGE_SIZE*(page.getOrElse(1)-1)}, "size" : $PAGE_SIZE,
-        |    "sort" : [{ "creationDate" : { "order": "desc" }}],
-        |    "query": {
-        |            "filtered" : {
-        |                "filter" : {
-        |                    "term" : {
-        |                       "published" : true
-        |                    }
-        |                },
-        |    "query" : {
-        |        "match" :  { "tags.text" : "$tag" }uwt<ds
-        |    }
-        |    }
-        |    }
-        |}
+      executeESSearch(
+        s"""
+           |{
+           |    "from" : ${PAGE_SIZE*(page.getOrElse(1)-1)}, "size" : $PAGE_SIZE,
+            |    "sort" : [{ "creationDate" : { "order": "desc" }}],
+            |    "query": {
+            |            "filtered" : {
+            |                "filter" : {
+            |                    "term" : {
+            |                       "published" : true
+            |                    }
+            |                },
+            |    "query" : {
+            |        "match" :  { "tags.text" : "$tag" }
+           |    }
+           |    }
+           |    }
+           |}
       """.stripMargin,"post")
-      }
+    }
   }
 
   def relatedPost(tags:JsValue) = {
@@ -164,18 +163,18 @@ object Application extends Controller with MongoController {
       case _ => ""
     }
     val query =
-        s"""
-          |{
-          | size:5,
-          |
-          | "filter" : {
+      s"""
+         |{
+         | size:5,
+         |
+         | "filter" : {
                 "term" : {
                   "published" : true
                 }
-          |  },
-          |  "query": {
-          |    "bool": {
-          |      "should":  $should
+         |  },
+         |  "query": {
+         |    "bool": {
+         |      "should":  $should
           |    }
           |  }
           |}
@@ -188,25 +187,25 @@ object Application extends Controller with MongoController {
 
   }
   //"""
-   implicit def  tagsAggregation = {
-     val res = WS.url(ESUtilities.ESURL+"blox/post/_search").post(
-       """
-         |{
-         |    "aggs" : {
-         |        "tags" : {
-         |            "terms" : { "field" : "tags.text" }
-         |        }
-         |    },
-         |    "size": 0
-         |}
-       """.stripMargin).map(rh => Json.obj("allTags"->Json.parse(rh.body)))
-       Await.result(res,10 seconds)
+  implicit def  tagsAggregation = {
+    val res = WS.url(ESUtilities.ESURL+"blox/post/_search").post(
+      """
+        |{
+        |    "aggs" : {
+        |        "tags" : {
+        |            "terms" : { "field" : "post.tags.text" }
+        |        }
+        |    },
+        |    "size": 0
+        |}
+      """.stripMargin).map(rh => Json.obj("allTags"->Json.parse(rh.body)))
+    Await.result(res,10 seconds)
 
   }
   //"""
 
   def postById(id:String) = Action.async {
-      collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
+    collection.find(Json.obj("_id"->Json.obj("$oid"->id))).cursor[JsObject].headOption.map(p => Ok(p.get))
   }
   def getComments(url: String) = Action.async{
     collection.find(Json.obj("url" -> url),Json.obj("comments"->"1")).cursor[JsObject].headOption.map(list => Ok(Json.toJson(list.getOrElse(Json.obj()))))
@@ -217,14 +216,14 @@ object Application extends Controller with MongoController {
         (__ \ "name").read[String](minLength[String](2)  andKeep maxLength[String](50) ) and
           (__ \ "email").read[String](minLength[String](2)  andKeep  maxLength[String](50) andKeep email) and
           (__ \ "comment").read[String](minLength[String](2) andKeep maxLength[String](2000))
-        tupled
+          tupled
         )
 
       request.body.validate(validationRead) match {
         case s: JsSuccess[String] => {
           WS.url("https://www.google.com/recaptcha/api/siteverify")
             .withQueryString(("secret"->System.getenv("RECAPTCHA_KEY"))
-                ,("response"->(request.body \ "recaptcha").as[String])).get().map(rh => {
+              ,("response"->(request.body \ "recaptcha").as[String])).get().map(rh => {
 
             if((Json.parse(rh.body)\"success").as[Boolean]) {
 
@@ -278,11 +277,11 @@ object Application extends Controller with MongoController {
       }
       """.stripMargin, "post").transform(((__ \ "hits" \ "hits")).json.pick)
       .collect(ValidationError("insane")){
-        case JsArray(a) if a.size > 0 => {
-              a(0).transform(
-                __.json.update((__ \ "_source" \ "body").json.put(a(0) \ "_source" \ "htmlbody")) andThen
-                  (__ \ "_source").json.pick).map({case o:JsObject => Ok(views.html.post(o))})
-        }
+      case JsArray(a) if a.size > 0 => {
+        a(0).transform(
+          __.json.update((__ \ "_source" \ "body").json.put(a(0) \ "_source" \ "htmlbody")) andThen
+            (__ \ "_source").json.pick).map({case o:JsObject => Ok(views.html.post(o))})
+      }
 
     }.flatMap(identity).getOrElse(NotFound(views.html.error(404)))
 
@@ -295,7 +294,7 @@ object Application extends Controller with MongoController {
   }
 
   def form(post:String) = Action.async {
-      Future.successful(Ok(views.html.form("")))
+    Future.successful(Ok(views.html.form("")))
   }
   def allPosts(f:Option[Long],l:Option[Long]) = Action.async {
 
@@ -307,10 +306,10 @@ object Application extends Controller with MongoController {
   }
 
   def saveDraft = Action(parse.json){
-      request => {
-        drafts.save(request.body)
-        Ok("")
-      }
+    request => {
+      drafts.save(request.body)
+      Ok("")
+    }
   }
 
   def savePost(draft:Boolean) = Action.async(parse.json){
@@ -318,13 +317,13 @@ object Application extends Controller with MongoController {
       val post = ((request.body \ "_id") match {
         case _:JsUndefined =>{
           request.body.transform(
-              __.json.update((__ \ 'author ).json.put(
-                  Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com"))
-                  ) andThen
+            __.json.update((__ \ 'author ).json.put(
+              Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com"))
+            ) andThen
               __.json.update((__ \ 'published ).json.put(JsBoolean(false))) andThen
               __.json.update((__ \ 'creationDate ).json.put(JsNumber(new java.util.Date().getTime()))) andThen
               __.json.update((__ \ 'url).json.copyFrom((__ \ 'title).json.pick.map({case JsString(e)=> JsString(e.replaceAll(" ","-"))})))  andThen
-                generateId
+              generateId
           ).get
         }
         case _ =>{
@@ -341,7 +340,7 @@ object Application extends Controller with MongoController {
         case list => list.as[Array[JsObject]].foreach(e => ESUtilities.esIndex(e,"tags","text"))
       }
 
-        //.as[Array[JsObject]]
+      //.as[Array[JsObject]]
 
       Future.successful(Ok(post).as(MimeTypes.JSON))
     }
@@ -360,14 +359,14 @@ object Application extends Controller with MongoController {
     }
   }
   def tags(query :String) = Action{
-    Ok(ESUtilities.esSearch(
+    Ok(JsArray(ESUtilities.esSearch(
       s"""
          {
              "query" : {
                  "wildcard" :  { "text" : "*$query*" }
                  }
           }
-      """.stripMargin,"tags") \"hits"\"hits"\"_source")
+      """.stripMargin,"tags") \"hits"\"hits"\\"_source"))
   }
 
   def upload(CKEditorFuncNum:String) = Action.async(parse.multipartFormData) { request =>
@@ -384,11 +383,11 @@ object Application extends Controller with MongoController {
         .withHeaders("Authorization"->System.getenv("DROPBOX_TOCKEN"))
         .put(tempFile)
         .map( rs => {
-            tempFile.delete()
-            Ok(
-              s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename?size=l','');window.parent.ARABICM.addImage('/img/$filename');</script></body></html>"
-            ).as("text/html")
-        })
+        tempFile.delete()
+        Ok(
+          s"<html><body><script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '/img/$filename?size=l','');window.parent.ARABICM.addImage('/img/$filename');</script></body></html>"
+        ).as("text/html")
+      })
 
     }.getOrElse {
       Future.successful(BadRequest(s"<html><body><script type='text/javascript'>alert('${Messages("upload.error.retry")}')</script></body></html>"))
@@ -477,7 +476,7 @@ object Application extends Controller with MongoController {
         |            "properties": {
         |               "text": {
         |                  "type": "string",
-        |                  "analyzer": "my_arabic"
+        |                  "index": "not_analyzed"
         |               }
         |            }
         |         }
@@ -543,25 +542,26 @@ object Application extends Controller with MongoController {
   def migration = Action.async{
     val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
     import scala.collection.JavaConversions._
+
     WS.url(s"https://www.googleapis.com/blogger/v3/blogs/6365368560867867924/posts?key=${System.getenv("GOOOGLE_KEY")}&maxResults=100")
       .get.map(r => {
 
-        (Json.parse(r.body)\"items").transform[JsArray](of[JsArray].map({ case JsArray(se) => {
-          JsArray(se.map( e => {
+      (Json.parse(r.body)\"items").transform[JsArray](of[JsArray].map({ case JsArray(se) => {
+        JsArray(se.map( e => {
 
-            val doc = org.jsoup.Jsoup.parse((e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"))
-            Json.obj("body"-> e \ "content",
-              "title"-> e \ "title",
-              "body"-> (e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"),
-              "imgs" -> doc.select("img[src]").map( {case img:Element => {
-                  JsString(img.attr("src"))
-                  }}).foldLeft[Seq[JsString]](Seq[JsString]())({case (lx,ex) => {lx.+:(ex)}}) ,
-              "url"-> (e \ "url").as[String].replace("http://www.arabicmontessori.com/","")  ,
-              "creationDate" -> sdf.parse((e \ "published").as[String]).getTime,
-              "tags" ->  {val xsr = (e \ "labels").transform[JsArray](of[JsArray].map({case JsArray(tags) => JsArray(tags.map(tag => Json.obj("text" -> tag)))})).getOrElse(JsArray(Seq()));xsr}
-            )
-          }))
-        }})).get
+          val doc = org.jsoup.Jsoup.parse((e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',"))
+          Json.obj("body"-> e \ "content",
+            "title"-> e \ "title",
+            "body"-> (e \ "content").as[String].replaceAll("Arial,","'Noto Naskh Arabic',").replaceAll("arial,","'Noto Naskh Arabic',"),
+            "imgs" -> doc.select("img[src]").map( {case img:Element => {
+              JsString(img.attr("src"))
+            }}).foldLeft[Seq[JsString]](Seq[JsString]())({case (lx,ex) => {lx.+:(ex)}}) ,
+            "url"-> (e \ "url").as[String].replace("http://www.arabicmontessori.com/","")  ,
+            "creationDate" -> sdf.parse((e \ "published").as[String]).getTime,
+            "tags" ->  {val xsr = (e \ "labels").transform[JsArray](of[JsArray].map({case JsArray(tags) => JsArray(tags.map(tag => Json.obj("text" -> tag)))})).getOrElse(JsArray(Seq()));xsr}
+          )
+        }))
+      }})).get
 
     }).map({case JsArray(s) => {s.map({
       e =>
@@ -569,11 +569,11 @@ object Application extends Controller with MongoController {
         val post = ((e \ "_id") match {
           case _:JsUndefined =>{
             e.transform(
-                __.json.update((__ \ 'author ).json.put(
-                    Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
-                )) andThen
+              __.json.update((__ \ 'author ).json.put(
+                Json.obj("fullName"->JsString(Messages("leila")),"_id"->"abid.leila@gmail.com")
+              )) andThen
                 __.json.update((__ \ 'published ).json.put(JsBoolean(true)))
-            andThen generateId
+                andThen generateId
             ).get
           }
           case _ => e
